@@ -1,0 +1,152 @@
+
+% ------------------------------------------------------------------------------------------------------
+% Google Calendar Library
+% 
+% The Google Calendar Library provides axioms to communicate with a Goolge Calendar using 
+% the Calendar XML feeds and the Google Client API. That is a Google Calendar can be used as
+% an external data source/fact base for a rule base.
+%
+% @author <A HREF="mailto:adrian.paschke@gmx.de">Adrian Paschke</A>
+% @version 0.1 <1 April 2007>
+% @since 0.1
+% @dependencies Google Java API
+% ------------------------------------------------------------------------------------------------------
+
+
+
+% ------------------------------------------------------------------------ 
+% service(Calendar, Username, Password, ServiceURI)
+%
+% Opens and returns a Calendar Client for a Google Calendar Service
+%
+% @mode service(+,-,-,-)
+% @param Username    Google Calendar Username
+% @param Password    Google Calendar Password
+% @param ServiceURI  Google Calendar Serive Feed URI
+% @return Calendar   Calendar Client
+%
+
+service(Calendar, Username, Password, ServiceURI):-
+
+	%verify modes
+	free(Calendar),
+	bound(Username),
+	bound(Password),
+	bound(ServiceURI),
+
+		
+	% instantiate calendar service
+
+	Calendar = rbsla.utils.CalendarClient(Username,Password,ServiceURI).
+
+	
+	
+	
+
+% ------------------------------------------------------------------------ 
+% calendars(Calendar, List)
+%
+% Returns or compares a list of calendars
+%
+% @mode calendars(+,?)
+% @param Calendar    Calendar Client
+% @return List  a list of calendars
+%
+
+calendars(Calendar, List) :-
+	
+	%verify modes
+	bound(Calendar),
+	
+	ws.prova.RList.List = Calendar.getUserCalendars().
+	
+
+% ------------------------------------------------------------------------ 
+% events(Calendar, List)
+%
+% Returns or compares a list of events from a calendar
+%
+% @mode calendars(+,?)
+% @param Calendar    Calendar Client
+% @return List  a list of events
+%
+
+events(Calendar, List) :-
+	
+	%verify modes
+	bound(Calendar),
+	
+	ws.prova.RList.List = Calendar.getAllEvents().	
+	
+	
+	
+% ------------------------------------------------------------------------ 
+% events(Calendar, Query, List)
+%
+% Returns or compares a list of events which match the full text query
+%
+% @mode calendars(+,+,?)
+% @param Calendar    Calendar Client
+% @param Query    Full text query
+% @return List  a list of events
+%
+
+events(Calendar, Query, List) :-
+	
+	%verify modes
+	bound(Calendar),
+	bound(Query),
+	
+	ws.prova.RList.List = Calendar.fullTextQuery(Query).
+	
+
+% ------------------------------------------------------------------------ 
+% events(Calendar, StartDate, EndDate, List)
+%
+% Returns or compares a list of events 
+% between the specified time interval
+%
+% @mode calendars(+,+,+,?)
+% @param Calendar    Calendar Client
+% @param Start 	the start date
+% @param End    the end date
+% @return List  a list of events
+%
+
+events(Calendar, Start, End, List) :-
+	
+	%verify modes
+	bound(Calendar),
+	bound(Start),
+	bound(End),
+	
+	%transfer to millis
+	datetime_epoch(Start,StartEpoch), 
+	datetime_epoch(End,EndEpoch),
+		
+	%map to Google DateTime
+	StartTime=com.google.gdata.data.DateTime(StartEpoch),
+	EndTime=com.google.gdata.data.DateTime(EndEpoch),
+	
+	ws.prova.RList.List = Calendar.dateRangeQuery(StartTime,EndTime).	
+
+
+
+% ------------------------------------------------------------------------ 
+% entryTitle(Entry,Title)
+%
+% Returns or compares a list of events 
+% between the specified time interval
+%
+% @mode entryTitle(+,?)
+% @param Entry  a calendar entry
+% @return TitleName the title name of the entry
+%
+	
+entryTitle(Entry, TitleName):-
+	
+	%verify modes
+	bound(Entry),
+	
+	Title = Entry.getTitle(),
+	TitleName = Title.getPlainText().		

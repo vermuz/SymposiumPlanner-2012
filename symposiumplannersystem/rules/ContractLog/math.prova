@@ -1,0 +1,400 @@
+% ------------------------------------------------------------------------------------------------------
+%  Copyright (C) 1999-2007 <a href="mailto:adrian.paschke@gmx.de">Adrian Paschke</a>
+% 
+% The Contractlog library is part of the Rule Based Service Level Agreement (RBSLA)
+%  project, available at 
+% <a href="https://sourceforge.net/projects/rbsla">SourceForge RBSLA</a>
+% 
+% More information <a href="http://ibis.in.tum.de/staff/paschke/rbsla/index.htm">RBSLA Project Site</a>
+%
+% This library is free software; you can redistribute it and/or
+% modify it under the terms of the GNU Lesser General Public
+% License as published by the Free Software Foundation; either
+%  version 2 of the License, or (at your option) any later version.
+% 
+% This library is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+% Lesser General Public License for more details.
+%
+% You should have received a copy of the GNU Lesser General Public
+% License along with this library; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+% ------------------------------------------------------------------------------------------------------
+
+% ------------------------------------------------------------------------------------------------------
+% Math Libary
+% 
+% The Math Library provides basic Math predicates.
+%
+% Build in Prova operators have some problems, so use these instead
+% e.g. They do not work with java.lang.Long, but create them in between ?!
+%
+% The second advantage of these operators are, that you can overload
+% them and adopt them for other types than numbers e.g. Date and Time
+%
+ % @author <A HREF="mailto:adrian.paschke@gmx.de">Adrian Paschke</A>
+ % @version 0.2 <1 Nov 2006>
+ % @since 0.1
+ % @dependencies rbsla.utils.Math.java
+% ------------------------------------------------------------------------------------------------------
+
+moduleOID("./ContractLog/math.prova").
+
+
+% --------------------------------------------------------------------- 
+% java_binary(OPERATOR, VALUE1, VALUE2, RESULT)
+%
+% calculate value1 and value2 with gived operator, return the result
+
+java_binary(OP, A, B, R) :-	
+	R = rbsla.utils.Math.binary(OP, A, B), !.
+	
+
+% --------------------------------------------------------------------- 
+% java_binary()
+% 
+% This predicates test type long 	
+% 
+% java_binary(OP, Long.A, Long.B, Long.R) :- 
+%	Long.R = rbsla.utils.Math.binary(OP, Long.A, Long.B), !.
+% println(["Types: ", OP, " ", Long.A," ", Long.B]),
+
+
+% --------------------------------------------------------------------- 
+% java_add(VALUE1, VALUE2, RESULT)
+%
+% value1 plus value2 
+
+java_add(A, B, R) :- 		R = rbsla.utils.Math.add(A, B), !.
+
+
+% --------------------------------------------------------------------- 
+% java_add(VALUE1, VALUE2, RESULT)
+%
+% value1 minus value2 
+
+java_sub(A, B, R) :- 		R = rbsla.utils.Math.sub(A, B), !.
+
+
+% --------------------------------------------------------------------- 
+% java_mult(VALUE1, VALUE2, RESULT)
+%
+% to multiply value1 by value2 
+
+java_mult(A, B, R) :- 		R = rbsla.utils.Math.mult(A, B), !.
+
+
+% ------------------------------------------------------------------------ 
+% java_div(VALUE1, VALUE2, RESULT)
+%
+% value1 divide value2 
+
+java_div(A, B, R) :- 		R = rbsla.utils.Math.div(A, B), !.
+
+
+% ------------------------------------------------------------------------ 
+% java_mod(VALUE1, VALUE2, RESULT)
+%
+% value1 mod value2
+
+% java_mod(A, B, R) :- 		R = rbsla.utils.Math.mod(A, B), !.
+
+
+% ------------------------------------------------------------------------- 
+% java_divnatural(VALUE1, VALUE2, RESULT)
+%
+% value1 div value2. result tpye is interger.
+
+java_divnatural(A, B, R) :- R = rbsla.utils.Math.divnatural(A, B), !.
+
+
+% ------------------------------------------------------------------------- 
+% java_equ(VALUE1, VALUE2, RESULT)
+%
+% r is the result true or false
+
+java_equ(A, B, R) :- 		R = rbsla.utils.Math.equ(A, B), !.
+
+
+% ------------------------------------------------------------------------- 
+% java_less(VALUE1, VALUE2, RESULT)
+%
+% value1 and value2 will be compared like value1 < value2
+
+java_less(A, B, R) :- 		R = rbsla.utils.Math.less(A, B), !.
+
+
+% ------------------------------------------------------------------------- 
+% java_less(VALUE1, VALUE2, RESULT)
+%
+% value1 and value2 will be compared like value1 <= value2
+
+java_lessequ(A, B, R) :- 	R = rbsla.utils.Math.lessequ(A, B), !.
+
+
+% ------------------------------------------------------------------------- 
+% java_casttolong(VALUE, RESULT)
+%
+% input value will be converted into long 
+
+java_casttolong(A, R):-		R = rbsla.utils.Math.castToLong(A),!.
+
+
+% ------------------------------------------------------------------------- 
+% equ(VALUE1, VALUE2)
+%
+% compare and unify
+
+equ(A, B) :- 
+	bound(A), 
+	bound(B), 
+	Boolean.TRUE = rbsla.utils.Math.equ(A, B), 
+	!.
+equ(A, B) :- 
+	A = B, 
+	!.
+
+
+% ------------------------------------------------------------------------- 
+% notequ(VALUE1, VALUE2)
+%
+% not equal
+
+notequ(A, B) :- 
+	bound(A),
+	bound(B), 
+	java_equ(A, B, Boolean.FALSE), 
+	!.
+
+
+% ------------------------------------------------------------------------- 
+% less(VALUE1, VALUE2)
+%
+% less
+
+less(A, B) :- 
+	bound(A),
+	bound(B), 
+	java_less(A, B, Boolean.TRUE), 
+	!.
+
+
+% ------------------------------------------------------------------------- 
+% lessequ(VALUE1, VALUE2)
+%
+% less equal
+
+lessequ(A, B) :- 
+	bound(A), 
+	bound(B), 
+	java_lessequ(A, B, Boolean.TRUE), 
+	!.
+
+
+% ------------------------------------------------------------------------- 
+% more(VALUE1, VALUE2)
+%
+% more
+
+more(A, B) :- 
+	bound(A), 
+	bound(B), 
+	java_lessequ(A, B, Boolean.FALSE), 
+	!.
+
+
+% ------------------------------------------------------------------------- 
+% moreequ(VALUE1, VALUE2)
+%
+% more equal
+
+moreequ(A, B) :- 
+	bound(A), 
+	bound(B), 
+	java_less(A, B, Boolean.FALSE), 
+	!.
+
+
+% ------------------------------------------------------------------------- 
+% between(VALUE1, VALUE_BETWEEN_1AND2, VALUE2)
+%
+% value1 <= value_between_1and2 <= value2
+
+between(T1, T, T2) :-
+	bound(T1), 
+	bound(T), 
+	bound(T2),
+	lessequ(T1, T),
+	lessequ(T, T2),
+	!.
+	
+	
+% ------------------------------------------------------------------------- 
+% null_element(VALUE1)
+%
+% null_element
+
+null_element(0).
+
+
+% ------------------------------------------------------------------------- 
+% math_add(VALUE1, VALUE2, RESULT)
+%
+% RESULT = value1 + value2
+
+math_add1(A,B,R) :- 
+	bound(A),
+	bound(B),
+    A1 = java.lang.Integer(A),
+    B1 = java.lang.Integer(B),
+	R = rbsla.utils.Math.add(A1, B1), 
+	!.
+
+math_add1(A,B,R) :- 
+	bound(A),
+	bound(B), 
+	R = rbsla.utils.Math.add(A, B), 
+	!.
+
+% Later also the other way round should be possible
+% at the moement -> Stack Overflow
+%math_add(A,B,R) :- bound(A), bound(R), java_binary(1, A, B),!.
+%math_add(A,B,R) :- bound(R), bound(B), java_binary(1, R, B, A),!.
+
+
+% ------------------------------------------------------------------------- 
+% math_sub(VALUE1, VALUE2, RESULT)
+%
+% RESULT = value1 - value2
+
+math_sub(A,B,R) :-  
+	bound(A), 
+	bound(B), 
+	R = rbsla.utils.Math.sub(A, B), 
+	!.
+
+
+% ------------------------------------------------------------------------- 
+% math_mult(VALUE1, VALUE2, RESULT)
+%
+% RESULT = value1 * value2
+
+math_mult(A,B,R) :-  
+	bound(A), 
+	bound(B), 
+	java_mult(A, B, R),
+	!.
+
+
+% ------------------------------------------------------------------------- 
+% math_div(VALUE1, VALUE2 RESULT)
+%
+% RESULT = value1 / value2, result is double
+
+math_div1(A,B,R) :-  
+	bound(A), 
+	bound(B), 
+	java_div(A, B, R),
+	!.
+
+
+% ------------------------------------------------------------------------- 
+% math_mod(VALUE1, VALUE2, RESULT)
+%
+% RESULT = value1 mod value2, result is long
+
+math_mod(A,B,R) :- 	
+	bound(A), 
+	bound(B), 
+	java_mod(A, B, R),
+	!.
+
+
+% ------------------------------------------------------------------------- 
+% math_div(VALUE1, VALUE2, RESULT)
+%
+% RESULT = value1 / value2, result is integer
+
+math_divnatural(A,B,R) :-  
+	bound(A), 
+	bound(B), 
+	java_divnatural(A, B, R),
+	!.
+
+
+% ------------------------------------------------------------------------- 
+% math_abs(VALUE1,  RESULT)
+%
+% RESULT = |value1|
+
+math_abs(A,R) :- 
+	bound(B), 
+	R = rbsla.utils.Math.abs(A), 
+	!.
+
+
+% ------------------------------------------------------------------------- 
+% castlong(VALUE1, RESULT)
+%
+% convert value1 into long 
+
+castlong(A, R) :- 
+	java_casttolong(A, R).
+
+
+% ------------------------------------------------------------------------- 
+% math_max(VALUE1, VALUE2, RESULT)
+%
+% MAX(Value1, Value2)
+
+math_max(A, B, R) :- 
+	bound(A),
+	bound(B),
+	less(A, B),
+	R = B,
+	!.
+math_max(A, B, R) :- 
+	bound(A),
+	bound(B),
+	R = A,
+	!.
+
+
+% ------------------------------------------------------------------------- 
+% math_min(VALUE1, VALUE2, RESULT)
+%
+% MIN(Value1, Value2)
+
+math_min(A, B, R) :-  
+	bound(A),
+	bound(B),
+	less(A, B),
+	R = A,
+	!.
+	
+math_min(A, B, R) :- 
+	bound(A),
+	bound(B),
+	R = B,
+	!.
+	
+% ------------------------------------------------------------------------- 
+% Peano Naturals
+
+unary_num(0).
+unary_num(s(X)) :- 
+	unary_num(X).
+
+% mit Accumulator
+plus(0,X,X).                     
+plus(s(X),Y,Z) :- 
+	plus(X,s(Y),Z).  
+
+% mit Combosition of Substitutions
+plus2(0,X,X).                     
+plus2(s(X),Y,s(Z)) :- 
+	plus(X,Y,Z).  		
+
+

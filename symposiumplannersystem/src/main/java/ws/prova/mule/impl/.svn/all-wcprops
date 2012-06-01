@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svnroot/sps2011/!svn/ver/10/SymposiumPlannerSystem/src/main/java/ws/prova/mule/impl
+END
+Test.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/src/main/java/ws/prova/mule/impl/Test.java
+END
+DecisionCriteria.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svnroot/sps2011/!svn/ver/5/SymposiumPlannerSystem/src/main/java/ws/prova/mule/impl/DecisionCriteria.java
+END
+ESBManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/src/main/java/ws/prova/mule/impl/ESBManager.java
+END
+Prova2RuleMLTranslator.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/src/main/java/ws/prova/mule/impl/Prova2RuleMLTranslator.java
+END
+RuleML2ProvaTranslator.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/src/main/java/ws/prova/mule/impl/RuleML2ProvaTranslator.java
+END
+ExternalInformationProcessing.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/src/main/java/ws/prova/mule/impl/ExternalInformationProcessing.java
+END
+BRF2011SubmissionDecision.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/src/main/java/ws/prova/mule/impl/BRF2011SubmissionDecision.java
+END
+SubmissionDecision.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/src/main/java/ws/prova/mule/impl/SubmissionDecision.java
+END
+ProvaUMOImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svnroot/sps2011/!svn/ver/4/SymposiumPlannerSystem/src/main/java/ws/prova/mule/impl/ProvaUMOImpl.java
+END
+rrml.xml
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/src/main/java/ws/prova/mule/impl/rrml.xml
+END
+rrml2prova.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svnroot/sps2011/!svn/ver/8/SymposiumPlannerSystem/src/main/java/ws/prova/mule/impl/rrml2prova.xsl
+END
+String2ProvaList.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svnroot/sps2011/!svn/ver/10/SymposiumPlannerSystem/src/main/java/ws/prova/mule/impl/String2ProvaList.java
+END
+IJCAI2011SubmissionDecision.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/src/main/java/ws/prova/mule/impl/IJCAI2011SubmissionDecision.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/src/main/java/ws/prova/mule/impl/package.html
+END

@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/personalAgents/pa_Configuration
+END
+PAConfiguration.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/personalAgents/pa_Configuration/PAConfiguration.java
+END
+BadConfigurationException.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/personalAgents/pa_Configuration/BadConfigurationException.java
+END

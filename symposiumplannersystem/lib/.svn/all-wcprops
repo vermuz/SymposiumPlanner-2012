@@ -1,0 +1,1139 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/sps2011/!svn/ver/12/SymposiumPlannerSystem/lib
+END
+axis.jar
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/axis.jar
+END
+derby.jar
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/derby.jar
+END
+geronimo-ejb_2.1_spec.jar
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/geronimo-ejb_2.1_spec.jar
+END
+cxf-rt-frontend-simple.jar
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/cxf-rt-frontend-simple.jar
+END
+cxf-rt-transports-local.jar
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/cxf-rt-transports-local.jar
+END
+xfire-annotations.jar
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/xfire-annotations.jar
+END
+jaxp-api.jar
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/jaxp-api.jar
+END
+xfire-jsr181-api.jar
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/xfire-jsr181-api.jar
+END
+icu4j.jar
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/icu4j.jar
+END
+log4j.jar
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/log4j.jar
+END
+cxf-common-utilities.jar
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/cxf-common-utilities.jar
+END
+cglib-full.jar
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/cglib-full.jar
+END
+mx4j-impl.jar
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mx4j-impl.jar
+END
+ant.jar
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/ant.jar
+END
+iri.jar
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/iri.jar
+END
+arq.jar
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/arq.jar
+END
+jaxb-impl.jar
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/jaxb-impl.jar
+END
+com.springsource.org.antlr.runtime.jar
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/com.springsource.org.antlr.runtime.jar
+END
+commons-collections.jar
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/commons-collections.jar
+END
+mule-module-spring-security.jar
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mule-module-spring-security.jar
+END
+gdata-client.jar
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/gdata-client.jar
+END
+com.springsource.org.apache.commons.collections.jar
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/com.springsource.org.apache.commons.collections.jar
+END
+plexus-compiler-api.jar
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/plexus-compiler-api.jar
+END
+jug-asl.jar
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/jug-asl.jar
+END
+spring-jdbc.jar
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/spring-jdbc.jar
+END
+geronimo-j2ee-management_1.0_spec.jar
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/geronimo-j2ee-management_1.0_spec.jar
+END
+cxf-rt-ws-rm.jar
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/cxf-rt-ws-rm.jar
+END
+tomcat-apr.jar
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/tomcat-apr.jar
+END
+mx4j-remote.jar
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mx4j-remote.jar
+END
+hsqldb.jar
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/hsqldb.jar
+END
+mule-transport-servlet.jar
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mule-transport-servlet.jar
+END
+commons-discovery.jar
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/commons-discovery.jar
+END
+commons-io.jar
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/commons-io.jar
+END
+smackx.jar
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/smackx.jar
+END
+asm-commons.jar
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/asm-commons.jar
+END
+cxf-rt-core.jar
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/cxf-rt-core.jar
+END
+slf4j-api.jar
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/sps2011/!svn/ver/12/SymposiumPlannerSystem/lib/slf4j-api.jar
+END
+xml-apis.jar
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/xml-apis.jar
+END
+geronimo-stax-api_1.0_spec.jar
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/geronimo-stax-api_1.0_spec.jar
+END
+xmlsec.jar
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/xmlsec.jar
+END
+cxf-rt-bindings-xml.jar
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/cxf-rt-bindings-xml.jar
+END
+spring-security-core.jar
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/spring-security-core.jar
+END
+cxf-rt-ws-security.jar
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/cxf-rt-ws-security.jar
+END
+mule-tests-functional.jar
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mule-tests-functional.jar
+END
+xfire-aegis.jar
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/xfire-aegis.jar
+END
+commons-primitives.jar
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/commons-primitives.jar
+END
+ws.prova.compact-3.1.3.jar
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/ws.prova.compact-3.1.3.jar
+END
+commons-attributes-api.jar
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/commons-attributes-api.jar
+END
+mule-transport-vm.jar
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mule-transport-vm.jar
+END
+stax.jar
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/stax.jar
+END
+mx4j-tools.jar
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mx4j-tools.jar
+END
+xstream.jar
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/xstream.jar
+END
+howl-logger.jar
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/howl-logger.jar
+END
+commons-codec.jar
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/sps2011/!svn/ver/12/SymposiumPlannerSystem/lib/commons-codec.jar
+END
+stax-api.jar
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/stax-api.jar
+END
+javacc.jar
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/javacc.jar
+END
+gdata-calendar.jar
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/gdata-calendar.jar
+END
+cxf-api.jar
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/cxf-api.jar
+END
+mule-module-spring-config.jar
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mule-module-spring-config.jar
+END
+spring-core.jar
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/spring-core.jar
+END
+mule-transport-axis.jar
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mule-transport-axis.jar
+END
+spring-expression.jar
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/spring-expression.jar
+END
+com.springsource.org.apache.commons.lang.jar
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/com.springsource.org.apache.commons.lang.jar
+END
+jmock.jar
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/jmock.jar
+END
+activeio.jar
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/activeio.jar
+END
+aspectjweaver.jar
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/aspectjweaver.jar
+END
+xfire-core.jar
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/xfire-core.jar
+END
+jaxen.jar
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/jaxen.jar
+END
+aterm.jar
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/aterm.jar
+END
+joda-time.jar
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/joda-time.jar
+END
+neethi.jar
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/neethi.jar
+END
+spring-aop.jar
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/spring-aop.jar
+END
+mule-module-annotations.jar
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mule-module-annotations.jar
+END
+spring-asm.jar
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/spring-asm.jar
+END
+wrapper.jar
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/wrapper.jar
+END
+XmlSchema.jar
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/sps2011/!svn/ver/12/SymposiumPlannerSystem/lib/XmlSchema.jar
+END
+wstx-asl.jar
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/wstx-asl.jar
+END
+yjp-controller-api-redist.jar
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/yjp-controller-api-redist.jar
+END
+com.springsource.org.apache.log4j.jar
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/com.springsource.org.apache.log4j.jar
+END
+pellet.jar
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/pellet.jar
+END
+saaj-api.jar
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/saaj-api.jar
+END
+cxf-rt-databinding-jaxb.jar
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/cxf-rt-databinding-jaxb.jar
+END
+mule-core.jar
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mule-core.jar
+END
+spring-beans.jar
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/spring-beans.jar
+END
+spring-jms.jar
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/spring-jms.jar
+END
+slf4j-api-1.6.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/sps2011/!svn/ver/9/SymposiumPlannerSystem/lib/slf4j-api-1.6.1.jar
+END
+msv-core.jar
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/msv-core.jar
+END
+cxf-rt-databinding-aegis.jar
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/cxf-rt-databinding-aegis.jar
+END
+spring-tx.jar
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/spring-tx.jar
+END
+mule-module-builders.jar
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mule-module-builders.jar
+END
+cxf-rt-transports-http.jar
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/cxf-rt-transports-http.jar
+END
+xbean.jar
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/xbean.jar
+END
+cxf-rt-bindings-soap.jar
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/cxf-rt-bindings-soap.jar
+END
+xml-resolver.jar
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/xml-resolver.jar
+END
+mule-module-client.jar
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mule-module-client.jar
+END
+cxf-rt-ws-addr.jar
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/cxf-rt-ws-addr.jar
+END
+slf4j-log4j12.jar
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/sps2011/!svn/ver/12/SymposiumPlannerSystem/lib/slf4j-log4j12.jar
+END
+tomcat-util.jar
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/tomcat-util.jar
+END
+slf4j-log4j12-1.6.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/sps2011/!svn/ver/9/SymposiumPlannerSystem/lib/slf4j-log4j12-1.6.1.jar
+END
+jakarta-regexp.jar
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/jakarta-regexp.jar
+END
+com.springsource.org.apache.commons.beanutils.jar
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/com.springsource.org.apache.commons.beanutils.jar
+END
+jaxb-xjc.jar
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/jaxb-xjc.jar
+END
+wsdl4j.jar
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/wsdl4j.jar
+END
+aopalliance.jar
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/aopalliance.jar
+END
+stax2-api.jar
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/stax2-api.jar
+END
+dom4j.jar
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/dom4j.jar
+END
+stax-utils.jar
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/stax-utils.jar
+END
+axion.jar
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/axion.jar
+END
+mule-transport-tcp.jar
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mule-transport-tcp.jar
+END
+plexus-container-default.jar
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/plexus-container-default.jar
+END
+mule-module-xml.jar
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mule-module-xml.jar
+END
+symposiumplannersystem-1.0-SNAPSHOT.jar
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svnroot/sps2011/!svn/ver/12/SymposiumPlannerSystem/lib/symposiumplannersystem-1.0-SNAPSHOT.jar
+END
+jdom.jar
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/jdom.jar
+END
+commons-lang.jar
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/commons-lang.jar
+END
+activemq-core.jar
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/activemq-core.jar
+END
+aspectjrt.jar
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/aspectjrt.jar
+END
+xbean_xpath.jar
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/xbean_xpath.jar
+END
+mule-module-cxf.jar
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mule-module-cxf.jar
+END
+wss4j.jar
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/wss4j.jar
+END
+xercesImpl.jar
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/xercesImpl.jar
+END
+jena.jar
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/jena.jar
+END
+spring-web.jar
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/spring-web.jar
+END
+mx4j-jmx.jar
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mx4j-jmx.jar
+END
+cxf-wstx-msv-validation.jar
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/cxf-wstx-msv-validation.jar
+END
+commons-digester.jar
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/commons-digester.jar
+END
+asm.jar
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/asm.jar
+END
+mail.jar
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/sps2011/!svn/ver/12/SymposiumPlannerSystem/lib/mail.jar
+END
+cos.jar
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/cos.jar
+END
+isorelax.jar
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/isorelax.jar
+END
+geronimo-j2ee-connector_1.5_spec.jar
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/geronimo-j2ee-connector_1.5_spec.jar
+END
+commons-httpclient.jar
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/commons-httpclient.jar
+END
+saxon-xqj.jar
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/saxon-xqj.jar
+END
+saxon.jar
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/saxon.jar
+END
+ptolemy.jar
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/ptolemy.jar
+END
+relaxngDatatype.jar
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/relaxngDatatype.jar
+END
+mule-module-management.jar
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mule-module-management.jar
+END
+activemq-core-3.2.jar
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/activemq-core-3.2.jar
+END
+commons-logging.jar
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/commons-logging.jar
+END
+classworlds.jar
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/classworlds.jar
+END
+activation.jar
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/activation.jar
+END
+jaxws-api.jar
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/jaxws-api.jar
+END
+com.springsource.org.apache.commons.logging.jar
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/com.springsource.org.apache.commons.logging.jar
+END
+mule-transport-xfire.jar
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mule-transport-xfire.jar
+END
+commons-jxpath.jar
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/commons-jxpath.jar
+END
+asm-tree.jar
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/asm-tree.jar
+END
+saaj-impl.jar
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/saaj-impl.jar
+END
+commons-cli.jar
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/commons-cli.jar
+END
+xfire-java5.jar
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/xfire-java5.jar
+END
+commons-pool.jar
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/commons-pool.jar
+END
+concurrent.jar
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/concurrent.jar
+END
+mule-transport-jms.jar
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mule-transport-jms.jar
+END
+cxf-common-schemas.jar
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/cxf-common-schemas.jar
+END
+woodstox-core-asl.jar
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/woodstox-core-asl.jar
+END
+mule-transport-ssl.jar
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mule-transport-ssl.jar
+END
+sparql-0.1-SNAPSHOT.jar
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/sparql-0.1-SNAPSHOT.jar
+END
+mule-transport-soap.jar
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mule-transport-soap.jar
+END
+jsr250-api.jar
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/jsr250-api.jar
+END
+smack.jar
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/smack.jar
+END
+xmlpublic.jar
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/xmlpublic.jar
+END
+lucene-core.jar
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/lucene-core.jar
+END
+jcl-over-slf4j.jar
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/jcl-over-slf4j.jar
+END
+xalan.jar
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/xalan.jar
+END
+cxf-tools-common.jar
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/cxf-tools-common.jar
+END
+saxon-dom.jar
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/saxon-dom.jar
+END
+mule-transport-http.jar
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mule-transport-http.jar
+END
+cxf-rt-frontend-jaxws.jar
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/cxf-rt-frontend-jaxws.jar
+END
+spring-security-config.jar
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/spring-security-config.jar
+END
+com.springsource.org.apache.activemq-5.1.0.jar
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/lib/com.springsource.org.apache.activemq-5.1.0.jar
+END
+activecluster.jar
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/activecluster.jar
+END
+plexus-utils.jar
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/sps2011/!svn/ver/12/SymposiumPlannerSystem/lib/plexus-utils.jar
+END
+geronimo-annotation_1.0_spec.jar
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/geronimo-annotation_1.0_spec.jar
+END
+jmock-cglib.jar
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/jmock-cglib.jar
+END
+commons-dbcp.jar
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/commons-dbcp.jar
+END
+spring-security-web.jar
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/spring-security-web.jar
+END
+cglib-nodep.jar
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/cglib-nodep.jar
+END
+geronimo-jta_1.0.1B_spec.jar
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/geronimo-jta_1.0.1B_spec.jar
+END
+spring-context.jar
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/spring-context.jar
+END
+xsdlib.jar
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/xsdlib.jar
+END
+mule-module-spring-extras.jar
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/mule-module-spring-extras.jar
+END
+junit.jar
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/junit.jar
+END
+regexp.jar
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/regexp.jar
+END
+jaxb-api.jar
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/jaxb-api.jar
+END
+geronimo-jaxrpc_1.1_spec.jar
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/geronimo-jaxrpc_1.1_spec.jar
+END
+xpp3_min.jar
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/xpp3_min.jar
+END
+jsr181-api.jar
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/jsr181-api.jar
+END
+geronimo-jms_1.1_spec.jar
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/geronimo-jms_1.1_spec.jar
+END
+commons-beanutils.jar
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/commons-beanutils.jar
+END
+backport-util-concurrent.jar
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/backport-util-concurrent.jar
+END
+spring.jar
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/lib/spring.jar
+END

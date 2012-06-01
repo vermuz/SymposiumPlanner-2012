@@ -1,0 +1,195 @@
+%%% not
+not([X|Args]) :-
+	derive([X|Args]),
+	!,
+	fail().
+not([X|Args]).
+
+
+%%% Mirroring
+% Only the first working connection is chosen
+retrieve_data_general(Type,ID,Data) :-
+	location_active(Type,ID,URL|Xs),
+	retrieve_data(Type,ID,Data,URL|Xs),
+%println(["aaa",ID]," "),
+	!.
+retrieve_data_general(Type,ID,Data) :-
+%println(["aaa"]," "),
+	location(Type,ID,URL|Xs),
+%println(["aa:",URL]," "),
+	retrieve_data(Type,ID,Data,URL|Xs),
+	!,
+%println(["a:",ID]," "),
+	retractall(location_active(Type,ID|Ts)),
+	assert(location_active(Type,ID,URL|Xs)).
+
+% retrieve_data(database,DBName,DB,URL,Username,Password) :-
+%	D = ws.prova.Database(),
+%println([DS,Username,Password]," "),
+% 	DS = D.getDataSource(URL),
+%println([DS,Username,Password]," "),
+% 	DB = DS.getConnection(Username, Password),
+%println([DB,Username,Password]," "),
+% 	!.
+
+
+%%% Opening databases including Connection caching
+dbopen(DBName,DB) :-
+	access_data(database,DBName,DB).
+
+access_data(Type,ID,Data) :-
+	% retrieve or create the cache for Type
+	cache_db(Type,CacheData),
+	access_data(Type,ID,Data,CacheData).
+access_data(Type,ID,Data,CacheData) :-
+	% Attempt to retrieve bound data
+	bound(ID),
+%println(["ID:",ID]),
+	Data=CacheData.get(ID),
+%println(["Data recovered from cache:",CacheData,ID,Data]," "),
+	% Success, Data (whatever object it is) is returned
+	!.
+access_data(Type,ID,Data,CacheData) :-
+	% Attempt to retrieve possibly multiple data corresponding to unbound key
+	KeySet = CacheData.keySet(),
+%println(["KeySet:",KeySet]),
+	element(ID,KeySet),
+%println(["ID:",ID]),
+	Data=CacheData.get(ID)
+%println(["Data recovered from cache."]," ")
+	% Success, Data (whatever object it is) is returned
+	.
+access_data(Type,ID,Data,CacheData) :-
+	% Retrieve the data from its location and update the cache
+%println(["+++++++",ID]," "),
+	bound(ID),
+	retrieve_data_general(Type,ID,Data),
+%println(["-------",Type,ID,Data]," "),
+	update_cache(Type,ID,Data,CacheData).
+
+cache_capacity(database,0).
+cache_capacity(pdb,3).
+cache_capacity(location,1).
+cache_capacity(_,5).
+
+cache_capacity_unique(Type,MaxSize) :-
+	% only one match is used
+	cache_capacity(Type,MaxSize),
+	!.
+
+cache_db(Type,CacheData) :-
+	% cache for Type is available?
+	cache_data(Type,CacheData),
+	% yes, so we're done
+	!.
+
+cache_db(Type,CacheData) :-
+	% no, so create the cache for Type
+	% maps ID to Data
+	CacheData = java.util.HashMap(),
+	% persist the reference
+	assert(cache_data(Type,CacheData)),
+	% stores a list of ID's as they arrive
+	CacheHistory = java.util.ArrayList(),
+	% persist the reference
+	assert(cache_history(Type,CacheHistory)).
+
+update_cache(Type,ID,Data,CacheData) :-
+	cache_capacity_unique(Type,0),
+	!.
+update_cache(Type,ID,Data,CacheData) :-
+	% size of the cache
+	Size=CacheData.size(),
+	% check what is the maximum capacity
+	cache_capacity_unique(Type,MaxSize),
+%println(["cache_capacity_unique",MaxSize]),
+	% if within bounds
+	Size<MaxSize,
+	% cut: no more choices
+	!,
+	% call store the data
+	cache_store(Type,ID,Data,CacheData).
+
+update_cache(Type,ID,Data,CacheData) :-
+	% only if capacity is full
+	% history
+	cache_history(Type,CacheHistory),
+	% the oldest entry
+	FirstID = CacheHistory.get(0),
+	% remove it
+	CacheHistory.remove(0),
+	% remove the corresponding data
+	CacheData.remove(FirstID),
+	% call store the data
+	cache_store(Type,ID,Data,CacheData).
+
+cache_store(Type,ID,Data,CacheData) :-
+	% store the data
+	% put the data
+	CacheData.put(ID,Data),
+	% history
+	cache_history(Type,CacheHistory),
+	% add the latest ID entry
+	CacheHistory.add(ID).
+
+%% sql_update %%
+sql_update(DB,T|Pairs) :-
+	Query = StringBuffer(),
+	sql_update_prepare(Pairs,Query),
+%println([Query]),
+	sql_update_execute(DB,T,Query).
+
+sql_update_where([[F,V]],Where) :-
+	!,
+	Where.append(F),
+	Where.append('='),
+	Where.append(V).
+sql_update_where([[F,V]|Xs],Where) :-
+	!,
+	Where.append(F),
+	Where.append('='),
+	Where.append(V),
+	Where.append(' and '),
+	sql_update_where(Xs,Where).
+
+sql_update_prepare([[where,String.V]],Query) :-
+	!,
+	Query.append(' where '),
+	Query.append(V).
+sql_update_prepare([[where,[F,V]]],Query) :-
+	!,
+%println([F]),
+	Query.append(' where '),
+	Query.append(F),
+	Query.append('='),
+	Query.append(V).
+sql_update_prepare([[where|L]],Query) :-
+	!,
+%println([L]),
+	Query.append(' where '),
+	Where = StringBuffer(),
+	sql_update_where(L,Where),
+	Query.append(Where).
+sql_update_prepare([[where,V]|Pairs],List,Result) :-
+	Ex = java.sql.SQLException("Wrong Prova sql_update syntax."),
+	raise(Ex).
+sql_update_prepare([[F,V]],Query) :-
+	!,
+	sql_update_prefix(Query),
+	Query.append(F),
+	Query.append('='),
+	Query.append(V).
+sql_update_prepare([[F,V]|Pairs],Query) :-
+	sql_update_prefix(Query),
+	Query.append(F),
+	Query.append('='),
+	Query.append(V),
+	sql_update_prepare(Pairs,Query).
+
+sql_update_prefix(Query) :-
+	S = Query.toString(),
+	S.equals(''),
+	!,
+	Query.append(' set ').
+sql_update_prefix(Query) :-
+	Query.append(',').

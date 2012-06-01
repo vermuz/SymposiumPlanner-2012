@@ -1,0 +1,342 @@
+% ------------------------------------------------------------------------------------------------------
+%  Copyright (C) 1999-2007 <a href="mailto:adrian.paschke@gmx.de">Adrian Paschke</a>
+% 
+% The Contractlog library is part of the Rule Based Service Level Agreement (RBSLA)
+%  project, available at 
+% <a href="https://sourceforge.net/projects/rbsla">SourceForge RBSLA</a>
+% 
+% More information <a href="http://ibis.in.tum.de/staff/paschke/rbsla/index.htm">RBSLA Project Site</a>
+%
+% This library is free software; you can redistribute it and/or
+% modify it under the terms of the GNU Lesser General Public
+% License as published by the Free Software Foundation; either
+%  version 2 of the License, or (at your option) any later version.
+% 
+% This library is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+% Lesser General Public License for more details.
+%
+% You should have received a copy of the GNU Lesser General Public
+% License along with this library; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+% ------------------------------------------------------------------------------------------------------
+
+% ------------------------------------------------------------------------------------------------------
+% DateTime Libary
+% 
+% The DateTime Library provides basic date and time predicates.
+% Time intervals [T1,T2] are supported.
+%
+ % @author <A HREF="mailto:adrian.paschke@gmx.de">Adrian Paschke</A>
+ % @version 0.2 <1 Nov 2006>
+ % @since 0.1
+ % @dependencies math.prova, list.prova
+% ------------------------------------------------------------------------------------------------------
+
+
+moduleOID("./ContractLog/datetime.prova").
+
+% ------------------------------------------------------------------------ 
+% shorthand writing for datetime
+% 
+% not used at the moment. is a little bit dangarous
+% datetime(YEAR, MONTH, DAY, 0, 0, 0) :- datetime(YEAR, MONTH, DAY).
+
+
+% ------------------------------------------------------------------------ 
+% datetime_date_time(datetime(YEAR,MONTH,DAY,HOUR,MIN,SEC), date(YEAR,MONTH,DAY), time(HOUR,MIN,SEC)).
+%
+% constructs a datetime
+
+datetime_date_time(datetime(YEAR,MONTH,DAY,HOUR,MIN,SEC), date(YEAR,MONTH,DAY), time(HOUR,MIN,SEC)).
+
+
+% ------------------------------------------------------------------------ 
+% datetime_epoch(datetime(YEAR,MONTH,DAY,HOUR,MIN,SEC), EPOCH)
+%
+% there are two representation of date time
+% 1. The normal human understanable version
+% 2. The calculatable epoch version
+% With first you can not compute, because
+% there are these anoying leap years and end of the month irregualities,
+% so for computation always use the epoch variant
+% JavaDate.getDay() is not the day of the month!!
+% Month is [0..11]
+% Day is [1..31] usw.
+
+datetime_epoch(CT, EPOCH) :-
+	bound(EPOCH),
+	Date = rbsla.utils.Math.createCalendar(EPOCH),
+	Y = Date.get(java.util.Calendar.YEAR),
+      M = Date.get(java.util.Calendar.MONTH),
+      D = Date.get(java.util.Calendar.DAY_OF_MONTH),
+      H = Date.get(java.util.Calendar.HOUR_OF_DAY) ,
+      Min =  Date.get(java.util.Calendar.MINUTE),
+      Sec = Date.get(java.util.Calendar.SECOND),
+	CT = ["datetime", Y, M, D, H, Min, Sec].	
+	
+datetime_epoch(datetime(YEAR,MONTH,DAY,HOUR,MIN,SEC), EPOCH) :-
+	bound(YEAR),
+	Calendar = java.util.Calendar.getInstance(),
+	Calendar.set(YEAR,MONTH,DAY,HOUR,MIN,SEC),
+	EPOCH = Calendar.getTimeInMillis().
+
+% ------------------------------------------------------------------------ 
+% timespan_epoch(timespan(DAY,HOUR,MIN,SEC), EPOCH)
+%
+% timespan is without month and year because that is not clear, 
+% because there is not a unique definition how many days a month have
+
+timespan_epoch(timespan(DAY,HOUR,MIN,SEC), EPOCH) :-
+	bound(DAY),
+	math_mult(MIN, 60, MINS),
+	math_mult(HOUR, 3600, HOURS),
+	math_mult(DAY, 86400, DAYS),
+	math_add(SEC, MINS, S1),
+	math_add(S1, HOURS, S2),
+	math_add(S2, DAYS, S3),
+	MS = java.lang.Long(1000),
+	math_mult(S3, MS, EPOCH),
+	!.
+
+timespan_epoch(timespan(DAY,HOUR,MIN,SEC), EPOCH) :-
+	bound(EPOCH),
+	math_divnatural(EPOCH, 1000, EPOCH2),
+	math_mod(EPOCH2, 60, SEC),
+	math_divnatural(EPOCH2, 60, EPOCH3),
+	math_mod(EPOCH3, 60, MIN),
+	math_divnatural(EPOCH3, 60, EPOCH4),
+	math_mod(EPOCH4, 24, HOUR),
+	math_divnatural(EPOCH4, 24, EPOCH5),
+	equ(EPOCH5, DAY), !.
+
+% ------------------------------------------------------------------------ 
+% interval_epoch([T1,T2], EPOCH)
+%
+% Transfer timespan of a time interval ([datetime 1,datetime 2] into epoch value in milli seconds and vice versa
+		
+% ------------------------------------------------------------------------ 
+interval_epoch([T1,T2], EPOCH):-
+	math_sub(T2,T1,TSPAN),
+	timespan_epoch(TSPAN,EPOCH),!.
+
+% ------------------------------------------------------------------------ 
+% interval_timespan([T1,T2], TSPAN)
+%
+% Transfer the timespan of a time interval ([datetime 1,datetime 2] into a timespan representation and vice versa	
+interval_timespan([T1,T2], TSPAN):-
+	math_sub(T2,T1, TSPAN),!.	
+
+% compare(datetime(YEAR1,MONTH1,DAY1,HOUR1,MIN1,SEC1), X ,datetime(YEAR2,MONTH2,DAY2,HOUR2,MIN2,SEC2))
+%
+% These comperators can be used to find the relationship between two dates
+% Many results are possible!
+
+compare(datetime(YEAR1,MONTH1,DAY1,HOUR1,MIN1,SEC1), '=' ,datetime(YEAR2,MONTH2,DAY2,HOUR2,MIN2,SEC2)):-
+	datetime_epoch(datetime(YEAR1,MONTH1,DAY1,HOUR1,MIN1,SEC1), EPOCH1),
+	datetime_epoch(datetime(YEAR2,MONTH2,DAY2,HOUR2,MIN2,SEC2), EPOCH2),
+	equ(EPOCH1, EPOCH2).
+
+
+compare(datetime(YEAR1,MONTH1,DAY1,HOUR1,MIN1,SEC1), '<' ,datetime(YEAR2,MONTH2,DAY2,HOUR2,MIN2,SEC2)):-
+	datetime_epoch(datetime(YEAR1,MONTH1,DAY1,HOUR1,MIN1,SEC1), E1),
+	datetime_epoch(datetime(YEAR2,MONTH2,DAY2,HOUR2,MIN2,SEC2), E2),
+	less(E1, E2).
+
+compare(datetime(YEAR1,MONTH1,DAY1,HOUR1,MIN1,SEC1), '<=' ,datetime(YEAR2,MONTH2,DAY2,HOUR2,MIN2,SEC2)):-
+	datetime_epoch(datetime(YEAR1,MONTH1,DAY1,HOUR1,MIN1,SEC1), E1),
+	datetime_epoch(datetime(YEAR2,MONTH2,DAY2,HOUR2,MIN2,SEC2), E2),
+	lessequ(E1, E2).
+
+compare(datetime(YEAR1,MONTH1,DAY1,HOUR1,MIN1,SEC1), '>' ,datetime(YEAR2,MONTH2,DAY2,HOUR2,MIN2,SEC2)):-
+	datetime_epoch(datetime(YEAR1,MONTH1,DAY1,HOUR1,MIN1,SEC1), E1),
+	datetime_epoch(datetime(YEAR2,MONTH2,DAY2,HOUR2,MIN2,SEC2), E2),
+	more(E1, E2).
+
+compare(datetime(YEAR1,MONTH1,DAY1,HOUR1,MIN1,SEC1), '>=' ,datetime(YEAR2,MONTH2,DAY2,HOUR2,MIN2,SEC2)):-
+	datetime_epoch(datetime(YEAR1,MONTH1,DAY1,HOUR1,MIN1,SEC1), E1),
+	datetime_epoch(datetime(YEAR2,MONTH2,DAY2,HOUR2,MIN2,SEC2), E2),
+	moreequ(E1, E2).
+
+compare(time(HOUR1, MIN1, SEC1), COMP, time(HOUR2, MIN2, SEC2)) :-
+	datetime_date_time(DT1, date(1970,0,1), time(HOUR1,MIN1,SEC1)),
+	datetime_date_time(DT2, date(1970,0,1), time(HOUR2,MIN2,SEC2)),
+	compare(DT1, COMP, DT2).
+	
+compare(date(YEAR1, MONTH1, DAY1), COMP, date(YEAR2, MONTH2, DAY2)) :-
+	datetime_date_time(DT1, date(YEAR1, MONTH1, DAY1), time(0,0,0)),
+	datetime_date_time(DT2, date(YEAR2, MONTH2, DAY2), time(0,0,0)),
+	compare(DT1, COMP, DT2).
+
+
+% ------------------------------------------------------------------------ 
+% less(), equ() etc.
+%
+% Overloaded for use of list_... etc.
+
+% Compare datetime
+
+less(A, B):-
+	compare(A, '<', B), 
+	!.
+	
+lessequ(A, B):-
+	compare(A, '<=', B), 
+	!.
+
+
+
+more(A, B):-
+	compare(A, '>', B), 
+	!.
+	
+moreequ(A, B):-
+	compare(A, '>=', B), 
+	!.
+
+% Compare timespans
+
+equ(timespan(DAY1, HOUR1, MIN1, SEC1), timespan(DAY2, HOUR2, MIN2, SEC2)):-
+	equ(DAY1, DAY2),
+	equ(HOUR1, HOUR2),
+	equ(MIN1, MIN2),
+	equ(SEC1, SEC2),
+	!.
+
+less(timespan(DAY1, HOUR1, MIN1, SEC1), timespan(DAY2, HOUR2, MIN2, SEC2)):-
+	timespan_epoch(timespan(DAY1, HOUR1, MIN1, SEC1), EPOCH1),
+	timespan_epoch(timespan(DAY2, HOUR2, MIN2, SEC2), EPOCH2),
+	less(EPOCH1, EPOCH2),
+	!.
+
+lessequ(timespan(DAY1, HOUR1, MIN1, SEC1), timespan(DAY2, HOUR2, MIN2, SEC2)):-
+	timespan_epoch(timespan(DAY1, HOUR1, MIN1, SEC1), EPOCH1),
+	timespan_epoch(timespan(DAY2, HOUR2, MIN2, SEC2), EPOCH2),
+	lessequ(EPOCH1, EPOCH2),
+	!.
+
+more(timespan(DAY1, HOUR1, MIN1, SEC1), timespan(DAY2, HOUR2, MIN2, SEC2)):-
+	timespan_epoch(timespan(DAY1, HOUR1, MIN1, SEC1), EPOCH1),
+	timespan_epoch(timespan(DAY2, HOUR2, MIN2, SEC2), EPOCH2),
+	more(EPOCH1, EPOCH2),
+	!.
+
+moreequ(timespan(DAY1, HOUR1, MIN1, SEC1), timespan(DAY2, HOUR2, MIN2, SEC2)):-
+	timespan_epoch(timespan(DAY1, HOUR1, MIN1, SEC1), EPOCH1),
+	timespan_epoch(timespan(DAY2, HOUR2, MIN2, SEC2), EPOCH2),
+	moreequ(EPOCH1, EPOCH2),
+	!.
+
+
+% Compare time interval
+ 
+equ([T1,T2], [T3,T4]):-
+	equ(T1, T3),
+	equ(T2, T4),
+	!.
+
+less([T1,T2], [T3,T4]):-
+	less(T2,T3),
+	!.
+
+lessequ([T1,T2], [T3,T4]):-	
+	lessequ(T2, T3),
+	!.
+
+more([T1,T2], [T3,T4]):-
+	more(T1, T4),
+	!.
+
+moreequ([T1,T2], [T3,T4]):-	
+	moreequ(T1,T4),
+	!.
+	
+between([T1,T2], [T3,T4]):-
+	moreequ(T1,T3),
+	lessequ(T2,T4),
+	!.
+
+
+% ------------------------------------------------------------------------ 
+% math_add(datetime(YEAR1,MONTH1,DAY1,HOUR1,MIN1,SEC1), timespan(DAY2, HOUR2, MIN2, SEC2), DTR)
+%
+% Overloaded math_add()
+
+math_add(datetime(YEAR1,MONTH1,DAY1,HOUR1,MIN1,SEC1), timespan(DAY2, HOUR2, MIN2, SEC2), DTR):-
+	datetime_epoch(datetime(YEAR1,MONTH1,DAY1,HOUR1,MIN1,SEC1), EPOCH1),
+	timespan_epoch(timespan(DAY2, HOUR2, MIN2, SEC2), EPOCH2),
+	math_add(EPOCH1, EPOCH2, EPOCHR),
+	datetime_epoch(DTR, EPOCHR),	!.
+
+math_add(timespan(DAY1, HOUR1, MIN1, SEC1), timespan(DAY2, HOUR2, MIN2, SEC2), RSPAN):-
+	timespan_epoch(timespan(DAY1, HOUR1, MIN1, SEC1), EPOCH1),
+	timespan_epoch(timespan(DAY2, HOUR2, MIN2, SEC2), EPOCH2),
+	type(EPOCH1, EPOCH1TYPE),
+	math_add(EPOCH1, EPOCH2, EPOCHR),
+	timespan_epoch(RSPAN, EPOCHR).
+
+
+
+% ------------------------------------------------------------------------ 
+% math_sub(timespan(DAY1, HOUR1, MIN1, SEC1), timespan(DAY2, HOUR2, MIN2, SEC2), RSPAN):-
+%
+% Overloaded math_sub()
+
+math_sub(timespan(DAY1, HOUR1, MIN1, SEC1), timespan(DAY2, HOUR2, MIN2, SEC2), RSPAN):-
+	timespan_epoch(timespan(DAY1, HOUR1, MIN1, SEC1), EPOCH1),
+	timespan_epoch(timespan(DAY2, HOUR2, MIN2, SEC2), EPOCH2),
+	math_sub(EPOCH1, EPOCH2, EPOCHR),
+	timespan_epoch(RSPAN, EPOCHR),
+	!.
+
+math_sub(datetime(YEAR1,MONTH1,DAY1,HOUR1,MIN1,SEC1), T2, RSPAN):-
+	datetime_epoch(datetime(YEAR1,MONTH1,DAY1,HOUR1,MIN1,SEC1), EPOCH1),
+	datetime_epoch(T2, EPOCH2),
+	math_sub(EPOCH1, EPOCH2, EPOCHR),
+	timespan_epoch(RSPAN, EPOCHR).
+
+
+
+% ------------------------------------------------------------------------ 
+% null_element().
+%
+% Overloaded null_element()
+
+null_element(timespan(0,0,0,0)).
+null_element(datetime(0,0,0,0,0,0)).
+
+
+% ------------------------------------------------------------------------ 
+% interval(Intervall, Time):-
+%
+% Interval can be all 5 seconds, all 2 Hours, 
+% but also all 1 and 1/2 hour etc.
+
+interval(Intervall, Time):-
+	datetime_epoch(Time, TimeEpoch),
+	timespan_epoch(Intervall, TimeSpan), 
+	math_mod(TimeEpoch,TimeSpan,SS),
+	equ(SS, 0).	
+	
+% ------------------------------------------------------------------------ 
+% interval(Initiator,Terminator, Interval):-
+%
+interval(T1,T2,Interval):-Interval=[T1,T2].
+
+% --------------------------------------------------------------------------
+% time predicate that gives back the actual time of the system
+% result is "datetime(Year,Month,Day,Hour,Min,Sec)".
+	
+sysTime(CT) :-
+	CurrentTime = java.util.GregorianCalendar.getInstance(),
+	Y = CurrentTime.get(java.util.Calendar.YEAR),
+      M = CurrentTime.get(java.util.Calendar.MONTH),
+      D = CurrentTime.get(java.util.Calendar.DAY_OF_MONTH),
+      H = CurrentTime.get(java.util.Calendar.HOUR_OF_DAY) ,
+      Min =  CurrentTime.get(java.util.Calendar.MINUTE),
+      Sec = CurrentTime.get(java.util.Calendar.SECOND),
+	CT = ["datetime", Y, M, D, H, Min, Sec].
+
+

@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svnroot/sps2011/!svn/ver/14/SymposiumPlannerSystem
+END
+shutDown.bat
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/shutDown.bat
+END
+.classpath
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/sps2011/!svn/ver/8/SymposiumPlannerSystem/.classpath
+END
+startUp
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svnroot/sps2011/!svn/ver/8/SymposiumPlannerSystem/startUp
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/.project
+END
+startUp.bat
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/sps2011/!svn/ver/13/SymposiumPlannerSystem/startUp.bat
+END
+ServletMaker.bat
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/ServletMaker.bat
+END
+pom.xml
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/sps2011/!svn/ver/13/SymposiumPlannerSystem/pom.xml
+END
+shutDown
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/shutDown
+END
+InstallAllServlets.bat
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/sps2011/!svn/ver/6/SymposiumPlannerSystem/InstallAllServlets.bat
+END
+assembly.xml
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/sps2011/!svn/ver/2/SymposiumPlannerSystem/assembly.xml
+END

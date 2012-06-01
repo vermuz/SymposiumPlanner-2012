@@ -1,0 +1,38 @@
+% The RuleResponder agent is used as a HTTP "bridge" waiting for 
+% incoming HTTP messages which contain valid Reaction RuleML messages
+% as contents. The RuleResponder simply distributes the incoming 
+% messages to the internal agents deployed on the Enterprise Service Bus. 
+%
+% Additional security rules and filtering rules might be implemented
+% in this bridge service.
+%
+% In contrast, to the usual agent communication style, the incoming
+% message contains in the conversation ID the address of the agent to which 
+% the message should be send.
+
+% import of additional ContractLog libraries (modules)
+
+:-eval(consult('../ContractLog/math.prova')).
+:-eval(consult('../ContractLog/datetime.prova')).
+:-eval(consult('../ContractLog/list.prova')).
+:-eval(consult('../ContractLog/update.prova')).
+:-eval(consult('../ContractLog/utils.prova')).
+%:-eval(consult('../ContractLog/calendar.prova')). % calendar API
+:-eval(consult('../ContractLog/owl.prova')).
+
+
+% the pragmatic performatives the rule responder bridge understands
+performative("query-sync").
+performative("answer").
+performative("end_of_transmission").
+performative("no_further_answers").
+
+% incoming HTTP queries are synchronous
+rcvMsg(To, esb, From, "query-sync", Payload) :-	
+    sendMsg(XID,esb, To, "query", Payload),
+	rcvMult(XID,esb, To, "answer", Answer),
+	sendMsg(XID,esb, From, "answer", Answer).
+rcvMsg(To, esb, From, "query-sync", Payload) :-
+    rcvMsg(XID,esb, To, "no_further_answers", Answer),
+	sendMsg(XID,esb, From, "no_further_answers", Payload).
+	

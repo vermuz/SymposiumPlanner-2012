@@ -1,0 +1,80 @@
+% ------------------------------------------------------------------------------------------------------
+%  Copyright (C) 1999-2007 <a href="mailto:adrian.paschke@gmx.de">Adrian Paschke</a>
+% 
+% The Contractlog library is part of the Rule Based Service Level Agreement (RBSLA)
+%  project, available at 
+% <a href="https://sourceforge.net/projects/rbsla">SourceForge RBSLA</a>
+% 
+% More information <a href="http://ibis.in.tum.de/staff/paschke/rbsla/index.htm">RBSLA Project Site</a>
+%
+% This library is free software; you can redistribute it and/or
+% modify it under the terms of the GNU Lesser General Public
+% License as published by the Free Software Foundation; either
+%  version 2 of the License, or (at your option) any later version.
+% 
+% This library is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+% Lesser General Public License for more details.
+%
+% You should have received a copy of the GNU Lesser General Public
+% License along with this library; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+% ------------------------------------------------------------------------------------------------------
+
+
+% ------------------------------------------------------------------------------------------------------
+% Template for Test Cases
+% ------------------------------------------------------------------------------------------------------
+
+testcase({name}).
+
+%-----------------------------------------------------------------------
+% Imported libraries
+%-----------------------------------------------------------------------	
+:-eval(consult('ContractLog/utils.prova')). % alway needed
+
+% ------------------------------------------------------------------------------------------------------
+% (Meta) test rules
+% ------------------------------------------------------------------------------------------------------
+
+% rules of the form head :- body.
+% the head can be negated with neg(head)
+
+% please use add(...) from update.prova to add rules and facts to the KB with an ID
+% the ID is used in test coverage measurement to apply partial reasoning with "partial(...,ID)"
+
+% ------------------------------------------------------------------------------------------------------
+% Test facts
+% ------------------------------------------------------------------------------------------------------
+
+
+% facts of the form p(...).
+% facts can be negated with neg(p(...)).
+% free variables might be used in facts, e.g. p(X).
+
+% ------------------------------------------------------------------------------------------------------
+% Integrity constraints / Integrity rules
+% ------------------------------------------------------------------------------------------------------
+
+% integrity constraints must always hold.
+% there are four types of integrity constraints
+% 1. Mutual exclusive constraints, of the form integrity(xor(p1(...),p2(...),...,pn(...)).
+% 2. Not constraints, of the form integrity(not(p1(...),p2(...),...,pn(...)).
+% 3. And constraints, of the form integrity(and(p1(...),p2(...),...,pn(...)).
+% 4. Or constraints, of the form integrity(or(p1(...),p2(...),...,pn(...)).
+%
+% Classical negation can be used, e.g. integrity(xor(p1(_),neg(p1(_))). to state that
+% there should never be a positive literal p1 and a negative literal neg(p1).
+
+
+% ------------------------------------------------------------------------------------------------------
+% Tests
+% ------------------------------------------------------------------------------------------------------
+
+runTest({test name}):-testcase({name}), ....
+
+
+
+run({name}):-runTest(), runTest ... .

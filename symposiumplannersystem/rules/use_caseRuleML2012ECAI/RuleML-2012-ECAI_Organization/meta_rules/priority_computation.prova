@@ -1,0 +1,59 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This module implements the meta inference rules
+% for the priority computation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%% 
+% Auxiliary inference rules
+% to compute the role with the highes priority
+% Simple prioritization calculi which works as a 
+% directed acyclic graph (nodes ~ prioritization ; branches ~ states).
+%
+% More expressive formalisms might be used such as
+% defeasible logic.
+
+
+% ------------------------------------------------------------------------ 
+% morePriority(X, Y)
+%
+% define the priority chain 
+
+morePriority(X, endElement):-
+	notAvailable(endElement, XX),
+	X = XX.
+
+morePriority(X, Y):-
+	notAvailable(YY, XX),
+	X = XX,
+	Y = YY.
+
+
+
+% ------------------------------------------------------------------------ 
+% rootCause(X)
+%
+% priority computation if person not available
+
+notCauseExists(X) :-
+	causeExists(X),	
+	!,
+	fail().
+notCauseExists(X).
+
+rootCause(X) :-
+	morePriority(X,Y),
+	notCauseExists(X),
+	hasCausesSequence(Y).
+
+hasCausesSequence(endElement).
+hasCausesSequence(X):-
+	causeExists(X),
+	morePriority(X,Y),
+	hasCausesSequence(Y).
+
+causeExists(X) :-	
+	person(Person, role(X,_), _, _),		
+	personNotAvailable(Person).
+
+

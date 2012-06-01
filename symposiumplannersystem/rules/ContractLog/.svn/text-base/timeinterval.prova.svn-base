@@ -1,0 +1,229 @@
+% ------------------------------------------------------------------------------------------------------
+%  Copyright (C) 1999-2007 <a href="mailto:adrian.paschke@gmx.de">Adrian Paschke</a>
+% 
+% The Contractlog library is part of the Rule Based Service Level Agreement (RBSLA)
+%  project, available at 
+% <a href="https://sourceforge.net/projects/rbsla">SourceForge RBSLA</a>
+% 
+% More information <a href="http://ibis.in.tum.de/staff/paschke/rbsla/index.htm">RBSLA Project Site</a>
+%
+% This library is free software; you can redistribute it and/or
+% modify it under the terms of the GNU Lesser General Public
+% License as published by the Free Software Foundation; either
+%  version 2 of the License, or (at your option) any later version.
+% 
+% This library is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+% Lesser General Public License for more details.
+%
+% You should have received a copy of the GNU Lesser General Public
+% License along with this library; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+% ------------------------------------------------------------------------------------------------------
+
+% ------------------------------------------------------------------------------------------------------
+% TimeIntervall Library
+% 
+% Implements some basic timeintervall pedicates.
+%
+% A timepoint represent a specific point in time.
+% It contains a status which one service have in a specific
+% time. The basic structure is the following:
+%
+% 	timepoint(datetime(YEAR,MONTH,DAY,HOUR,MIN,SEC), STATUS)
+%
+% Parameters:
+%	YEAR, ..., SEC: Integer representing a specific time
+%	STATUS:	Can be any type, representing a status
+%	
+% The timepoint can be used to store the status of anything at
+% a given time. Later these timepoints can be converted to time-
+% intervals.
+% Often a timepoint is concated in timepoint list:
+%
+%	[timepoint(...), timepoint(...), ...]
+%
+% In the following declerations this structure is reffered 
+% as TIMEPOINTS.
+%
+%
+ % @author <A HREF="mailto:adrian.paschke@gmx.de">Adrian Paschke</A>
+ % @version 0.2 <1 Nov 2006>
+ % @since 0.1
+ % @dependencies math.prova
+%
+% ------------------------------------------------------------------------------------------------------
+
+moduleOID("./ContractLog/timeinterval.prova").
+
+% --------------------------------------------------------------- 
+% timepoint_construct(TIMEPOINT, DATETIME, STATUS)
+%
+% Constructs or seperates a timepoint() from a given
+% datetime() and STATUS.
+%
+
+timepoint_construct(timepoint(datetime(YEAR,MONTH,DAY,HOUR,MIN,SEC), STATUS), datetime(YEAR,MONTH,DAY,HOUR,MIN,SEC), STATUS).
+
+
+% --------------------------------------------------------------- 
+% delete_between(TIMEPOINTS, TIMEPOINTS)
+% 
+% Delete all elements of a timepoints list
+% which contain  a timpoints which follows another
+% timepoint with the same status.
+% It is a preperation of the conversion to the
+% timeinterval.
+% TODO: ! weg, dafür X != Y funktioniert aber nicht!?
+
+delete_between([],[]).
+
+delete_between([timepoint(T1, SAME),timepoint(T2, SAME)|XS],N):-
+	delete_between([timepoint(T1, SAME)|XS],N),
+	!.  
+delete_between([X|XS],[X|NS]):-
+	delete_between(XS,NS). 
+
+
+% ---------------------------------------------------------------  	
+% between(DATETIME1, TIMEPOINT, DATETIME)
+% 
+% overload to use list_filter_between
+
+between(T1, timepoint(T, SAME), T2) :-
+	between(T1, T, T2),
+	!.
+
+	
+% --------------------------------------------------------------- 
+% timeintervall_construct()
+%
+% represent a time_intervall
+
+timeintervall_construct(
+	timeintervall(
+		datetime(YEAR1,MONTH1,DAY1,HOUR1,MIN1,SEC1), 
+		datetime(YEAR2,MONTH2,DAY2,HOUR2,MIN2,SEC2), 
+		STATUS), 
+	datetime(YEAR1,MONTH1,DAY1,HOUR1,MIN1,SEC1), 
+	datetime(YEAR2,MONTH2,DAY2,HOUR2,MIN2,SEC2), 
+	STATUS).
+
+
+% --------------------------------------------------------------- 
+% timepoints_timeintervalls(TIMEPOINTS, TIMEINTERVALLS)
+% 
+% convert a timepoints list in a timeintervalls liste
+
+timepoints_timeintervalls(TimeList, IntervallList):-
+	delete_between(TimeList, T),
+	timepoints_timeintervalls_impl(T,IntervallList).
+
+timepoints_timeintervalls_impl([],[]) :- !.
+
+timepoints_timeintervalls_impl([timepoint(T1,S1)|B],[timeintervall(T1, T1, S1)|D]):-
+	D=[],
+	B=[],
+	!.
+	
+timepoints_timeintervalls_impl([timepoint(T1,S1),timepoint(T2,S2)|AS],[timeintervall(T1, T2, S1)|DS]) :- 
+	timepoints_timeintervalls_impl([timepoint(T2,S2)|AS],DS),
+	!.
+
+
+% ---------------------------------------------------------------  	
+% between(INTERVALLS, INTERVALLS, DATETIME1, DATETIME2)
+% 
+% filters all intrevalls which between a certain time
+% maybe the in/out can be extended
+% between(LISTE, X, datetime(1990,1,1,0,0,0), datetime(1990,1,1,4,0,0))
+
+between([],[], T1, T2).
+
+between([timeintervall(IT1,IT2,S)|IS], [timeintervall(IT1,IT2,S)|OS], T1, T2) :-
+	between(T1, IT1, T2),
+	between(IS,OS,T1,T2),
+	!.
+
+between([I|IS], OS, T1, T2) :-
+	between(IS,OS,T1,T2).
+	
+
+% ---------------------------------------------------------------  		
+% filter_status(STATUS, TIMEINTERVALLS, TIMEINTERVALLS)
+% 
+% convert TIMEINTERVALLS in a simple TIMESPANS list
+
+filter_status(STATUS,[],[]):-!. 
+
+filter_status(STATUS, [timeintervall(T1, T2, S)|AS], [timeintervall(T1, T2, S)|BS] ) :-
+	STATUS = S,
+	filter_status(STATUS, AS, BS), !.
+
+filter_status(STATUS, [timeintervall(T1, T2, S)|AS], BS ) :-
+	filter_status(STATUS, AS, BS).
+	
+
+% ---------------------------------------------------------------  	
+% math_add(timeintervall(T1, T2, S), TS2, TSR) 
+%
+% overload math_add
+
+math_add(timeintervall(T1, T2, S), TS2, TSR) :-
+	math_sub(T2, T1, TS),
+	math_add(TS, TS2, TSR),
+	!.
+
+
+% ---------------------------------------------------------------  	
+% less(timeintervall(T11, T12, S1), timeintervall(T21, T22, S2))
+%
+% overload less
+		
+less(timeintervall(T11, T12, S1), timeintervall(T21, T22, S2)):-
+	math_sub(T12,T11,N1),
+	math_sub(T22,T21,N2),
+	less(N1, N2).	 
+
+
+% ---------------------------------------------------------------  	
+% between(A, timeintervall(T1, T2, S1), B)
+%
+% overload between
+% TODO: only compares T1 not T2?!
+
+between(A, timeintervall(T1, T2, S1), B):-
+	datetime_date_time(T1, DATE, TIME),
+	lessequ(A, TIME),	
+	lessequ(TIME, B),	!.
+
+between(A, timeintervall(T1, T2, S), B):-
+	between(A, T1, B).
+
+
+% ---------------------------------------------------------------  	
+% availability(S, L, R)
+%
+% Availability in percent
+
+availability(S, L, R) :-
+	filter_status(S, L, AVAILLIST),
+	list_sum(AVAILLIST, AVAILTIME),
+	list_sum(L, COMPLETETIME),
+	timespan_epoch(AVAILTIME, AVAILEPOCH),
+	timespan_epoch(COMPLETETIME, COMPLETEEPOCH),	
+	math_div(AVAILEPOCH, COMPLETEEPOCH, R).
+
+
+% ---------------------------------------------------------------  	
+% timeintervalls_timespans(TIMEINTERVALLS, TIMESPANS)
+% 
+% convert TIMEINTERVALLS in a simple TIMESPANS list
+
+timeintervalls_timespans([],[]). 
+
+timeintervalls_timespans([timeintervall(T1, T2, S)|AS], [timespan(DAY,HOUR,MIN,SEC)|BS] ) :-
+	datetime_sub(T2, T1, timespan(DAY,HOUR,MIN,SEC)),
+	timeintervalls_timespans(AS, BS).

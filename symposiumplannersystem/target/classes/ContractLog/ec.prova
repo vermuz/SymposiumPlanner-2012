@@ -1,0 +1,577 @@
+% ------------------------------------------------------------------------------------------------------
+%  Copyright (C) 1999-2007 <a href="mailto:adrian.paschke@gmx.de">Adrian Paschke</a>
+% 
+% The Contractlog library is part of the Rule Based Service Level Agreement (RBSLA)
+%  project, available at 
+% <a href="https://sourceforge.net/projects/rbsla">SourceForge RBSLA</a>
+% 
+% More information <a href="http://ibis.in.tum.de/staff/paschke/rbsla/index.htm">RBSLA Project Site</a>
+%
+% This library is free software; you can redistribute it and/or
+% modify it under the terms of the GNU Lesser General Public
+% License as published by the Free Software Foundation; either
+%  version 2 of the License, or (at your option) any later version.
+% 
+% This library is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+% Lesser General Public License for more details.
+%
+% You should have received a copy of the GNU Lesser General Public
+% License along with this library; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+% ------------------------------------------------------------------------------------------------------
+
+% ------------------------------------------------------------------------------------------------------
+% Event Calclus Implementation
+%
+% Implementes the basic EC axioms, the interval-based Event Calculus and
+% the EC based event algebra operators.
+% 
+ % @author <A HREF="mailto:adrian.paschke@gmx.de">Adrian Paschke</A>
+ % @version 0.2 <1 Nov 2006>
+ % @since 0.1
+ % @dependencies utils.prova, list.prova, list_math.prova, datetime.prova, update.prova
+% ------------------------------------------------------------------------------------------------------
+
+moduleOID("./ContractLog/ec.prova").
+
+
+% ------------------------------------------------------------------------ 
+% planned(Event,T)  planned event, which happens in future (AI Planning)
+% Note: Might be omitted for performance reasons, if not used
+
+%happens(E,T) :- planned(E,T).
+
+
+
+
+%
+% tests if fluent holds at given time
+
+
+% ------------------------------------------------------------------------ 
+% holdsAt(Fluent,T) for happens facts, i.e. durable, non-transient events
+%
+% tests if fluent holds at given time
+%
+% Provides reliability and vadlidity
+
+
+% initially construct, might be omitted for performance reasons
+holdsAt(Fluent, T) :-
+	bound(Fluent),
+	bound(T),
+	initially(Fluent),
+	notclipped(datetime(0,0,0,0,0,0),Fluent,T),
+	!.
+	
+holdsAt(Fluent, T) :-
+	bound(T),
+	initially(Fluent),
+	notclipped(datetime(0,0,0,0,0,0),Fluent,T).	
+
+%----------------
+% Optimized version with cut to answer bound queries holdsAt(f,t)? ==> true/false
+%----------------
+holdsAt(Fluent,T):- 
+	bound(Fluent),
+	bound(T), % T must be input / bound			
+	not(derivedFluent(Fluent)), % compute only non derived fluents
+	initiates(AnEvent, Fluent, T), % Note order of initiates / happens is crucial for conditional EC predicates and loops	
+	happens(AnEvent, Before), 
+	less(Before, T),				
+	notclipped(Before, Fluent, T),  % assumes closed world
+	!. 
+
+%----------------
+% Optimized version to answer free queries holdsAt(F,t)? ==> All Fluents which hold at t
+%----------------
+holdsAt(Fluent,T):- 
+	bound(T), % T must be input / bound
+	happens(AnEvent, Before), 
+	less(Before, T),
+	initiates(AnEvent, Fluent, Before),
+	not(derivedFluent(Fluent)), % compute only non derived fluents	
+	notclipped(Before, Fluent, T).  % assumes closed world
+
+%----------------
+% Optimized version with cut to answer bound queries negholdsAt(f,t)? ==> true/false
+%----------------
+neg(holdsAt(Fluent,T)):- 
+	bound(Fluent),
+	bound(T),
+	not(derivedFluent(Fluent)),
+	terminates(AnEvent, Fluent, T),
+	happens(AnEvent, Before), 
+	less(Before, T),				
+	notdeclipped(Before, Fluent, T),
+	!.
+
+%----------------
+% Optimized version to answer free queries negholdsAt(F,t)? ==> All Fluents which do not hold at t
+neg(holdsAt(Fluent,T)):- 
+	bound(T),
+	happens(AnEvent, Before), 
+	less(Before, T),				
+	terminates(AnEvent, Fluent, Before),
+	not(derivedFluent(Fluent)),
+	notdeclipped(Before, Fluent, T).
+
+% ------------------------------------------------------------------------ 
+% clipped(T1, Fluent, T2)
+%
+% tests if fluent is terminated/initiates between timespan
+
+clipped(T1, Fluent, T2) :-
+	terminates(AnEvent, Fluent, T2),
+	happens(AnEvent, AnTime), 
+	lessequ(T1, AnTime),
+	less(AnTime, T2).
+
+notclipped(T1, Fluent, T2):-
+	clipped(T1, Fluent, T2),	
+	!,
+	fail().
+notclipped(T1, Fluent, T2). 
+
+declipped(T1, Fluent, T2) :-
+	initiates(AnEvent, Fluent, T2),
+	happens(AnEvent, AnTime), 
+	lessequ(T1, AnTime),
+	less(AnTime, T2).
+
+
+notdeclipped(T1, Fluent, T2):-
+	declipped(T1, Fluent, T2),
+	!,
+	fail().
+notdeclipped(T1, Fluent, T2).
+	
+
+
+
+
+
+% ------------------------------------------------------------------------ 
+% valueAt(Fluent,T)
+%
+% gives quantitative value at given time (trajectories)
+% valueAt(Parameter,Time,Value): valueAt(P,T2,X) <-- initiates(E,F,T1) and happens(E,T1) and T2>=T1 and trajectory(F,T1,P,T2,Value) and not clipped(T1,F,T2)
+
+valueAt(P,T2,X):-
+	bound(T2),
+	bound(P),
+	trajectory(F,datetime(0,0,0,0,0,0),P,datetime(0,0,0,0,0,0),Y), % to prevent loops
+	initiates(E,F,T2), % change order of initiates and happens if initiates should be conditional
+	happens(E,T1), % be careful of loops between happens and valueAt --> cond. initiates not allowed for valueAt
+	lessequ(T1,T2),
+	trajectory(F,T1,P,T2,X),
+	notclipped_trajectory(T1,F,T2),	
+	!.
+
+
+valueAt(P,T2,X):-
+	free(T2),
+	bound(X),
+	bound(P),
+	trajectory(F,datetime(0,0,0,0,0,0),P,datetime(0,0,0,0,0,0),Y), % to prevent loops and narrow search space
+	initiates(E,F,T1), % change order of initiates and happens if initiates should be conditional
+	happens(E,T1), 	% be careful of loops between happens and valueAt --> cond. initiates not allowed for valueAt
+	math_add(T1,X,T2),
+	notclipped_trajectory(T1,F,T2).
+	
+clipped_trajectory(T1, Fluent, T2) :-	
+	terminates(AnEvent, Fluent, T2),			
+	not(derivedEvent(AnEvent)),
+	happens(AnEvent, AnTime), 
+	lessequ(T1, AnTime),
+	less(AnTime, T2).
+
+notclipped_trajectory( T1, Fluent, T2):-
+	clipped_trajectory(T1, Fluent, T2),	
+	!,
+	fail().
+notclipped_trajectory(T1, Fluent, T2). 	
+
+
+
+% ------------------------------------------------------------------------ 
+% countMVIs
+%
+% counts the number of MVIs for a fluen
+% countMVI(Fluent,Time)
+
+countMVIs(Fluent, Number):- 
+		initiates(E,Fluent,T),		 
+		findall(happens(E,T),happens(E,T),MVIList),
+		size(MVIList,Number).
+		
+% ------------------------------------------------------------------------ 
+% interval
+%
+% computes all validity intervals for a fluent
+% mvi(Fluent,Timespan)
+mvi(Fluent,Timespan) :- 				
+				terminates(E,Fluent,T),				
+				happens(E,T),
+				datetime_epoch(T,E1),
+				timespan_epoch(timespan(0,0,0,1),T1),	
+				math_sub(E1,T1,TE), 
+				datetime_epoch(T2,TE),	
+				add("mvi","trajectory(_0,T1,mvi(_0),T2,Value):-math_sub(T2,T1,Value).",[Fluent]),			
+				valueAt(mvi(Fluent),T2, Timespan),
+				remove("mvi").
+mvi(Fluent,Timespan) :-
+				initiates(E,Fluent,T),
+				happens(E,T),
+				sysTime(T2),
+				notclipped(T,Fluent,T2),
+				add("mvi","trajectory(_0,T1,mvi(_0),T2,Value):-math_sub(T2,T1,Value).",[Fluent]),			
+				valueAt(mvi(Fluent),T2, Timespan),
+				remove("mvi").
+
+
+% ------------------------------------------------------------------------ 
+% overallMVI
+%
+% computes the overall mvi for a fluent
+% overallMVI(Fluent,Timespan)
+overallMVI(Fluent,Timespan):-		
+			findall(Interval,mvi(Fluent,Interval),OT),
+			list_sum(OT,Timespan).
+			
+			
+			
+			
+			
+
+% ------------------------------------------------------------------------ 			
+% Complex event processing			
+% ------------------------------------------------------------------------ 			
+
+
+% ------------------------------------------------------------------------ 
+% Interval-based Event Calculus Event Algebra Operators
+% ------------------------------------------------------------------------ 			
+
+operator(sequence).
+operator(and).
+operator(or).
+operator(xor).
+operator(concurrent).
+operator(neg).
+operator(any).
+operator(aperiodic).
+
+
+% ------------------------------------------------------------------------ 
+% Atomic event occurences and complex event occurences 
+% with occurence interval [T1,T2]
+% ------------------------------------------------------------------------ 	
+
+% atomic event
+event([Event],T):- occurs(Event,T).
+% complex event defined by event algebra operators
+event([Operator|Events],[T1,T2]):- 
+	operator(Operator),	
+	derive(Operator(Events,[T1,T12],T2,Events)).	
+event([[Operator|Events]],[T1,T2]):- 
+	operator(Operator),		
+	derive(Operator(Events,[T1,T12],T2,Events)).	
+
+% ------------------------------------------------------------------------ 
+% A general auxiliary rule to derive all explicitly defined terminating events 
+% for an event interval from a set (list) of terminating events.
+% Example: terminates([a,b,c],[a,b],T), i.e. the event interval [a,b] is terminated
+% by the events a, b or c.
+% ------------------------------------------------------------------------ 
+
+% TODO: Solution with type checking for list to prevent loops
+% Current solution only allows terminates facts which are not conditional
+terminates(E,[E1|E2],T):- fact(terminates([E11|E22],[E1|E2],T)), member(E,[E11|E22]).
+
+
+% ------------------------------------------------------------------------ 
+% holdsInterval(Interval,T) where Interval is a binary set of two events [E1,E2]
+% which span a time interval T = [T1,T2] with E1 being the initiator occuring at T1
+% and E2 being the terminator occuring at T2.
+%
+% E1 and E2 must be bound, i.e. E1 initates the interval and E2 terminates it. 
+% Hence no EC initates predicate is needed.
+%
+% An event might be an atomic event, e.g. "a" or a complex event defined in terms of
+% event algebra operators, e.g. sequence(a,b,c).
+%
+% The predicate is in particular useful in active event processing
+% and interval based event algebras
+
+% Inbound complex event definitions
+% e.g. holdsInterval(sequence(a,b),T).
+holdsInterval([Operator|Events],T):-
+	operator(Operator),
+	event([Operator|Events],T).
+
+%----------------
+% Optimized version for queries with free time intervals
+% Returns the all time intervals [T1,T2] where the event interval [E1,E2]
+% occurs and is not terminated in between. The terminators are defined explicitly 
+% and globaly be a terminates predicate.
+% E1 and E2 must be bound, i.e. E1 initates the interval and E2 terminates it. 
+% Hence no EC initates predicate is needed.
+%----------------
+holdsInterval([E1,E2],[T11,T22]):- 
+	free(T11), free(T22),
+	event([E1],[T11,T12]), 	
+	event([E2],[T21,T22]),		
+	lessequ([T11,T12], [T21,T22]),
+	notbroken(T12, [E1,E2], T21). 
+
+%----------------
+% Interval with one event.
+%----------------
+holdsInterval([E],[T1,T2]):- 
+	event([E],[T1,T2]). 
+
+%----------------
+% Version with local inbound terminators (list of terminating events)
+%----------------
+holdsInterval([E1,E2],[T11,T22],Terminators):- 
+	free(T11), free(T22),
+	event([E1],[T11,T12]), 
+	event([E2],[T21,T22]),
+	lessequ([T11,T12], [T21,T22]),	% E1 occurs before E2			
+	notbroken(T12, [E1,E2], T21, Terminators). % not clipped in between
+	
+	
+%----------------
+% Optimized version with cut for queries with bound time intervals
+% Test whether the time interval [T1,T2] is between the occurence times 
+% of the event interval [E1,E2], i.e. the event interval [E1,E2] holds
+% in the interval [T1,T2].
+%----------------
+holdsInterval([E1,E2],[T1,T2]):- 
+	bound(T1),bound(T2),
+	event([E1],[T11,T12]),
+	lessequ(T11,T1),
+	event([E2],[T21,T22]),
+	lessequ(T2,T22),			
+	notbroken(T1, [E1,E2], T2), !.
+	
+	
+%----------------
+% Version with local terminators.
+%----------------
+holdsInterval([E1,E2],[T1,T2], Terminators):- 
+	bound(T1),bound(T2),
+	event([E1],[T11,T12]),
+	lessequ(T11,T1),
+	event([E2],[T21,T22]),
+	lessequ(T2,T22),			
+	notbroken(T1, [E1,E2], T2, Terminators), !.
+
+
+%----------------
+% Optimized version with cut for queries with partially bound time intervals
+%----------------
+holdsInterval([E1,E2],[T1,T2]):- 
+	bound(T1),free(T2),
+	event([E1],[T11,T1]),
+	event([E2],[T21,T2]),
+	lessequ([T11,T1],[T21,T2]),			
+	notbroken(T1, [E1,E2], T21).
+	
+holdsInterval([E1,E2],[T1,T2],Terminators):- 
+	bound(T1),free(T2),
+	event([E1],[T11,T1]),
+	event([E2],[T21,T2]),
+	lessequ([T11,T1],[T21,T2]),				
+	notbroken(T1, [E1,E2], T21, Terminators).
+
+
+%----------------------------------------------
+% Negation of holdsInterval
+%----------------------------------------------
+
+%TODO: Negations
+
+%----------------
+% Optimized version for free time interval queries
+% Derives the time interval [T1,T2] where the event interval
+% [E1,E2] does not hold
+%----------------
+neg(holdsInterval([E1,E2],[T1,T2])):- 
+	free(T1), free(T2),
+	occurs(AnEvent, T1), 
+	terminates(AnEvent,[E1,E2],T1),
+	occurs(E1,T2),
+	less(T1, T2),
+	notdebroken(T1,[E1,E2],T2).
+	
+
+neg(holdsInterval([E],[T1,T2])):- 
+	free(T1), free(T2),
+	occurs(E, T1), 
+	occurs(E, T2),
+	less(T1,T2), 
+	notdebroken(T1,[E,E],T2).
+	
+%----------------
+% Optimized version for bound time interval queries
+% Test whether tthe event interval
+% [E1,E2] does not hold in the time interval [T1,T2]
+neg(holdsInterval([E1,E2],[T1,T2])):- 
+	bound(T1),bound(T2),	
+	neg(holdsInterval([E1,E2],[TE1,TE2])),
+	between([T1,T2],[TE1,TE2]),!.
+
+neg(holdsInterval([E],[T1,T2])):- 
+	bound(T1),bound(T2),
+	neg(holdsInterval([E],[TE1,TE2])),
+	between([T1,T2],[TE1,TE2]),!.
+		
+
+% ------------------------------------------------------------------------ 
+% broken(T1, Interval, T2)
+%
+% tests if the interval [E1,E2] is terminated between T1 and T2 by an terminating event
+
+broken(T1, Interval, T2) :-
+	terminates(AnEvent, Interval, T2),
+	event([AnEvent],[T11,T12]),
+	less(T1, T11),
+	less(T12, T2),
+	!.
+
+
+% clipped with local terminators
+broken(T1, Interval, T2, Terminators) :-	
+	broken(T1, Interval, T2),!.
+broken(T1, Interval, T2, Terminators) :-	
+	member(Terminator,Terminators), % local terminator - might be complex events
+	event([Terminator],[TE1,TE2]), % terminator event holds between TE1 and TE2
+	less(T1,TE1),
+	less(TE2,T2),
+	!.
+
+% not clipped
+notbroken(T1, Interval, T2):-
+	broken(T1, Interval, T2),
+	!,
+	fail().
+notbroken(T1, Interval, T2). 
+
+% not clipped with terminators
+notbroken(T1, Interval, T2, Terminators):-
+	broken(T1, Interval, T2, Terminators),
+	!,
+	fail().
+notbroken(T1, Interval, T2, Terminators). 
+
+
+
+debroken(T1, [E1,E2], T2) :-
+	occurs(E2,T),
+	more(T,T1),
+	less(T,T2),
+	!.
+
+notdebroken(T1, Interval, T2):-
+	debroken(T1, Interval, T2),
+	!,
+	fail().
+notdebroken(T1, Interval, T2).
+
+
+	
+			
+% ------------------------------------------------------------------------ 
+% Sequence Operator with local terminators derived from event sequence
+% ------------------------------------------------------------------------ 			
+
+sequence([E],[T1,T2],T2,Terminators):-
+	holdsInterval([E],[T1,T2]).
+sequence([E1|Rest],[T1,T2],Tend, Terminators):-
+	head(E2,Rest),			
+	holdsInterval([E1,E2],[T1,T2],Terminators),
+	sequence(Rest,[T2,T3],Tend,Terminators),	
+	lessequ([T1,T2],[T2,T3]).
+
+
+% ------------------------------------------------------------------------ 
+% Or Operator 
+% ------------------------------------------------------------------------ 			
+
+or([E],[T1,T2],T2,Terminator):- event([E],[T1,T2]).
+or([E1|Rest],[T1,T2],T2,Terminator):-
+	event([E1],[T1,T2]),
+	!.
+or([E1|Rest],[T1,T2],T2,Terminator):-
+	or(Rest,[T1,T2],T2,Terminator),
+	!.
+
+
+% ------------------------------------------------------------------------ 
+% And Operator 
+% ------------------------------------------------------------------------ 		
+
+and([E],[T1,T2],T2,Terminator):- event([E],[T1,T2]).	
+and([E1|Rest],[T1,T2],T2,Terminator):-
+	event([E1],[T1,T12]),
+	and(Rest,[T21,T22],T2,Terminator).
+	% TODO: Sort interval
+	
+% ------------------------------------------------------------------------ 
+% Concurrent / Simultaneous Operator 
+% ------------------------------------------------------------------------ 	
+concurrent([E],[T1,T2],T2,Terminator):- event([E],[T1,T2]).	
+concurrent([E1|Rest],[T1,T2],T2,Terminator):-
+	event([E1],[T1,T2]),
+	concurrent(Rest,[T1,T2],T2,Terminator).	
+	
+% ------------------------------------------------------------------------ 
+% Xor Operator 
+% ------------------------------------------------------------------------ 
+xor([E],[T1,T2],T2,Terminator):- !, fail().
+xor([E1|Rest],[T1,T2],T2,Terminator):-
+	event([E1],[T1,T2]),
+	not(or(Rest,[T11,T22],T22,Terminator)),
+	!.
+xor([E1|Rest],[T1,T2],T2,Terminator):-
+	xor(Rest,[T1,T2],T2,Terminator),
+	!.	
+	
+% ------------------------------------------------------------------------ 
+% Neg Operator 
+% ------------------------------------------------------------------------ 
+neg([Terminators,Interval],[T1,T2],T2, Term):-
+	holdsInterval(Interval,[T1,T2],Terminators).
+	
+% ------------------------------------------------------------------------ 
+% Any Operator 
+% ------------------------------------------------------------------------ 	
+any([N,E],[T1,T2],T2, Terminators):-	
+	findall([T1,T2],event([E],[T1,T2]),List),	
+	size(List,Count),
+	modList(List,N,Count,[T1,T2]).
+modList([H|T],N,Count,Element):-
+	math_mod(Count,N,0),
+	head(Element,[H|T]).
+modList([H|T],N,Count,Element):-
+	math_sub(Count,1,CountNew),
+	modList(T,N,CountNew,Element),!.
+	
+% ------------------------------------------------------------------------ 
+% Aperiodic
+% ------------------------------------------------------------------------ 	
+aperiodic([Event,Interval],[T1,T2],T2, Terminators):-
+	sequence(Interval,T,Tend,Interval),
+	event([Event],[T1,T2]),
+	between([T1,T2],T).
+	
+% ------------------------------------------------------------------------ 
+% Periodic
+% ------------------------------------------------------------------------ 	
+
+% Can be much better and efficiently represented as a ECA rule

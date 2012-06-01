@@ -1,0 +1,298 @@
+% ------------------------------------------------------------------------------------------------------
+%  Copyright (C) 1999-2007 <a href="mailto:adrian.paschke@gmx.de">Adrian Paschke</a>
+% 
+% The Contractlog library is part of the Rule Based Service Level Agreement (RBSLA)
+%  project, available at 
+% <a href="https://sourceforge.net/projects/rbsla">SourceForge RBSLA</a>
+% 
+% More information <a href="http://ibis.in.tum.de/staff/paschke/rbsla/index.htm">RBSLA Project Site</a>
+%
+% This library is free software; you can redistribute it and/or
+% modify it under the terms of the GNU Lesser General Public
+% License as published by the Free Software Foundation; either
+%  version 2 of the License, or (at your option) any later version.
+% 
+% This library is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+% Lesser General Public License for more details.
+%
+% You should have received a copy of the GNU Lesser General Public
+% License along with this library; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+% ------------------------------------------------------------------------------------------------------
+
+moduleOID("./ContractLog/owl.prova").
+
+
+ % ----------------------------------------------------------------
+ % OWL2Prova Library
+ % @author <A HREF="mailto:paschke@in.tum.de">Adrian Paschke</A>
+ % @version 0.2 <1 Nov 2006>
+ % @since 0.1
+ % ----------------------------------------------------------------
+
+
+
+
+% includes additional inference rules to handel intersections, hasValue and allValuesFrom constructs
+
+%:-eval(consult('rules/common/owl_inference/intersectionOfRule.prova')).
+%:-eval(consult('rules/common/owl_inference/hasValueRule.prova')).
+%:-eval(consult('rules/common/owl_inference/allValuesFromRule.prova')).
+
+
+
+% ------------------------------------------------------------------------ 
+% owl2prova(InputFile,OutputFile)
+%
+% Translate an RDF/RDFS/OWL file into a Prova fact file
+% which can be consulted within an Prova script.
+% Uses the default reasoner (OWLReasoner) and default converter (DLP_full).
+%
+% @param InputFile RDF/RDFS/OWL file
+% @param OutputFile Prova script
+%-------------------------------------------------------------------------
+
+owl2prova(String.InputFile,String.OutputFile) :-
+	bound(String.InputFile),
+	bound(String.OutputFile),
+	Generator = rbsla.owl.OWL2PROVA(),
+	Generator.run(String.InputFile, String.OutputFile).
+
+
+
+
+
+% ------------------------------------------------------------------------ 
+% owl2prova(Reasoner, Converter, InputFile,OutputFile)
+%
+% Translate an RDF/RDFS/OWL file into a Prova fact file
+% which can be consulted within an Prova script.
+%
+% @param Reasoner name
+%    "" | "empty" | null = no reasoner
+%    default = OWL reasoner
+%    transitive = transitive reasoner
+%    rdfs = RDFS rule reasoner
+%    owl = OWL reasoner
+%    daml = DAML reasoner
+%    dl = OWL-DL reasoner 
+%    swrl = SWRL reasoner
+%    rdfs_full = rdfs full reasoner
+%    rdfs_simple = rdfs simple reasoner
+%    owl_mini = owl mini reasoner
+%    owl_micro = owl micro reasoner
+%
+% @param converter name
+%    default = default converter
+%	 simple = simple converter
+%	 dlp = plain DLP converter (leads to loops)
+%	 dlp_standard = standard DLP with instance equivalence
+%	 dlp_full = full DLP converter to be used onyl with OWL reasoner
+%	 defeasible = defeasible converter
+%
+% @param InputFile RDF/RDFS/OWL file
+% @param OutputFile Prova script	 
+%-------------------------------------------------------------------------
+
+owl2prova(String.Reasoner,String.Converter,String.InputFile,String.OutputFile) :-
+	bound(String.Reasoner),bound(String.Converter),bound(String.InputFile),bound(String.OutputFile),
+	Generator = rbsla.owl.OWL2PROVA(String.Reasoner,String.Converter),
+	Generator.run(String.InputFile,String.OutputFile).
+
+
+
+
+% ------------------------------------------------------------------------ 
+% owl2prova(Reasoner, Pattern, InputFile,OutputFile)
+%
+% Translate an RDF/RDFS/OWL file into a Prova fact file
+% which can be consulted within an Prova script.
+%
+% @param Reasoner name
+%    "" | "empty" | null = no reasoner
+%    default = OWL reasoner
+%    transitive = transitive reasoner
+%    rdfs = RDFS rule reasoner
+%    owl = OWL reasoner
+%    daml = DAML reasoner
+%    dl = OWL-DL reasoner 
+%    swrl = SWRL reasoner
+%    rdfs_full = rdfs full reasoner
+%    rdfs_simple = rdfs simple reasoner
+%    owl_mini = owl mini reasoner
+%    owl_micro = owl micro reasoner
+%
+% @param Pattern  List user-defined pattern, e.g.:
+%   ["predicate","subject","object"] => predicate(subject,object)
+%   ["subj_obj", "subject","object"] => subj_obj(subject,object)
+%   ["rdf","RDFTriple","subject","predicate","object"] => rdf(RDFTriple,subject,predicate,object)
+% etc. "predicate","subject","object" are restricted key words which define the position of 
+% the RDF subject, object and predicate in the output fact.The first term is always 
+% interpreted as predicate name of the prova fact.
+%
+% @param InputFile RDF/RDFS/OWL file
+% @param OutputFile Prova script	 
+%-------------------------------------------------------------------------
+
+owl2prova(String.Reasoner,Pattern,String.InputFile,String.OutputFile) :-
+	bound(String.Reasoner),bound(Pattern),bound(String.InputFile),bound(String.OutputFile),
+	Generator = rbsla.owl.OWL2PROVA(String.Reasoner,"simple"),
+	Converter = rbsla.owl.SimpleConverter(Pattern),
+	Generator.setConverter(Converter), 
+	Generator.run(String.InputFile,String.OutputFile).
+
+
+% ------------------------------------------------------------------------ 
+% assertOWL(File)
+%
+% @param File     RDF input file.
+%
+% Translates a RDF/RDFS/OWL file into logical facts 
+% and asserts them to the prova knowledge base.
+%
+%Uses owl2prova predicate with default reasoner and converter.
+% ------------------------------------------------------------------------ 
+assertOWL(String.File) :-
+	owl2prova(String.File,"./temp.prova"), 
+	consult("./temp.prova").
+	
+
+
+
+
+% ------------------------------------------------------------------------ 
+% assertOWL(Reasoner,Converter, File)
+%
+% @param Reasoner        see owl2prova
+% @param Converter       see owl2prova
+% @param File            RDF input file.
+%
+% Translates a RDF/RDFS/OWL file into logical facts 
+% and asserts them to the prova knowledge base.
+%
+% Uses owl2prova predicate.
+% ------------------------------------------------------------------------ 
+assertOWL(String.Reasoner, String.Converter, String.InputFile) :-
+	owl2prova(String.Reasoner,String.Conveter,String.InputFile,"./temp.prova"), 
+	consult("./temp.prova").
+
+	
+	
+	
+% ------------------------------------------------------------------------ 
+% assertOWL(Reasoner, Pattern, File)
+%
+% @param Reasoner        see owl2prova
+% @param Pattern         List defining the translation pattern - see owl2prova
+% @param File            RDF input file.
+%
+% Translates a RDF/RDFS/OWL file into logical facts 
+% and asserts them to the prova knowledge base.
+%
+% Uses owl2prova predicate.
+% ------------------------------------------------------------------------ 
+assertOWL(String.Reasoner, Pattern, String.InputFile) :-
+	owl2prova(String.Reasoner,Pattern,String.InputFile,"./temp.prova"), 
+	consult("./temp.prova").
+	
+	
+	
+% ------------------------------------------------------------------------ 
+% rdf(File,Subject,Predicate,Object).
+% rdf(File,Reasoner,Subject,Predicate,Object).
+%
+% @param File			 Input RDF/RDFS/OWL file
+% @param Reasoner        see owl2prova
+% @param Subject		 Subject
+% @param Predicate       Predicate
+% @param Object			 Object
+%
+% Namespace abreviations can be used according to the NameSpaceList:
+%   "rdf" => "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+%   "rdfs" => "http://www.w3.org/2000/01/rdf-schema#");
+%   "owl" => "http://www.w3.org/2002/07/owl#");
+%   "xmlns" => "http://www.w3.org/2001/XMLSchema#");
+%   "vcard" => "http://www.w3.org/2001/vcard-rdf/3.0#");
+%   "dc" =>"http://purl.org/dc/elements/1.1/");
+%   "rss" => "http://purl.org/rss/1.0/");
+%   "daml" => "http://www.daml.org/2001/03/daml+oil#");
+%   "jms" => "http://jena.hpl.hp.com/2003/08/jms#");
+%	+ user-defined namespaces.
+% Use "_" instead of "#".
+% Example: "rdf_type" instead of "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+%
+% Query a RDF file dynamically at run time.
+% ------------------------------------------------------------------------ 
+
+rdf(String.File,String.Reasoner,String.Subject,String.Predicate,String.Object, Result) :-
+	bound(String.File),bound(String.Reasoner),
+	Result = rbsla.owl.OWL2PROVA.rdf(String.File,String.Reasoner,String.Subject,String.Predicate,String.Object).
+
+rdf(String.File,String.Reasoner,String.Subject,String.Predicate,String.Object) :-
+	bound(String.File),bound(String.Reasoner),
+	Result = rbsla.owl.OWL2PROVA.rdf(String.File,String.Reasoner,String.Subject,String.Predicate,String.Object),
+	testResult(Result, String.Subject,String.Predicate,String.Object).
+
+rdf(String.File, String.Subject,String.Predicate,String.Object) :-
+	bound(String.File),
+	Result = rbsla.owl.OWL2PROVA.rdf(String.File,"owl",String.Subject,String.Predicate,String.Object),
+	testResult(Result, String.Subject,String.Predicate,String.Object).
+
+% help method	
+testResult(Result, String.Subject,String.Predicate,String.Object) :- 
+	element(Triple,Result),
+	String.Subject=Triple.get(0),
+	String.Predicate=Triple.get(1),
+	String.Object=Triple.get(2).	
+	
+% ------------------------------------------------------------------------ 
+% cache(Size)
+%
+% @param Size  cache size (default 3)
+% 
+% Set the cache size for rdf() queries. 
+% If -1 then no cache is used.
+% ------------------------------------------------------------------------ 	
+cacheSize(java.lang.Integer.Size):-
+	rbsla.owl.OWL2PROVA.setCacheSize(java.lang.Integer.Size).
+
+% ------------------------------------------------------------------------ 
+% cache(Time)
+%
+% @param Time  cache timeout size in milliseconds (default is 10000)
+%
+% Set the cache timeout, i.e. contents older than timeout are removed from the cache
+% ------------------------------------------------------------------------ 	
+cacheTimeOut(java.lang.Integer.Time):-
+	rbsla.owl.OWL2PROVA.setCacheTimeout(java.lang.Integer.Time).
+
+
+
+% ------------------------------------------------------------------------ 
+% nsMapping(on/off)
+%
+% @param on/off on = out put with namespace abreviations. (default is on)
+%
+% Format the rdf() query output.
+% ------------------------------------------------------------------------ 	
+nsMapping(on):-rbsla.owl.OWL2PROVA.setNSMapping(Boolean.TRUE).
+nsMapping(off):-rbsla.owl.OWL2PROVA.setNSMapping(Boolean.FALSE).
+
+
+% ------------------------------------------------------------------------ 
+% type
+%
+% @param Instance
+% @param Class
+%
+% If Instance is a free variable it returns all instances of a Class
+% If Instance is bound it checks wether the instance is of type Class
+% 
+% Note: Can be used only within DLP knowledge bases (see DLP converter)
+% ------------------------------------------------------------------------ 	
+type(String.Inst,String.Class):-bound(String.Class), bound(String.Inst), derive(String.Class(String.Inst)), !.
+type(String.Inst,String.Class):-bound(String.Class), free(String.Inst), derive(String.Class(String.Inst)).
+	

@@ -1,0 +1,251 @@
+% ------------------------------------------------------------------------------------------------------
+%  Copyright (C) 1999-2007 <a href="mailto:adrian.paschke@gmx.de">Adrian Paschke</a>
+% 
+% The Contractlog library is part of the Rule Based Service Level Agreement (RBSLA)
+%  project, available at 
+% <a href="https://sourceforge.net/projects/rbsla">SourceForge RBSLA</a>
+% 
+% More information <a href="http://ibis.in.tum.de/staff/paschke/rbsla/index.htm">RBSLA Project Site</a>
+%
+% This library is free software; you can redistribute it and/or
+% modify it under the terms of the GNU Lesser General Public
+% License as published by the Free Software Foundation; either
+%  version 2 of the License, or (at your option) any later version.
+% 
+% This library is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+% Lesser General Public License for more details.
+%
+% You should have received a copy of the GNU Lesser General Public
+% License along with this library; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+% ------------------------------------------------------------------------------------------------------
+
+% ------------------------------------------------------------------------------------------------------
+% List Libary
+% 
+% The List Library provides basic List predicates.
+%
+% @author <A HREF="mailto:adrian.paschke@gmx.de">Adrian Paschke</A>
+ % @version 0.2 <1 Nov 2006>
+ % @since 0.1
+% ------------------------------------------------------------------------------------------------------
+moduleOID("./ContractLog/list.prova").
+
+% --------------------------------------------------------------------- 
+% member(X, List)
+%
+% used to convert a list to a set
+member(X, [X|XS]).
+member(X, [_|XS]) :-
+	member(X,XS).
+
+
+
+
+% --------------------------------------------------------------------- 
+% head(X, List)
+%
+% first element of a list
+
+head(X,[X|_]):-!.
+head(X,X).
+
+% --------------------------------------------------------------------- 
+% tail(List, List)
+%
+% list withgout the first element
+
+tail(L,[_|L]):-!. 
+tail([],X).
+
+
+% --------------------------------------------------------------------- 
+% first(X, List)
+%
+% first element of the list
+
+first(F,[F|_]). 
+
+
+% --------------------------------------------------------------------- 
+% last(X, List)
+%
+% last Element of the list
+
+last(L,[L]).
+last(L,[H|T]) :- 
+	last(L,T).
+
+
+% --------------------------------------------------------------------- 
+% size(List, Size)
+%
+% size if a list
+size([],0).
+size([H|T],N) :- 
+	size(T,N1),
+	math_add1(N1, 1, N).
+
+
+% --------------------------------------------------------------------- 
+% element_at(List, Pos, Element)
+%
+% element at postion Pos in the List
+
+element_at([L2|LS],Z,L1):- 
+	equ(L1,L2), 
+	equ(Z, 0),
+	!.
+
+element_at([L|LS],X, Z) :-
+	math_sub(X,1,X1), 
+	element_at(LS,X1,Z).
+
+
+% --------------------------------------------------------------------- 
+% prefix(List1, List2)
+%
+% List1 is prefix of List2
+% e.g. prefix([1,2,3],[1,2,3,4]) 
+
+prefix([],_).
+prefix([H|T1],[H|T2]) :- 
+	prefix(T1,T2).
+
+
+% --------------------------------------------------------------------- 
+% suffix(List1, List2)
+%
+% List1 is suffix of List2
+
+suffix(S,S).
+suffix([H|T],L) :- 
+	suffix(T,L).
+
+
+% --------------------------------------------------------------------- 
+% append(List1, List2, ResultList)
+%
+% Append List1 and List2
+
+append([],L,L).
+append([H|T],L,[H|LT]) :-
+	append(T,L,LT).
+
+
+% --------------------------------------------------------------------- 
+% sublist(List1, List2)
+%
+% List2 contains List1
+
+sublist(S,L) :-
+	prefix(S,L).
+sublist(S,[_|T]) :-
+	sublist(S,T).
+
+
+
+
+% --------------------------------------------------------------------- 
+% split(List,Element,Rest)
+%
+% Splits a list at the position where the element occurs first and returns the rest of the list
+
+split([H|T],H,T).
+split([H|T],E,R):-
+	split(T,E,R),!.
+
+
+% --------------------------------------------------------------------- 
+% delete(X, List, ListResult)
+%
+% deletes a given Element one time
+% you will get many results, if the element occurs more than one time!
+
+delete(X,[X|T],T).
+delete(X,[Y|T],[Y|NT]) :- 
+	delete(X,T,NT).
+
+% --------------------------------------------------------------------- 
+% delete_all(X, List, ListResult)
+%
+% deletes a given Element one time, also if it is contains more
+% than one time. X should be instantiated with ONE value
+
+delete_all(X,[],[]).
+delete_all(X,[X|T],NT) :-
+	delete_all(X,T,NT),
+	!.  
+delete_all(X,[Y|T],[Y|NT]) :- 
+	delete_all(X,T,NT). 
+	
+% --------------------------------------------------------------------- 
+% reverselist(List, ReverseList)
+%
+% Reverse a list.
+
+reverselist([],[]):-!.
+
+reverselist([X],[X]):-!.
+
+reverselist([X, Y],[Y, X]):-!.
+
+reverselist(XS,[Y|YS]) :-
+	last(Y, XS),
+	reversetail(XS, ZS),	
+	reverselist(ZS, YS).	
+
+% --------------------------------------------------------------------- 
+% reversetail(List, ReverseTail)
+%
+% Tail from back of the list.
+
+reversetail([X],[]) :-
+	!.
+
+reversetail([X, Y],[X]) :-
+	!.
+
+reversetail([X|XS],[X|YS]) :-
+	reversetail(XS, YS).	
+
+% --------------------------------------------------------------------- 
+% union(List1,List2,Union)
+%
+% Union of two lists
+union(List1,List2,Union):-
+	append(List1,List2,Union).
+
+% --------------------------------------------------------------------- 
+% intersection(List1,List2,Intersection)
+%
+% Intersection of two lists	
+intersection([],List2,[]).
+intersection([Head1|Tail],List2,[Head1|TmpIntersec]):-
+	member(Head1,List2),
+	intersection(Tail,List2,TmpIntersec),!.
+intersection([Head|Tail],List2,TmpIntersec):-	
+	intersection(Tail,List2,TmpIntersec).
+
+% --------------------------------------------------------------------- 
+% complement(List1,List2,Complement)
+%
+% The complement of two lists
+complement([],List2,[]).
+complement([Head|Tail],List2,TmpComp):-
+	member(Head,List2),	
+	complement(Tail,List2,TmpComp),!.
+complement([Head|Tail],List2,[Head|TmpComp]):-		
+	complement(Tail,List2,TmpComp).
+	
+	
+% --------------------------------------------------------------------- 
+% sort(List, SortedList)
+%
+% sort the list entries
+sort(List,SortedList):-
+	% TODO
+	SortedList = List.

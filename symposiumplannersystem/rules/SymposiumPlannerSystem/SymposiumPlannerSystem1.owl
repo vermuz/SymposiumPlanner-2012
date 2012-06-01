@@ -1,0 +1,237 @@
+<?xml version="1.0"?>
+<!DOCTYPE rdf:RDF [
+	 <!ENTITY ruleml2011ATijcai 'http://ibis.in.tum.de/projects/paw/2011#'>
+	  <!ENTITY ruleml2011ATbrf 'http://ibis.in.tum.de/projects/paw/2010#'>
+	  <!ENTITY ruleml2012ATecai 'http://ibis.in.tum.de/projects/paw/2011#'>
+]>
+
+
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+   	xmlns:sps="http://ibis.in.tum.de/projects/paw#"
+    xmlns:ruleml2011ATijcai="&ruleml2011ATijcai;"
+    xmlns:ruleml2011ATbrf="&ruleml2011ATbrf;"
+    xmlns:ruleml2012ATecai="&ruleml2012ATecai;"
+    xmlns="http://ibis.in.tum.de/projects/paw#"
+	xml:base="http://ibis.in.tum.de/projects/paw#"
+>
+
+	<owl:Ontology rdf:about="./SymposiumPlannerSystem.owl">
+	  <owl:versionInfo>v 0.01</owl:versionInfo>
+	  <rdfs:comment>Describes the responsibility assignment matrix of SymposiumPlannerSystem</rdfs:comment>	  
+	</owl:Ontology>
+
+
+	<owl:Class rdf:ID="SymposiumPlannerSystem" />	
+
+	<!-- Model of the SymposiumPlannerSystem NameSpace Management -->
+
+	<owl:Class rdf:ID="FunctionManagement">
+		<rdfs:subClassOf rdf:resource="#SymposiumPlannerSystem" />
+	</owl:Class>
+
+   <owl:Class rdf:ID="getContact">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+	<owl:Class rdf:ID="sponsor">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+	<owl:Class rdf:ID="viewMediaPartners">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+		<owl:Class rdf:ID="viewOrganizationPartners">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+		<owl:Class rdf:ID="viewSponsors">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+		<owl:Class rdf:ID="getTopicsOfATrack">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+	
+	<owl:Class rdf:ID="getTrackOfATopic">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+	
+	<owl:Class rdf:ID="findTracks">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+	
+	<owl:Class rdf:ID="getTracks">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+	
+	<owl:Class rdf:ID="getTrackChairs">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+	
+	<owl:Class rdf:ID="getChairsOfTrack">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+	
+	
+	<owl:Class rdf:ID="submission">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+	
+	<owl:Class rdf:ID="getTrackPapers">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+		<owl:Class rdf:ID="getFullPapers">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+	
+			<owl:Class rdf:ID="getShortPapers">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+	
+	
+	<owl:Class rdf:ID="getPosterPapers">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+	
+	
+			<owl:Class rdf:ID="getDoctoralConsortiumPapers">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+	
+			<owl:Class rdf:ID="getAuthorsOfPaper">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+	
+	<!-- Assign Responsibilities to organizing committee members -->
+	
+	<owl:ObjectProperty rdf:ID="responsible">
+		<rdfs:comment>This role conducts the actual work/owns the problem. There should be only one R. If multiple R s are listed, then the work needs to be further subdivided to a lower level.</rdfs:comment>
+	    <rdf:type rdf:resource="owl#FunctionalProperty" />
+	    <rdfs:domain rdf:resource="#FunctionManagement" />
+	    <rdfs:range rdf:resource="&ruleml2011ATijcai;RuleML-2011-IJCAI"/>
+ 	</owl:ObjectProperty>
+ 	
+ 	<owl:ObjectProperty rdf:ID="responsible">
+		<rdfs:comment>This role conducts the actual work/owns the problem. There should be only one R. If multiple R s are listed, then the work needs to be further subdivided to a lower level.</rdfs:comment>
+	    <rdf:type rdf:resource="owl#FunctionalProperty" />
+	    <rdfs:domain rdf:resource="#FunctionManagement" />
+	    <rdfs:range rdf:resource="&ruleml2011ATbrf;RuleML-2011-BRF"/>
+ 	</owl:ObjectProperty>
+ 	
+ 	<owl:ObjectProperty rdf:ID="responsible">
+		<rdfs:comment>This role conducts the actual work/owns the problem. There should be only one R. If multiple R s are listed, then the work needs to be further subdivided to a lower level.</rdfs:comment>
+	    <rdf:type rdf:resource="owl#FunctionalProperty" />
+	    <rdfs:domain rdf:resource="#FunctionManagement" />
+	    <rdfs:range rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI"/>
+ 	</owl:ObjectProperty>
+ 	
+ 	<!-- Individual agents (individuals) 
+	
+		 Define a Responsibility Assignment Matrix
+		     
+	-->
+	
+<!-- TODO: Complete Responsibility Assignment Matrix --> 		
+
+	<Get_Contact rdf:ID="getContact">
+		 <responsible rdf:resource="&ruleml2011ATijcai;RuleML-2011-IJCAI" />
+		 <responsible rdf:resource="&ruleml2011ATbrf;RuleML-2011-BRF" />
+		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</Get_Contact>
+
+	<Sponsor rdf:ID="sponsor">
+		 <responsible rdf:resource="&ruleml2011ATijcai;RuleML-2011-IJCAI" />
+		 <responsible rdf:resource="&ruleml2011ATbrf;RuleML-2011-BRF" />
+		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</Sponsor>
+	
+	<ViewMediaPartners rdf:ID="viewMediaPartners">
+		<responsible rdf:resource="&ruleml2011ATijcai;RuleML-2011-IJCAI" />
+		 <responsible rdf:resource="&ruleml2011ATbrf;RuleML-2011-BRF" />
+		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</ViewMediaPartners>
+	
+	<ViewOrganizationPartners rdf:ID="viewOrganizationPartners">
+		<responsible rdf:resource="&ruleml2011ATijcai;RuleML-2011-IJCAI" />
+		 <responsible rdf:resource="&ruleml2011ATbrf;RuleML-2011-BRF" />
+		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</ViewOrganizationPartners>
+	
+	<ViewSponsors rdf:ID="viewSponsors">
+		 <responsible rdf:resource="&ruleml2011ATijcai;RuleML-2011-IJCAI" />
+		 <responsible rdf:resource="&ruleml2011ATbrf;RuleML-2011-BRF" />
+		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</ViewSponsors>
+	
+	<GetTopicsOfATrack rdf:ID="getTopicsOfATrack">
+		 <responsible rdf:resource="&ruleml2011ATbrf;RuleML-2011-BRF" />
+		 <responsible rdf:resource="&ruleml2011ATijcai;RuleML-2011-IJCAI" />
+		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</GetTopicsOfATrack>
+	
+	<GetTrackOfATopic rdf:ID="getTrackOfATopic">
+		 <responsible rdf:resource="&ruleml2011ATbrf;RuleML-2011-BRF" />
+		  <responsible rdf:resource="&ruleml2011ATijcai;RuleML-2011-IJCAI" />
+		   <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</GetTrackOfATopic>
+	
+	<FindTracks rdf:ID="findTracks">
+		  <responsible rdf:resource="&ruleml2011ATbrf;RuleML-2011-BRF"/>
+		   <responsible rdf:resource="&ruleml2011ATijcai;RuleML-2011-IJCAI" />
+		  <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</FindTracks>
+	
+	<FindTracks rdf:ID="getTracks">
+		  <responsible rdf:resource="&ruleml2011ATbrf;RuleML-2011-BRF"/>
+		   <responsible rdf:resource="&ruleml2011ATijcai;RuleML-2011-IJCAI" />
+		  <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</FindTracks>
+	
+	<GetTrackChairs rdf:ID="getTrackChairs">
+		 <responsible rdf:resource="&ruleml2011ATbrf;RuleML-2011-BRF"/>
+		  <responsible rdf:resource="&ruleml2011ATijcai;RuleML-2011-IJCAI" />
+		  <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</GetTrackChairs>
+	
+	<GetChairsOfTrack rdf:ID="getChairsOfTrack">
+		 <responsible rdf:resource="&ruleml2011ATbrf;RuleML-2011-BRF" />
+		  <responsible rdf:resource="&ruleml2011ATijcai;RuleML-2011-IJCAI" />
+		  <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</GetChairsOfTrack>
+	
+	<Submission rdf:ID="submission">
+		 <responsible rdf:resource="&ruleml2011ATbrf;RuleML-2011-BRF" />
+		 <responsible rdf:resource="&ruleml2011ATijcai;RuleML-2011-IJCAI" />
+		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</Submission>
+	
+	<GetTrackPapers rdf:ID="getTrackPapers">
+		 <responsible rdf:resource="&ruleml2011ATijcai;RuleML-2011-IJCAI" />
+		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</GetTrackPapers>
+	
+		<GetFullPapers rdf:ID="getFullPapers">
+		 <responsible rdf:resource="&ruleml2011ATijcai;RuleML-2011-IJCAI" />
+		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</GetFullPapers>
+	
+	<GetAuthorsOfPaper rdf:ID="getAuthorsOfPaper">
+		 <responsible rdf:resource="&ruleml2011ATijcai;RuleML-2011-IJCAI" />
+		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</GetAuthorsOfPaper>
+	
+		<GetShortPapers rdf:ID="getShortPapers">
+		 <responsible rdf:resource="&ruleml2011ATijcai;RuleML-2011-IJCAI" />
+		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</GetShortPapers>
+	
+		<GetPosterPapers rdf:ID="getPosterPapers">
+		 <responsible rdf:resource="&ruleml2011ATijcai;RuleML-2011-IJCAI" />
+		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</GetPosterPapers>
+	
+		<GetDoctoralConsortiumPapers rdf:ID="getDoctoralConsortiumPapers">
+		 <responsible rdf:resource="&ruleml2011ATijcai;RuleML-2011-IJCAI" />
+		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</GetDoctoralConsortiumPapers>
+
+</rdf:RDF>

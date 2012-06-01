@@ -1,0 +1,135 @@
+% ------------------------------------------------------------------------------------------------------
+%  Copyright (C) 1999-2007 <a href="mailto:adrian.paschke@gmx.de">Adrian Paschke</a>
+% 
+% The Contractlog library is part of the Rule Based Service Level Agreement (RBSLA)
+%  project, available at 
+% <a href="https://sourceforge.net/projects/rbsla">SourceForge RBSLA</a>
+% 
+% More information <a href="http://ibis.in.tum.de/staff/paschke/rbsla/index.htm">RBSLA Project Site</a>
+%
+% This library is free software; you can redistribute it and/or
+% modify it under the terms of the GNU Lesser General Public
+% License as published by the Free Software Foundation; either
+%  version 2 of the License, or (at your option) any later version.
+% 
+% This library is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+% Lesser General Public License for more details.
+%
+% You should have received a copy of the GNU Lesser General Public
+% License along with this library; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+% ------------------------------------------------------------------------------------------------------
+
+
+moduleOID("./ContractLog/integrity.prova").
+
+% ----------------------------------------------------------------
+% Integrity Constraints
+% @author <A HREF="mailto:paschke@in.tum.de">Adrian Paschke</A>
+% @version 0.2 <1 Nov 2006>
+% @since 0.1
+% @dependencies list.prova, utils.prova
+%
+% ContractLog defines four types of integrity constraints
+% and:   intgertiy(and(...)).
+% or:   intgertiy(or(...)).
+% xor:   intgertiy(xor(...)). (mutual exclusive)
+% not:   intgertiy(not(...)).
+% ----------------------------------------------------------------
+ 
+
+
+%----------------------------------------------------------------------------
+%
+%	Integrity Constraints / Rules
+%
+%----------------------------------------------------------------------------
+
+% --------------------------------------------------------------------------- 
+% testIntegrity(Literal)   Hypothetically test the integrity of the literal
+% testIntegrity()  Test the ingerity of the complex knowldege base
+%
+% Hypothetically test the integrity of the KB with the 
+% Literal 
+%
+% @param Literal a predicate of the form p(x1..xn) possibly negated with neg
+%----------------------------------------------------------------------------
+
+%-------------------------
+% Test literal integrity
+%-------------------------
+
+
+% test XOR (mutex) integrity constraints	
+testIntegrity(Literal):-
+	integrity([xor|Mutex]),
+	delete(Literal,Mutex,NMutex),
+	member([H|T],NMutex),
+	derive([H|T]),!,fail().
+
+% test Not integrity constraints
+testIntegrity(Literal):-
+	integrity([not|NotConstraints]),
+	member(Literal,NotConstraints),!,fail().
+	
+% test And integrity constraints	
+testIntegrity(Literal):-
+	integrity([and|AndConstraints]),
+	delete(Literal,AndConstraints,NAndConstraints),
+	member(M,NAndConstraints),
+	deriveLiteral(M),!,fail().
+deriveLiteral(M):- moduleOID("./ContractLog/defeasible.prova"),!, not(M), not(body(defeasible(M))). % defeasible test
+deriveLiteral(M):-	not(M).
+
+
+% test OR integrity constraints	
+% not necessary, hypothetical Literal satisfied OR
+
+% All tests passed - succeed.
+testIntegrity(Literal).	
+
+
+%-------------------------------
+% Test integrity of complete KB
+%-------------------------------
+
+% test Not integrity constraints
+testIntegrity():-
+	integrity([not|NotConstraints]),
+	member([H|T],NotConstraints),
+	derive([H|T]),!,fail().
+
+% test XOR (mutex) integrity constraints	
+testIntegrity():-
+	integrity([xor|Mutex]),
+	member([H|T],Mutex),
+	derive([H|T]),
+	split(Mutex,[H|T],NMutex),
+	member([H2|T2],NMutex),
+	derive([H2|T2]),!,fail().
+
+	
+% test And integrity constraints	
+testIntegrity():-
+	integrity([and|AndConstraints]),
+	member(M,AndConstraints),
+	not(M),!,fail().
+
+
+% test Or integrity constraints	
+testIntegrity():-
+	integrity([or|OrConstraints]),
+	not(testOrIntegrity(OrConstraints)),!,fail().
+testOrIntegrity(OrConstraints):-		
+	member([H|T],OrConstraints),
+	derive([H|T]),!.
+testOrIntegrity(OrConstraints):-!,fail().
+
+
+% All tests passed - succeed.
+testIntegrity().	
+
+

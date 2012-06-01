@@ -1,0 +1,158 @@
+% ------------------------------------------------------------------------------------------------------
+%  Copyright (C) 1999-2007 <a href="mailto:adrian.paschke@gmx.de">Adrian Paschke</a>
+% 
+% The Contractlog library is part of the Rule Based Service Level Agreement (RBSLA)
+%  project, available at 
+% <a href="https://sourceforge.net/projects/rbsla">SourceForge RBSLA</a>
+% 
+% More information <a href="http://ibis.in.tum.de/staff/paschke/rbsla/index.htm">RBSLA Project Site</a>
+%
+% This library is free software; you can redistribute it and/or
+% modify it under the terms of the GNU Lesser General Public
+% License as published by the Free Software Foundation; either
+%  version 2 of the License, or (at your option) any later version.
+% 
+% This library is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+% Lesser General Public License for more details.
+%
+% You should have received a copy of the GNU Lesser General Public
+% License along with this library; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+% ------------------------------------------------------------------------------------------------------
+
+% ------------------------------------------------------------------------------------------------------
+% Deontic Logic Implementation
+%
+ %
+ % @author <A HREF="mailto:adrian.paschke@gmx.de">Adrian Paschke</A>
+ % @version 0.2 <1 Nov 2006>
+ % @since 0.1
+ % @dependencies ec.prova
+% ------------------------------------------------------------------------------------------------------
+
+moduleOID("./ContractLog/deontic.prova").
+
+
+% ------------------------------------------------------------------------ 
+% Constructor predicates
+% ------------------------------------------------------------------------
+
+
+
+% ------------------------------------------------------------------------ 
+% oblige_construct(oblige(S,O,A), S, O, A).
+%
+% constructs an obligation norm (fluent)
+
+oblige_construct(oblige(S,O,A), S, O, A).
+
+
+
+% ------------------------------------------------------------------------ 
+% permit_construct(permit(S,O,A), S, O, A).
+%
+% constructs a permit norm
+
+permit_construct(permit(S,O,A), S, O, A).
+
+
+
+% ------------------------------------------------------------------------ 
+% forbid_construct(forbid(S,O,A), S, O, A).
+%
+% constructs a forbid norm
+
+forbid_construct(forbid(S,O,A), S, O, A).
+
+
+% ------------------------------------------------------------------------ 
+% waived_construct(waived(S,O,A), S, O, A).
+%
+% constructs a waived norm
+
+waived_construct(oblige(S,O,A), S, O, A).
+
+
+
+
+
+
+% ------------------------------------------------------------------------ 
+% Rights and obligation management rules
+%
+% ------------------------------------------------------------------------
+
+terminates(A,oblige(S,O,A),T). % if A happens it terminates the obligation
+
+
+
+
+
+
+% ------------------------------------------------------------------------ 
+% Deontic Logic axioms / inference rules
+% ------------------------------------------------------------------------
+
+
+% ------------------------------------------------------------------------ 
+% holdsAt(permit,T) :- holdsAt(oblige,T)
+%
+holdsAt(permit(S,O,A), T) :-
+	holdsAt(oblige(S,O,A), T),
+	!.
+
+
+% ------------------------------------------------------------------------ 
+% holdsAt(waived,T) :- holdsAt(forbid,T)
+%
+holdsAt(waived(S,O,A), T) :-
+	holdsAt(forbid(S,O,A), T),
+	!.	
+	
+% ------------------------------------------------------------------------ 
+% holdsAt(forbid,T) :- holdsAt(oblige(neg(A)),T)
+%
+holdsAt(oblige(S,O,neg(A)), T) :-
+	holdsAt(forbid(S,O,A), T),
+	!.	
+
+% ------------------------------------------------------------------------ 
+% notholdsAt(forbid,T) :- holdsAt(permit,T)
+%
+notholdsAt(forbid(S,O,A), T) :-
+	holdsAt(permit(S,O,A), T),
+	!.
+	
+	
+%TODO: complete SDL inference rules
+
+
+
+
+	
+% ------------------------------------------------------------------------ 
+% Valid scheme via integrity constraints
+%
+% @dependencies: integrity.prova
+% ------------------------------------------------------------------------
+
+integrity(xor(holdsAt(oblige(S,O,A),T),holdsAt(oblige(S,O,neg(A)),T))).
+
+% might be meaningful in some domains --> omitted
+%integrity(xor(holdsAt(permit(S,O,A),T),holdsAt(permit(S,O,neg(A)),T))).
+
+% omitted because derived by inference rules
+%integrity(xor(holdsAt(forbid(S,O,A),T), holdsAt(permit(S,O,A),T))).
+
+integrity(xor(holdsAt(oblige(S,O,A),T), holdsAt(forbid(S,O,A),T))).
+
+% omitted because derived by inference rules
+%integrity(xor(holdsAt(forbid(S,O,A),T), happens(neg(A),T))).
+%integrity(xor(holdsAt(forbid(S,O,neg(A)),T), happens(A,T))).
+integrity(xor(holdsAt(oblige(S,O,A),T), happens(neg(A),T))). % violation
+integrity(xor(holdsAt(oblige(S,O,neg(A)),T), happens(A,T))). % violation
+
+%TODO: complete valid scheme

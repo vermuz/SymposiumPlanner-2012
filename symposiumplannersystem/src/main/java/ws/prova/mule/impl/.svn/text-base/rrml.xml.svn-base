@@ -1,0 +1,32 @@
+<RuleML xmlns=
+   "http://www.ruleml.org/0.91/xsd"
+ xmlns:xsi=
+   "http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation=
+   "http://www.ruleml.org/0.91/xsd
+    http://ibis.in.tum.de/research/
+    ReactionRuleML/0.2/rr.xsd"
+ xmlns:ruleml2011=
+   "http://ibis.in.tum.de/projects/paw#">
+
+ <Message mode="outbound"
+  directive="query-sync">
+   <oid>
+      <Ind>SymposiumPlannerSystem</Ind>
+   </oid>
+   <protocol>
+      <Ind>esb</Ind>
+   </protocol>
+   <sender>
+      <Ind>User</Ind>
+   </sender>
+   <content>
+      <Atom>
+         <Rel>getContact</Rel>
+         <Ind>ruleml2011ATijcai_GeneralChair</Ind>
+         <Ind>update</Ind>
+         <Var>Contact</Var>
+      </Atom>
+   </content>
+ </Message>
+</RuleML>

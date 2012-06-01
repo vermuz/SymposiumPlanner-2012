@@ -1,0 +1,165 @@
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:spring="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:xm="http://www.mulesoft.org/schema/mule/xml" xmlns:stdio="http://www.mulesoft.org/schema/mule/stdio"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+       http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/3.0/mule-http.xsd
+       http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.0/mule.xsd
+       http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/3.0/mule-jms.xsd
+       http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/3.0/mule-xml.xsd
+       http://www.mulesoft.org/schema/mule/stdio http://www.mulesoft.org/schema/mule/stdio/3.0/mule-stdio.xsd">
+	<!-- environment-properties -->
+	<global-property name="http.host" value="localhost" />
+	<global-property name="MULE_PORT" value="8888" />
+	<global-property name="MULE_IMPLEMENTATION" value="ws.prova.mule.impl.ProvaUMOImpl" />
+	<global-property name="TOMCAT" value="http://127.0.0.1:8080" />
+	<global-property name="jms.url" value="vm://localhost" />
+
+	<!-- RuleResponder Model -->
+	<global-property name="RULE_RESPONDER_Prova"
+		value="rules/rule_responder_bridge/RuleResponderBridge.prova" />
+
+
+	<!-- BRF-2011 -->
+	<global-property name="BRF2011EAName" value="BRF-2011" />
+	<global-property name="BRF2011OAName" value="BRF2011" />
+	<global-property name="BRF2011_PORT" value="9993" />
+	<global-property name="BRF2011_Prova"
+		value="rules/use_caseRuleML2011BRF/RuleML-2011-BRF_Organization/RuleML-2011-BRF-Responder.prova" />
+	<global-property name="BRF2011TopicName" value="BRF2011" />
+	<global-property name="BRF2011Topic1" value="GeneralChair" />
+	<global-property name="BRF2011Topic2" value="PublicityChair" />
+	<global-property name="BRF2011Topic3" value="ProgramChair" />
+	<global-property name="BRF2011Topic4" value="LiaisonChair" />
+	<global-property name="BRF2011Topic5" value="RRChair" />
+	<global-property name="BRF2011Topic6" value="DRDChair" />
+
+	<!-- IJCAI-2011 -->
+	<global-property name="IJCAI2011EAName" value="IJCAI-2011" />
+	<global-property name="IJCAI2011OAName" value="IJCAI2011" />
+	<global-property name="IJCAI2011_PORT" value="9998" />
+	<global-property name="IJCAI2011_Prova"
+		value="rules/use_caseRuleML2011IJCAI/RuleML-2011-IJCAI_Organization/RuleML-2011-IJCAI-Responder.prova" />
+	<global-property name="IJCAI2011TopicName" value="ruleml2016" />
+	<global-property name="IJCAI2011Topic1" value="PublicityChair" />
+	<global-property name="IJCAI2011Topic2" value="GeneralChair" />
+	<global-property name="IJCAI2011Topic3" value="ProgramChair" />
+	<global-property name="IJCAI2011Topic4" value="LiaisonChair" />
+
+	<!-- Symposium Planner System -->
+	<global-property name="SymposiumPlannerSystemTopicName"
+		value="symposiumplannersystem" />
+	<global-property name="SymposiumPlannerSystem_PORT"
+		value="9990" />
+	<global-property name="SymposiumPlannerSystem_Prova"
+		value="rules/SymposiumPlannerSystem/SymposiumPlannerSystem.prova" />
+
+
+	<jms:activemq-connector name="jmsConnector"
+		specification="1.1" brokerURL="${jms.url}" />
+
+	<http:endpoint name="httpEndpoint" address="http://${http.host}:${MULE_PORT}" />
+	<jms:endpoint name="RuleResponder" topic="ruleResponder" />
+	<jms:endpoint name="PatientSupporter" topic="${PatientSupporterTopicName}" />
+
+
+	<!-- service endpoints of the BRF-2011 use case -->
+	<jms:endpoint name="RuleML-2011-BRF" topic="${BRF2011TopicName}" />
+	<http:endpoint name="ruleml2011ATbrf_GeneralChair"
+		address="${TOMCAT}/${BRF2011OAName}${BRF2011Topic1}/" />
+	<http:endpoint name="ruleml2011ATbrf_PublicityChair"
+		address="${TOMCAT}/${BRF2011OAName}${BRF2011Topic2}/" />
+	<http:endpoint name="ruleml2011ATbrf_ProgramChair"
+		address="${TOMCAT}/${BRF2011OAName}${BRF2011Topic3}/" />
+	<http:endpoint name="ruleml2011ATbrf_LiaisonChair"
+		address="${TOMCAT}/${BRF2011OAName}${BRF2011Topic4}/" />
+	<http:endpoint name="ruleml2011ATbrf_RRChair"
+		address="${TOMCAT}/${BRF2011OAName}${BRF2011Topic5}/" />
+	<http:endpoint name="ruleml2011ATbrf_DRDChair"
+		address="${TOMCAT}/${BRF2011OAName}${BRF2011Topic6}/" />
+
+	<!-- service endpoints of the IJCAI-2011 use case -->
+	<jms:endpoint name="RuleML-2011-IJCAI" topic="${IJCAI2011TopicName}" />
+	<http:endpoint name="ruleml2011ATijcai_PublicityChair"
+		address="${TOMCAT}/${IJCAI2011OAName}${IJCAI2011Topic1}/" />
+	<http:endpoint name="ruleml2011ATijcai_GeneralChair"
+		address="${TOMCAT}/${IJCAI2011OAName}${IJCAI2011Topic2}/" />
+	<http:endpoint name="ruleml2011ATijcai_ProgramChair"
+		address="${TOMCAT}/${IJCAI2011OAName}${IJCAI2011Topic3}/" />
+	<http:endpoint name="ruleml2011ATijcai_LiaisonChair"
+		address="${TOMCAT}/${IJCAI2011OAName}${IJCAI2011Topic4}/" />
+
+	<!-- service endpoints of Symposium Planner System -->
+	<jms:endpoint name="SymposiumPlannerSystem" topic="${SymposiumPlannerSystemTopicName}" />
+
+	<!-- the main rule responder endpoint descriptor -->
+	<model name="RuleResponderModel">
+		<service name="RuleResponderService" initialState="started">
+			<inbound>
+				<http:inbound-endpoint ref="httpEndpoint">
+					<properties>
+						<!-- Each receiver polls with a 5 second interval -->
+						<spring:entry key="rulebase" value="${RULE_RESPONDER_Prova}" />
+					</properties>
+				</http:inbound-endpoint>
+				<jms:inbound-endpoint ref="RuleResponder" />
+			</inbound>
+			<component class="${MULE_IMPLEMENTATION}" />
+		</service>
+	</model>
+
+
+	<!-- descriptors of the BRF-2011 rule responder agents for the BRF-2011 use 
+		case -->
+	<model name="BRF-2011Model">
+		<service name="BRF-2011Service" initialState="started">
+			<inbound>
+				<jms:inbound-endpoint ref="RuleML-2011-BRF">
+					<properties>
+						<!-- Each receiver polls with a 5 second interval -->
+						<spring:entry key="rulebase" value="${BRF2011_Prova}" />
+					</properties>
+				</jms:inbound-endpoint>
+				<http:inbound-endpoint address="http://${http.host}:${BRF2011_PORT}" />
+			</inbound>
+			<component class="${MULE_IMPLEMENTATION}" />
+		</service>
+	</model>
+
+	<!-- descriptors of the IJCAI-2011 rule responder agents for the IJCAI-2011 
+		use case -->
+	<model name="IJCAI-2011Model">
+		<service name="IJCAI-2011Service" initialState="started">
+			<inbound>
+				<jms:inbound-endpoint ref="RuleML-2011-IJCAI">
+					<properties>
+						<!-- Each receiver polls with a 5 second interval -->
+						<spring:entry key="rulebase" value="${IJCAI2011_Prova}" />
+					</properties>
+				</jms:inbound-endpoint>
+				<http:inbound-endpoint address="http://${http.host}:${IJCAI2011_PORT}" />
+			</inbound>
+			<component class="${MULE_IMPLEMENTATION}" />
+		</service>
+	</model>
+
+	<!-- descriptors of the SymposiumPlannerSystem rule responder agents -->
+	<model name="SymposiumPlannerSystemModel">
+		<service name="SymposiumPlannerSystemService" initialState="started">
+			<inbound>
+				<jms:inbound-endpoint ref="SymposiumPlannerSystem">
+					<properties>
+						<!-- Each receiver polls with a 5 second interval -->
+						<spring:entry key="rulebase" value="${SymposiumPlannerSystem_Prova}" />
+					</properties>
+				</jms:inbound-endpoint>
+				<http:inbound-endpoint
+					address="http://${http.host}:${SymposiumPlannerSystem_PORT}" />
+			</inbound>
+			<component class="${MULE_IMPLEMENTATION}" />
+		</service>
+	</model>
+</mule>

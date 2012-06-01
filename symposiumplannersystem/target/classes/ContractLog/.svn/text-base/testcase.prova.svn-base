@@ -1,0 +1,595 @@
+% ------------------------------------------------------------------------------------------------------
+%  Copyright (C) 1999-2007 <a href="mailto:adrian.paschke@gmx.de">Adrian Paschke</a>
+% 
+% The Contractlog library is part of the Rule Based Service Level Agreement (RBSLA)
+%  project, available at 
+% <a href="https://sourceforge.net/projects/rbsla">SourceForge RBSLA</a>
+% 
+% More information <a href="http://ibis.in.tum.de/staff/paschke/rbsla/index.htm">RBSLA Project Site</a>
+%
+% This library is free software; you can redistribute it and/or
+% modify it under the terms of the GNU Lesser General Public
+% License as published by the Free Software Foundation; either
+%  version 2 of the License, or (at your option) any later version.
+% 
+% This library is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+% Lesser General Public License for more details.
+%
+% You should have received a copy of the GNU Lesser General Public
+% License along with this library; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+%
+% ------------------------------------------------------------------------------------------------------
+
+
+moduleOID("./ContractLog/testcase.prova").
+
+% -----------------------------------------------------------------------
+% Test Case Library for Verification and Validation of LPs / Rule Bases
+% @author <A HREF="mailto:adrian.paschke@gmx.de">Adrian Paschke</A>
+% @version 0.2 <1 Nov 2006>
+% @since 0.1
+% @dependencies utils.prova, list.prova, math.prova, update.prva 
+% -------------------------------------------------------------------------
+ 
+ 
+
+ 
+% ------------------------------------------------------------------------ 
+% test()		 test all test cases in the knowledge base
+% test(OID)		 test the test case with ID <OID>
+%
+% Test all / one test case. 
+%
+% @param OID oid of test case
+%-------------------------------------------------------------------------
+test():-findall(OID,testcase(OID),Tests),testTestCase(Tests).
+testTestCase([]):-!. % empy test case list --> succeed
+testTestCase([H,T]):-
+	runTest(H), % run test case
+	testTestCase(T). % next test case
+
+test([]):-!. % no test case specified
+test(OID) :-
+	loadTestCase(OID), %load to KB
+	runTestCase(OID),	% run test case
+	unloadTestCase(OID). % unload from KB
+	
+	
+	
+% ------------------------------------------------------------------------ 
+% loadTestCase(TestCase)
+%
+% Load a test case temporarily to knowledge base, i.e. add test data and test rules.
+%
+% @param TestCase = test case OID ~ test case name/label
+%-------------------------------------------------------------------------
+loadTestCase(TestCase):-	
+	consult(TestCase).
+	
+	
+	
+% ------------------------------------------------------------------------ 
+% runTestCase(TestCase)
+%
+% Run the test case and execute all tests.
+%
+% @param TestCase
+%-------------------------------------------------------------------------
+runTestCase(TestCase):-
+	runTest(TestCase), % use meta predicate from test case
+	!. % succeed
+runTestCase(TestCase):-
+	unloadTestCase(TestCase),
+	fail().	% fail
+
+
+	
+	
+% ------------------------------------------------------------------------ 
+% unloadTestCase(TestCase)
+%
+% Unload a test case from the knowledge base.
+%
+% @param TestCase
+%-------------------------------------------------------------------------
+unloadTestCase(TestCase):-
+	unconsult(TestCase).
+	
+
+
+
+% ---------------------------------------------------------------------------------------------------------------------------------------------------
+% Definitions of different meta test query variants 
+% which can be used to define specific tests in a test case
+%
+% testQuery(Literal)                          test the literal (= rule head or fact)
+% testNotQuery(Literal)                       negatively test the literal with default negation
+% testNegQuery(Literal)                       negatively test the literal with explicit negation
+% testNumberOfResults(Literal, Number)        test number of results derived for the literal = stated value
+% testNumberOfResults(Literal, Var, Number)   test number of results for the variable in the literal
+% testNumberOfResultsMore(Literal,Number)     test number of results for the literal > given value
+% testNumberOfResultsLess(Literal,Number)     test number of results for the literal < given value
+% testNumberOfResultsMore(Literal,Var,Number) test number of results for the variable in the literal > given value
+% testNumberOfResultsLess(Literal,Var,Number) test number of results for the variable in the literal < given value
+% testResult(QueryLiteral,ResultLiteral)      test if the second literal is an answer of the query literal
+% testResults(Literal,Var,[<BindingList>])    test if the list of binding results for the variable in the literal can be derived
+% testResultsOrder(Literal,Var,[<BindingList>]) test if the list of ordered binding results for the variable in the literal can be derived
+% testQueryTime(Literal, MaxTime)             test if the literal can be derived in less than the stated time in milliseconds
+% testNotQueryTime(Literal, MaxTime)          test if the literal can be derived negatively by default in less than the stated time in milliseconds
+% testNegQueryTime(Literal, MaxTime)          test if the literal can be derived strongly negative in less than the stated time in milliseconds
+% getQueryTime(Literal, Time)				  get the query time for the literal
+% getNotQueryTime(Literal,Time)               get the default negated query time for the literal
+% getNegQueryTime(Literal,Time)               get the explicitly negated query time for the literal
+%
+% Examples:
+%
+% testQuery(p(X))	test success of query p(X)?
+% testNegQuery(p(X)) test success of query neg(p(X))? (explicitly negated p(X))
+% testNumberOfResults(p(X),X,10)) test if ten bindings for the variable X of the query p(X)? can be derived
+% testResult(p(X),p(a)) test if p(a) is an answer to the query p(X)?
+% testResults(p(X),X,[a,b,c]) test if a, b and c are result bindings for the variable X of the query p(X)?
+% testResultsOrder(p(X),X,[a,b,c]) test if a, b and c are answer bindings in exactly this order for the variable X of the query p(X)?
+% testResultsOrder(p(X),X,[a,a,a,b,c,c]) note the order and number of answers
+% testQueryTime(p(X),1000)  test if the query p(X)? can be derived in less than 1 second
+% getQueryTime(p(X),T) get the time to answer the query p(X); output is the variable T
+% testQueryTime(testResults(p(X),X,[a,b])) nested test
+%----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+testQuery([H|T]) :- derive([H|T]).
+testNotQuery(Literal) :- derive(not(Literal)).
+testNegQuery(Literal) :- derive(neg(Literal)).
+
+testNumberOfResults(Literal, Number) :-
+			findall(Literal,Literal,Results),
+			size(Results,Number),!.
+testNumberOfResults(Literal,Var,Number):-
+			findall(Var,Literal,Results),
+			size(Results,Number).
+testNumberOfResultsMore(Literal,Number):-
+			findall(Literal,Literal,Results),
+			size(Results,Size),
+			Size > Number,!.
+testNumberOfResultsLess(Literal,Number):-
+			findall(Literal,Literal,Results),
+			size(Results,Size),
+			Size < Number,!.						
+testNumberOfResultsMore(Literal,Var,Number):-
+			findall(Var,Literal,Results),
+			size(Results,Size),
+			Size > Number.
+testNumberOfResultsLess(Literal,Var,Number):-
+			findall(Var,Literal,Results),
+			size(Results,Size),
+			Size < Number.
+
+testResult(Query,Result):-
+			findall(Query,Query,Results),
+			member(Result,Results).
+testResults(Literal,Var,Bindings):-
+			findall(Var,Literal,Results),
+			member(Result,Bindings),
+			not(member(Result,Results)),
+			!,fail().
+testResults(Literal,Var,Bindings).			
+testResultsOrder(Literal,Var,Bindings):-
+			findall(Var,Literal,Results),
+			sublist(Bindings,Results).			
+testQueryTime([H|T],MaxTime):-
+			C1 = java.util.GregorianCalendar.getInstance(),
+			T1=C1.getTimeInMillis(),
+			
+			derive([H|T]),
+			
+			C2 = java.util.GregorianCalendar.getInstance(),
+			T2=C2.getTimeInMillis(),
+			math_sub(T2,T1,DiffT),
+			less(DiffT,MaxTime).
+testNotQueryTime(Literal,MaxTime):-
+			C1 = java.util.GregorianCalendar.getInstance(),
+			T1=C1.getTimeInMillis(),
+			
+			derive(not(Literal)),
+			
+			C2 = java.util.GregorianCalendar.getInstance(),
+			T2=C2.getTimeInMillis(),
+			math_sub(T2,T1,DiffT),
+			less(DiffT,MaxTime).
+testNegQueryTime(Literal,MaxTime):-
+			C1 = java.util.GregorianCalendar.getInstance(),
+			T1=C1.getTimeInMillis(),
+			
+			derive(neg(Literal)),
+			
+			C2 = java.util.GregorianCalendar.getInstance(),
+			T2=C2.getTimeInMillis(),
+			math_sub(T2,T1,DiffT),
+			less(DiffT,MaxTime).			
+
+getQueryTime([H|T],Time):-		
+			C1 = java.util.GregorianCalendar.getInstance(),
+			T1=C1.getTimeInMillis(),
+			
+			derive([H|T]),
+			
+			C2 = java.util.GregorianCalendar.getInstance(),
+			T2=C2.getTimeInMillis(),
+			math_sub(T2,T1,Time).
+getNotQueryTime(Literal,Time):-		
+			C1 = java.util.GregorianCalendar.getInstance(),
+			T1=C1.getTimeInMillis(),
+			
+			derive(not(Literal)),
+			
+			C2 = java.util.GregorianCalendar.getInstance(),
+			T2=C2.getTimeInMillis(),
+			math_sub(T2,T1,Time).
+getNegQueryTime(Literal,Time):-		
+			C1 = java.util.GregorianCalendar.getInstance(),
+			T1=C1.getTimeInMillis(),
+			
+			derive(neg(Literal)),
+			
+			C2 = java.util.GregorianCalendar.getInstance(),
+			T2=C2.getTimeInMillis(),
+			math_sub(T2,T1,Time).		
+			
+			
+%---------------------------------------------------------------------------------------------------------------------------------------------------
+% Test Coverage and Inductive Logic Programming 
+% Implements different functions for: 
+% - determination of subsitutions,
+% - Plotkin's least general generalisation 
+% - specialisation
+% - coverage.
+%---------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+% ----------------------------
+% specialisation
+% ----------------------------
+
+% ------------------------------------------------------------------------ 
+% subsitution (Term1,Term2,Subst)
+%
+% Compute and return the substitution S of two terms t1 and t2 
+% such that t1 S = t2. Fails when no substitution exists.
+%
+% @param Term1 = a term with variables
+% @param Term2 = a ground term without variables
+% @param Subst = List of substitutions
+%-------------------------------------------------------------------------
+
+substitution(Term1,Term2,SubstList) :-     	
+     compute_substitution([Term1],[Term2],Subst1), % compute substitution          
+     sort(Subst1,Subst2), % sort list
+     minimalize(Subst1,SubstList), % remove redundant substitutions
+     !.
+       
+compute_substitution([],[],[]) :- !.
+compute_substitution([Head1|Tail1],[Head2|Tail2],[[Head1,Head2]|Tail3]) :-
+     free(Head1), % is variable?    
+     checkType(Head1,Head2), % unify DL or Java types
+     compute_substitution(Tail1,Tail2,Tail3), !. 
+compute_substitution([Head1|Tail1],[Head2|Tail2],Subst) :-	
+	head(Functor1,Head1),	
+	tail(Tail11,Head1),
+	head(Functor1,Head2),
+	tail(Tail22,Head2),	
+    compute_substitution(Tail11,Tail22,Tail33),
+    compute_substitution(Tail1,Tail2,Tail4),
+    append(Tail33,Tail4,Subst), !.
+
+checkType(Term1,Term2) :-
+	assert(typeCheck(Term1)),
+	typeCheck(Term2),
+	retract(typeCheck(Term1)).
+
+minimalize([],[]) :- !.
+minimalize([X],[X]) :- !.
+minimalize([A,B|Tail],List) :-
+     A = B,
+     minimalize([A|Tail],List), !.
+minimalize([Head1|Tail1],[Head1|Tail2]) :-
+     minimalize(Tail1,Tail2), !.	
+
+
+% ------------------------------------------------------------------------ 
+% substiute (Clause,ClauseInstance,Subst)
+% substiute (Term,TermInstance,Subst)
+%
+% Apply the substituions to a clause/term and compute the spezialised instance 
+% of the clause/term. 
+%
+% @param Clause/Term = the input clause/term
+% @param Instance = the specialized instance of the clause/term
+% @param Subst = List of substitutions
+%-------------------------------------------------------------------------
+     
+% substitute variables in clause and return specialized instance
+substitute([[FunctorHead|ArgsHead]|Body1],Instance,SubstList):-
+	apply_clause_substitutions([[FunctorHead|ArgsHead]|Body1],Instance,SubstList),!.
+	
+apply_clause_substitutions([],[],SubstList):-!.
+apply_clause_substitutions([[FunctorHead|ArgsHead]|Body1],[LiteralInstance|TmpInstance],SubstList):-
+	substitute([FunctorHead|ArgsHead],LiteralInstance,SubstList),
+	apply_clause_substitutions(Body1,TmpInstance,SubstList).
+	
+% substitute variables in term and return specialized instance	
+substitute(X,X,[]):-!. % empty substitution
+substitute([],[],SubstList):-!. % empty term
+substitute(Term,Instance,SubstList):-
+	apply_substitutions([Term],[Instance],SubstList).
+	
+apply_substitutions([],[],SubstList).
+apply_substitutions([Head|Tail],[Subst|TmpInstance],SubstList):-
+	free(Head), % is Variable	
+	member([Original,Subst],SubstList),
+	member(Head,[Original,Subst]),	
+	apply_substitutions(Tail,TmpInstance,SubstList),!.
+apply_substitutions(Head,Head,SubstList):-
+	bound(Head), % is constant
+	!.
+	
+apply_substitutions([Head|Tail],[[Functor1|TmpInstance11]|TmpInstance2],SubstList):-	
+	head(Functor1,Head),	
+	tail(Tail11,Head),
+    apply_substitutions(Tail11,TmpInstance11,SubstList),         
+    apply_substitutions(Tail,TmpInstance2,SubstList),!.
+    
+
+% ------------------------------------------------------------------------ 
+% specializations(Goal,Clause,Instances)
+%
+% Unify (i.e. specialize) a clause (rule) with a goal (set of subgoals)
+% and compute the specialized top level instances (specializations)
+%
+% @param Goal = a set of subgoals
+% @param Clause = a rule
+% @param Instances = the top level instances of the clause w.r.t. the goal
+%-------------------------------------------------------------------------
+
+specializations(Goal,[Head|[]],[[Head]]):-!. % do not specialize facts
+specializations(Goal,Clause,Instances):-	
+	compute_instances(Goal,Clause,Instances).
+	
+compute_instances([],Clause,[]):-!.
+compute_instances([SubGoal|Tail],[Head|Body],[Instance|TmpInstances]):-	
+	substitution(Head,SubGoal,Subst),	
+	substitute([Head|Body],Instance,Subst),
+	compute_instances(Tail,[Head|Body],TmpInstances),!.
+compute_instances([SubGoal|Tail],Clause,Instances):- % no unifcation with subgoal possible	
+	compute_instances(Tail,Clause,Instances).
+
+
+
+% ------------------------------------------------------------------------ 
+% specialize(Goal,InputLP,OutputLP)
+%
+% Specialize an input LP (set of clauses) with a goal and return the
+% specialization of the LP (i.e. set of top level clause instances).
+%
+% @param Goal = a set of subgoals
+% @param InputLP = a set of clauses
+% @param OutputLP = the specialized top level instances
+%-------------------------------------------------------------------------
+specialize(Goal,[],[]).
+specialize([],InputLP,OutputLP).
+specialize(Goal,[Clause|Tail],OutputLP):-
+	specializations(Goal,Clause,Instances),
+	specialize(Goal,Tail,TmpOutput),
+	append(Instances,TmpOutput,OutputLP).
+	
+
+	
+	
+	
+
+% --------------------
+% generalization
+% --------------------
+
+
+     
+% ------------------------------------------------------------------------ 
+% lgg (Clause1,Clause2,LGG) compute lgg of two clauses
+% lgg (Term1,Term2,LGG) compute lgg of two terms
+%
+% A clause is a disjunction of literals (L1 \/ L2 \/ ... Ln). A literal
+% is an atom or the negation of an atom. A Horn clause (rule) is a 
+% disjunction of negtive atoms (the body atoms) and
+% one positive atom (the head), which can be written as H <- B1,..Bn
+% or in Prolog syntax H :- B1,..,Bn.
+% We represent a rule as a list [H,B1,..,Bn] with the head of the rule being the 
+% head of the list,
+%
+% A clause A is a generalisation (or subsumes)' B whenever there 
+% is a substitution S such that A S is a subset of or equal to B.
+% A clause A is a least-general-generalization of two clauses B and C 
+% iff A is a generalisation of the clauses B and C, and every 
+% other generalisation A' of B and C is also a generalisation of A.
+% 
+%  
+% A term t1 is a generalisation of term t2, i.e. subsumes t2, 
+% iff there exists a substitution S such that t1 S = t2. A    
+% term t is the least-general-generalisation (lgg) of u and v 
+% iff t is a generalisation of terms u and  v, and    
+% every other generalisation t' of u and v is also a      
+% generalisation of t.       
+%
+% Examples:
+% lgg(p(a),p(b),LGG) % lgg of the two terms p(a) and p(b)
+% lgg([p(a),q(a)],[p(b),q(b)],LGG) % lgg of the two clauses
+								   % p(a) :- q(a). and p(b):-q(b).
+%
+% @param Clause1/Term1 = a clause/term
+% @param Clause2/Term2 = a clause/term
+% @param LGG = the least general generalization of clause/term1 and clause2/term2
+%-------------------------------------------------------------------------
+
+%lgg of two clauses
+lgg([[FunctorHead|ArgsHead]|Body1],[Head2|Body2],LGG):-
+	compute_clause_lgg([[FunctorHead|ArgsHead]|Body1],[Head2|Body2],[],LGG),
+	!.
+	
+compute_clause_lgg([],[],Subst,ReverseList):-reverselist(Subst,ReverseList).
+compute_clause_lgg([Head1|Body1],[Head2|Body2],Subst,LGG):-
+	lgg(Head1,Head2,LGG1),
+	compute_clause_lgg(Body1,Body2,[LGG1|Subst],LGG).
+
+
+% lgg of two terms
+lgg(Term1,Term2,LGG) :-
+   compute_lgg([Term1],[Term2],[LGG],[],Subst),
+   !.
+   
+compute_lgg([],[],[],Subst,Subst).
+compute_lgg([Head1|Tail1],[Head2|Tail2],[Head3|Tail3],Subst1,Subst3) :-	
+	bound(Head1), % is constant
+	bound(Head2), % is constant
+	Head1=Head2,
+	Head3=Head1,
+	compute_lgg(Tail1,Tail2,Tail3,Subst2,Subst3), !.
+	
+compute_lgg([Head1|Tail1],[Head2|Tail2],[Head3|Tail3],Subst1,Subst3) :-	
+   head(F,Head1),
+   tail(Tail11,Head1),
+   head(F,Head2),
+   tail(Tail22,Head2),   	
+   compute_lgg(Tail11,Tail22,Tail33,Subst1,Subst2),
+   head(F,Head3),
+   tail(Tail33,Head3),
+   compute_lgg(Tail1,Tail2,Tail3,Subst2,Subst3), !.
+compute_lgg([Head1|Tail1],[Head2|Tail2],[Head3|Tail3],Subst1,Subst2) :-
+   subst_member([Head3,[Head1,Head2]],Subst1),  
+   compute_lgg(Tail1,Tail2,Tail3,Subst1,Subst2), !.
+compute_lgg([Head1|Tail1],[Head2|Tail2],[Head3|Tail3],Subst1,Subst2) :-
+   compute_lgg(Tail1,Tail2,Tail3,[[Head3,[Head1,Head2]]|Subst1],Subst2), !.
+
+subst_member([A,B],[[A,C]|_]) :- B = C, !.
+subst_member(A,[_|B]) :- subst_member(A,B), !.    
+     
+     
+     
+% ------------------------------------------------------------------------ 
+% lggs (Clause,LP,LGGs) compute all lggs of a clause and a LP (set of clauses)
+%
+% Returns a list of generalization of the clause w.r.t the given LP (set of clauses)
+% 
+% @param Clause the input clause
+% @param LP the input LP (set of clauses represented as list)
+% @param LGG the list of lggs - is empty when no lggs exist
+% ------------------------------------------------------------------------ 
+
+
+% all lggs of a clause and a LP (set of clauses)
+% LGGs list is empty when no lgg exists
+
+lggs(Clause,LP,LGGs):-
+	findall(LGG,compute_lgg(Clause,LP,LGG),LGGs).
+compute_lgg([Head|[]],LP,[Head]):-!. % do not generalize facts
+compute_lgg(Clause,LP,LGG):-	
+	member(Clause2,LP),
+	lgg(Clause,Clause2, LGG),
+	isDefined(LGG).	
+
+% an empyt lgg is undefined = fails.
+isDefined(LGG):-size(LGG,0),!, fail().
+isDefined(LGG).
+
+
+% ------------------------------------------------------------------------ 
+% generalize(InputLP,OutputLP)
+%
+% Generalize an input LP (set of clauses) and returns the generalized
+% and minimalized (compacted) output LP
+%
+% @param InputLP = input set of clauses represented as list
+% @param OutputLP = output set of clauses represented as list
+% ------------------------------------------------------------------------ 
+generalize([],[]):-!.
+generalize(InputLP,OutputLP):-
+	compute_lggs(InputLP,[],GeneralizedLP),	
+	sort(GeneralizedLP,SortedLP),
+	minimalize(SortedLP,OutputLP).
+          
+compute_lggs([],OutputLP,OutputLP).
+compute_lggs([Clause1|Tail],TmpOutput,OutputLP):-	
+	lggs(Clause1,Tail,LGGs),
+	append(TmpOutput,LGGs,TmpOutput2),
+	compute_lggs(Tail,TmpOutput2,OutputLP).
+
+
+
+
+
+% --------------------
+% coverage
+% --------------------
+
+
+% ------------------------------------------------------------------------ 
+% coverage(Goal,LP,CoveredClauses,NotCoveredClauses,CoverageLevel)
+%
+% Computes the test coverage for a given test (goal) and a LP.
+% Computes the coverage level and gives feedback about the actually
+% covered and not covered clauses
+%
+% @param Goal = the test query
+% @param LP = the LP
+% @param CoveredClauses = the set of covered clauses
+% @param NotCoveredClauses = the set of not covered clauses
+% @param CoverageLevel = the coverage level = 
+%					covered clauses divided by the number of clauses in the LP
+% ------------------------------------------------------------------------ 
+coverage(Goal,LP,CoveredClauses,NotCoveredClauses,CoverageLevel):-
+	% TODO remove subgoals wich are not entailed (via derive)
+	specialize(Goal,LP,SpecializedLP),
+	generalize(SpecializedLP,OutputLP),	
+	findall(CoveredClause,cover(LP,OutputLP,CoveredClause),CoveredClauses),
+	complement(LP,CoveredClauses,NotCoveredClauses),
+	size(CoveredClauses,CovPos),
+	size(LP,OriginalSize),
+	math_div(CovPos,OriginalSize,CoverageLevel).
+	
+	
+% ------------------------------------------------------------------------ 
+% cover(LP1,LP2,CoveredClause)
+%
+% Return the covered clause from both LPs, i.e. the clauses
+% which are variants
+
+%
+% @param LP1 = set of clauses
+% @param LP2 = set of clauses
+% @param CoveredClause = the covered clause
+% ------------------------------------------------------------------------ 	
+cover(LP1,LP2,[[FunctorHead1|ArgsHead1]|Body1]):-	
+	member([[FunctorHead1|ArgsHead1]|Body1],LP1),
+	member([[FunctorHead1|ArgsHead2]|Body2],LP2),
+	variant([[FunctorHead1|ArgsHead1]|Body1],[[FunctorHead1|ArgsHead2]|Body2]).
+	
+		
+
+% is a term/clause/sorted LP a variant of another term/clause/sorted LP
+
+
+variant(Term1,Term2):-		
+	free(Term1), % term 1 is variable
+	free(Term2), % term 2 is variable		
+	checkType(Term1,Term2), % check types		
+	!.
+	
+variant([],[]):-!.	
+
+variant(Term1,Term2):-
+	bound(Term1),
+	bound(Term2),	
+	Term2=Term1,	
+	!.	
+	
+variant([Head1|Tail1],[Head2|Tail2]):-	
+	variant(Head1,Head2),
+	variant(Tail1,Tail2).
