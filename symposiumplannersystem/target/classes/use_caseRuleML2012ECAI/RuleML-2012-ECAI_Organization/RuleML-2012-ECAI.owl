@@ -53,6 +53,10 @@
 		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
 	</owl:Class>
 	
+	<owl:Class rdf:ID="IntlRuleChal_Chair">
+		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>
+	
 	<owl:Class rdf:ID="DocSymposium_Chair">
 		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
 	</owl:Class>
@@ -85,6 +89,43 @@
 		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
 	</owl:Class>
 	
+	<owl:Class rdf:ID="LegalRuleML">
+		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>
+	
+	<owl:Class rdf:ID="InternationalPragmaticWebConference">
+		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>
+	
+	<owl:Class rdf:ID="BusinessRulesandProcesses">
+		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>
+	
+	<owl:Class rdf:ID="RulebasedEventProcessingandReactionRules">
+		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>
+	
+	<owl:Class rdf:ID="RulebasedEventProcessingandReactionRules">
+		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>
+	
+	<owl:Class rdf:ID="RulebasedPoliciesandAgentsonthePragmaticWeb">
+		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>
+	
+	<owl:Class rdf:ID="RulesandtheSemanticWeb">
+		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>
+	
+	<owl:Class rdf:ID="RuleMarkupLanguagesandRuleInterchange">
+		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>
+	
+	<owl:Class rdf:ID="RuleTransformationExtractionandLearning">
+		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>
+	
+	
 	<owl:Class rdf:ID="RuleML_Challenge">
 		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
 	</owl:Class>
@@ -115,6 +156,14 @@
 	<Responsibility rdf:ID="CoordinateSteeringCommittee" />
 	<Responsibility rdf:ID="CoordinateLocalChair" />
 	<Responsibility rdf:ID="Challenge" />
+	<Responsibility rdf:ID="LegalRuleML" />
+	<Responsibility rdf:ID="InternationalPragmaticWebConference" />
+	<Responsibility rdf:ID="BusinessRulesandProcesses" />
+	<Responsibility rdf:ID="RulebasedEventProcessingandReactionRules" />
+	<Responsibility rdf:ID="RulebasedPoliciesandAgentsonthePragmaticWeb" />
+	<Responsibility rdf:ID="RulesandtheSemanticWeb" />
+	<Responsibility rdf:ID="RuleMarkupLanguagesandRuleInterchange" />
+	<Responsibility rdf:ID="RuleTransformationExtractionandLearning" />
 	<Responsibility rdf:ID="RuleTransformationExtraction" />
 	<Responsibility rdf:ID="RulesUncertainty" />
 	<Responsibility rdf:ID="RulesNorms" />
@@ -132,6 +181,7 @@
 	<Responsibility rdf:ID="ProgramChair" />
 	<Responsibility rdf:ID="DocSymposiumChair" />
 	<Responsibility rdf:ID="IntlRuleChalSteerCommitChair" />
+	<Responsibility rdf:ID="IntlRuleChalChair" />
 	<Responsibility rdf:ID="LocalChair" />
 	<Responsibility rdf:ID="MetaAndSocialChair" />
 	<Responsibility rdf:ID="SteeringChair" />
@@ -141,6 +191,14 @@
 	<Responsibility rdf:ID="RulebasedGameAI" />
 	<Responsibility rdf:ID="RulebasedEventAndReaction" />
 	<Responsibility rdf:ID="RulesAndCrossIndustry" />
+	<Responsibility rdf:ID="LegalRuleML" />
+	<Responsibility rdf:ID="InternationalPragmaticWebConference" />
+	<Responsibility rdf:ID="BusinessRulesandProcesses" />
+	<Responsibility rdf:ID="RulebasedEventProcessingandReactionRules" />
+	<Responsibility rdf:ID="RulebasedPoliciesandAgentsonthePragmaticWeb" />
+	<Responsibility rdf:ID="RulesandtheSemanticWeb" />
+	<Responsibility rdf:ID="RuleMarkupLanguagesandRuleInterchange" />
+	<Responsibility rdf:ID="RuleTransformationExtractionandLearning" />
 	<Responsibility rdf:ID="RuleMLChallenge" />
 	<Responsibility rdf:ID="ProgramCommittee" />
 	<Responsibility rdf:ID="WellnessRules" />
@@ -221,12 +279,8 @@
 		<responsible rdf:resource="#ProgramChair" />			
 	</Program_Chair>
 	
-	<Liaison_Chair rdf:ID="LiaisonChair">	
-		<responsible rdf:resource="#Partners" />
-		<responsible rdf:resource="#LiaisonChair" />			
-	</Liaison_Chair> 
-	
 	<Publicity_Chair rdf:ID="PublicityChair">
+	    <responsible rdf:resource="#Partners" />
 		<responsible rdf:resource="#Sponsoring" />	
 		<responsible rdf:resource="#PublicityChair" />		
 	</Publicity_Chair>
@@ -237,6 +291,11 @@
 	</DocSymposium_Chair>
 	
 	<IntlRuleChalSteerCommit_Chair rdf:ID="IntlRuleChalSteerCommitChair">
+		<responsible rdf:resource= "#CoordinateLocalChair" />
+		<responsible rdf:resource= "#IntlRuleChalSteerCommitChair" />
+	</IntlRuleChalSteerCommit_Chair>
+	
+	<IntlRuleChalSteerCommit_Chair rdf:ID="IntlRuleChalChair">
 		<responsible rdf:resource= "#CoordinateLocalChair" />
 		<responsible rdf:resource= "#IntlRuleChalSteerCommitChair" />
 	</IntlRuleChalSteerCommit_Chair>
@@ -286,6 +345,51 @@
 		<responsible rdf:resource="#RulesCrossIndustry" />
 		<responsible rdf:resource="#RulesAndCrossIndustry" />	
 	</Rules_And_Cross_Industry>
+	
+	<LegalRuleML rdf:ID="LegalRuleML">
+		<responsible rdf:resource="#LegalRuleML" />
+		<responsible rdf:resource="#LegalRuleML" />	
+	</LegalRuleML>
+	
+	<InternationalPragmaticWebConference rdf:ID="InternationalPragmaticWebConference">
+		<responsible rdf:resource="#InternationalPragmaticWebConference" />
+		<responsible rdf:resource="#InternationalPragmaticWebConference" />	
+	</InternationalPragmaticWebConference>
+	
+	<BusinessRulesandProcesses rdf:ID="BusinessRulesandProcesses">
+		<responsible rdf:resource="#BusinessRulesandProcesses" />
+		<responsible rdf:resource="#BusinessRulesandProcesses" />	
+	</BusinessRulesandProcesses>
+	
+	<RulebasedEventProcessingandReactionRules rdf:ID="RulebasedEventProcessingandReactionRules">
+		<responsible rdf:resource="#RulebasedEventProcessingandReactionRules" />
+		<responsible rdf:resource="#RulebasedEventProcessingandReactionRules" />	
+	</RulebasedEventProcessingandReactionRules>
+	
+	<RulebasedPoliciesandAgentsonthePragmaticWeb rdf:ID="RulebasedPoliciesandAgentsonthePragmaticWeb">
+		<responsible rdf:resource="#RulebasedPoliciesandAgentsonthePragmaticWeb" />
+		<responsible rdf:resource="#RulebasedPoliciesandAgentsonthePragmaticWeb" />	
+	</RulebasedPoliciesandAgentsonthePragmaticWeb>
+	
+	<RulebasedPoliciesandAgentsonthePragmaticWeb rdf:ID="RulebasedPoliciesandAgentsonthePragmaticWeb">
+		<responsible rdf:resource="#RulebasedPoliciesandAgentsonthePragmaticWeb" />
+		<responsible rdf:resource="#RulebasedPoliciesandAgentsonthePragmaticWeb" />	
+	</RulebasedPoliciesandAgentsonthePragmaticWeb>
+	
+	<RulesandtheSemanticWeb rdf:ID="RulesandtheSemanticWeb">
+		<responsible rdf:resource="#RulesandtheSemanticWeb" />
+		<responsible rdf:resource="#RulesandtheSemanticWeb" />	
+	</RulesandtheSemanticWeb>
+	
+	<RuleMarkupLanguagesandRuleInterchange rdf:ID="RuleMarkupLanguagesandRuleInterchange">
+		<responsible rdf:resource="#RuleMarkupLanguagesandRuleInterchange" />
+		<responsible rdf:resource="#RuleMarkupLanguagesandRuleInterchange" />	
+	</RuleMarkupLanguagesandRuleInterchange>
+	
+	<RuleTransformationExtractionandLearning rdf:ID="RuleTransformationExtractionandLearning">
+		<responsible rdf:resource="#RuleTransformationExtractionandLearning" />
+		<responsible rdf:resource="#RuleTransformationExtractionandLearning" />	
+	</RuleTransformationExtractionandLearning>
 	
 	<RuleML_Challenge rdf:ID="RuleMLChallenge">
 		<responsible rdf:resource="#Challenge" />

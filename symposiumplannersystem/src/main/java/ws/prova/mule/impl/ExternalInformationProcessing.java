@@ -22,9 +22,11 @@ public class ExternalInformationProcessing {
 					roles.add(strs[0].toLowerCase());
 					newResources.add(roles);
 				}
+				//empty it will return a empty string
 				if (!strs[1].trim().equals("")) {
-					affilication.add("affilication");
+					affilication.add("affiliation");
 					affilication.add(strs[1].toLowerCase());
+					//affilication.add(strs[1]);
 					newResources.add(affilication);
 				}
 				if (!strs[2].trim().equals("")) {

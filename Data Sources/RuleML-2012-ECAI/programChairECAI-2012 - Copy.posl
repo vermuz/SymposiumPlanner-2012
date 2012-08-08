@@ -1,0 +1,370 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%FOAF profile for IJCAI-2011 Program Chair Rules: **Disclaimer** these rules are experimental and not offical									    %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%FOAF contact and personal information									                                                                        %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%FOAF facts about the Program Chair
+person(
+  symposiumChair[RuleML_2012,programChair],  
+  foafname[firstName[Antonis],lastName[Bikakis]],
+  foaftitle[title[Dr]],
+  foafmbox[email[bikakisATicsDOTforthDOTgr]],
+  exphones[telephoneNumbers[office[302810391624],cellPhone[]]]).
+
+person(
+  symposiumChair[RuleML_2012,programChair],  
+  foafname[firstName[Adrian],lastName[Giurca]],
+  foaftitle[title[Dr]],
+  foafmbox[email[adrianDOTpaschkeATgmxDOTde]],
+  exphones[telephoneNumbers[office[4935146340074],cellPhone[]]]).
+
+% FOAF facts about the Track Chairs
+% ToDo: Add chair contact details, besides first+last name
+trackperson(
+  symposiumChair[RuleML_2012,LegalRuleML_trackChair],  
+  foafname[firstName[Monica],lastName[Palmirani]],
+  foaftitle[title[Dr]],
+  foafmbox[email[palmiraniATcirsfidDOTuniboDOTit]],
+  exphones[telephoneNumbers[office[],cellPhone[]]]).
+  
+trackperson(
+  symposiumChair[RuleML_2012,InternationalPragmaticWebConference_trackChair],  
+  foafname[firstName[Adrian],lastName[Paschke]],
+  foaftitle[title[Dr]],
+  foafmbox[email[adrianDOTpaschkeATbiotecDOTtuDASHdresdenDOTde]],
+  exphones[telephoneNumbers[office[],cellPhone[]]]).
+  
+trackperson(
+  symposiumChair[RuleML_2012,InternationalPragmaticWebConference_trackChair],  
+  foafname[firstName[Hans],lastName[Weigand]],
+  foaftitle[title[Dr]],
+  foafmbox[email[HDOTWeigandATkubDOTnl]],
+  exphones[telephoneNumbers[office[],cellPhone[]]]).
+  
+trackperson(
+  symposiumChair[RuleML_2012,BusinessRulesandProcesses_trackChair],  
+  foafname[firstName[Patrick],lastName[Albert]],
+  foaftitle[title[Dr]],
+  foafmbox[email[patrickDOTalbert55ATgmailDOTcom]],
+  exphones[telephoneNumbers[office[],cellPhone[]]]).
+  
+trackperson(
+  symposiumChair[RuleML_2012,RulebasedEventProcessingandReactionRules_trackChair],  
+  foafname[firstName[Harold],lastName[Boley]],
+  foaftitle[title[Dr]],
+  foafmbox[email[firstdotlastATnrcDOTgcDOTca]],
+  exphones[telephoneNumbers[office[15064440385],cellPhone[]]]).
+  
+trackperson(
+  symposiumChair[RuleML_2012,RulebasedPoliciesandAgentsonthePragmaticWeb_trackChair],  
+  foafname[firstName[Adrian],lastName[Paschke]],
+  foaftitle[title[Dr]],
+  foafmbox[email[adrianDOTpaschkeATbiotecDOTtuDASHdresdenDOTde]],
+  exphones[telephoneNumbers[office[],cellPhone[]]]).
+  
+trackperson(
+  symposiumChair[RuleML_2012,RulebasedPoliciesandAgentsonthePragmaticWeb_trackChair],  
+  foafname[firstName[Hans],lastName[Weigand]],
+  foaftitle[title[Dr]],
+  foafmbox[email[HDOTWeigandATkubDOTnl]],
+  exphones[telephoneNumbers[office[],cellPhone[]]]).
+  
+trackperson(
+  symposiumChair[RuleML_2012,RulesandtheSemanticWeb_trackChair],  
+  foafname[firstName[Grzegorz],lastName[Nalepa]],
+  foaftitle[title[Dr]],
+  foafmbox[email[gjnATaghDOTeduDOTpl]],
+  exphones[telephoneNumbers[office[],cellPhone[]]]).
+  
+trackperson(
+  symposiumChair[RuleML_2012,RuleMarkupLanguagesandRuleInterchange_trackChair],  
+  foafname[firstName[Nick],lastName[Bassiliades]],
+  foaftitle[title[Dr]],
+  foafmbox[email[nbassiliATcsDOTauthDOTgr]],
+  exphones[telephoneNumbers[office[],cellPhone[]]]).
+  
+
+trackperson(
+  symposiumChair[RuleML_2012,RuleTransformationExtractionandLearning_trackChair],  
+  foafname[firstName[Monica],lastName[Palmirani]],
+  foaftitle[title[Dr]],
+  foafmbox[email[palmiraniATcirsfidDOTuniboDOTit]],
+  exphones[telephoneNumbers[office[],cellPhone[]]]).
+  
+% Facts about tracks, respective topics (taken from CFP) and the names of the track chairs
+% This is the only viable solution, i.e. to have a single fact for each track and a list with all its topics
+% All other representation solutions (i.e. to have a single fact for each topic) have failed because they require
+% at some point to gather all the topics of a track into a list, which is not do-able due to lack of findall
+% A solution based on backtracking has the problem that created too many backtracking points, so it is very slow
+% NOTICE: Some characters have been replaced from the CFP because they caused problems
+%         ":" has been replaced by "-", "," by ";", and "." has been removed
+
+track("LegalRuleML":string,
+	["Rule interchange language for the legal domain":string,
+	 "Modelling and reasoning":string,
+	 "Structure, evaluate, and compare legal arguments":string,
+	 "Rule representation tools":string,
+	 "Modelling norms, regulation, policy, guidelines, judgements, and contracts":string,
+	 "Extend the existing RuleML, RIF and related Web rule work":string,
+	 "Representing and capturing the legal knowledge embedded in legal texts":string],
+	 [foafname[firstName[Monica],lastName[Palmirani]]]).
+	 
+track("International Pragmatic Web Conference":string,
+	["Collection of practices and theories describing why and how people use information":string,
+	 "Social interaction":string,
+	 "Provide information consumers with computational agents":string,
+	 "Transform existing information into relevant information":string,
+	 "Information of practical consequences":string],
+	[foafname[firstName[Adrian],lastName[Paschke]],
+	foafname[firstName[Hans],lastName[Weigand]]]).
+	
+track("Business Rules and Processes":string,
+	["Business Rules":string,
+	 "Business Processes":string],
+	 [foafname[firstName[Patrick],lastName[Albert]]]).
+	 
+track("Rule-based Event Processing and Reaction Rules":string,
+	["Rule-based Event Processing":string,
+	 "Rule-based Reaction Rules":string],
+	 [foafname[firstName[Harold],lastName[Boley]]]).
+	 
+track("Rule-based Policies and Agents on the Pragmatic Web":string,
+	["Rule-based Policies":string,
+	 "Rule-based Agents":string,
+	 "Pragmatic Web":string],
+	 [foafname[firstName[Adrian],lastName[Paschke]],
+	 foafname[firstName[Hans],lastName[Weigand]]]).
+
+track("Rules and the Semantic Web":string,
+	["Rules":string,
+	 "The Semantic Web":string],
+	 [foafname[firstName[Grzegorz],lastName[Nalepa]]]).	
+	 
+track("Rule Markup Languages and Rule Interchange":string,
+	["Rule Markup Languages":string,
+	 "Rule Interchange":string],
+	 [foafname[firstName[Nick],lastName[Bassiliades]]]).
+
+track("Rule Transformation, Extraction and Learning":string,
+	["Rule Transformation":string,
+	 "Rule Extraction":string,
+	 "Rule Learning":string],
+	 [foafname[firstName[Monica],lastName[Palmirani]]]).
+	
+% This predicate implements the "Find Tracks relevant to Keywords" sample query
+% The predicate finds a track and scores it according to a list of keywords provided
+% by the asker through the OA. The list of keywords is in the format of a recursive complex term
+% keys[Key1,RestKeys], where RestKeys has the same structure, excepot for the empty key-list which is nil.
+% Example: keys[rule:String,keys[exceptions:string,nil]]
+% The list of keywords is given as a string that is decomposed to a list of keywords
+% according to an algorithm explained in the OA prova file.
+% The predicate returns the name of the track and a relevance score for the respective track, 
+% which must be more than 0 (o means completely irrelevant).
+% The scoring algorithm is explained below.
+
+score_tracks(?Keys,track[?Track,relevance[?Score]]) :-
+	track(?Track,?Topics,?),
+	score_track(?Keys,?Track,?Topics,?Score),
+	greaterThan(?Score,0:real).
+
+
+% To score each track, first score all the topics that fall under the track
+% then score the track string itself and combine all the scores together.
+% The score of the track string is doubled, because it is more important 
+% to find the keywords in the track string itself.
+
+score_track(?Keys,?track,?topics,?S) :-
+	score_topics(?Keys,?topics,?Scores),
+	score_one_topic(?Keys,?track,?Sc1),
+	multiply(?Sc2, ?Sc1, 2:integer),
+	calc_track_score([?Sc2|?Scores],?S).
+
+	
+% Iterate over all the topic list by scoring each one
+
+score_topics(?Keys,[],[]).
+score_topics(?Keys,[?Topic|?RestTopics],[?Score|?RestScores]) :- 
+	score_one_topic(?Keys,?Topic,?Score),
+	score_topics(?Keys,?RestTopics,?RestScores).
+
+
+% Each topic is scored by first counting how many keywords of the given list
+% are present inside the string of the topic (or the track).
+% Then this number is used as an input to the scoring function.
+
+score_one_topic(?Keys,?Topic,?Score) :-
+	countTopic(?Keys,?Topic,?N),
+	scoreTopic(?N, ?Score).
+
+
+% Iterate over all keywords in the list and increase the counter 
+% each time a keyword is found in the string.
+% Notice that when there is a weight associated with a keyword
+% then the comlex terms is keys/3 and the weight is multipled
+% with the number of found keywords.
+% When there is no associated weight, then the complex term
+% is keys/2 and weight=1 is assumed.
+
+countTopic(keys[?Key, nil], ?topic, ?X) :-
+	addContains(?Key, ?topic, 1:real, ?X).
+countTopic(keys[?Key,?weight, nil], ?topic, ?X) :-
+	addContains(?Key, ?topic, ?weight, ?X).
+countTopic(keys[?Key, ?RestKeys], ?topic, ?N1) :-
+	addContains(?Key, ?topic, 1:real, ?X),
+	countTopic(?RestKeys, ?topic, ?N),
+	add(?N1, ?N, ?X).
+countTopic(keys[?Key, ?weight, ?RestKeys], ?topic, ?N1) :-
+	addContains(?Key, ?topic, ?weight, ?X),
+	countTopic(?RestKeys, ?topic, ?N),
+	add(?N1, ?N, ?X).
+
+
+% If the keyword is found add 1, times the associated weight. 
+% If not found add 0.
+% Case is ignored.
+
+addContains(?Key, ?topic, ?weight, ?M)  :- 
+	containsIgnoreCase(?topic, ?Key),
+	multiply(?M, ?weight, 1:real).
+addContains(?Key, ?topic, ?weight, 0:real)  :- 
+	naf(containsIgnoreCase(?topic, ?Key)).
+
+
+% The scoring function implemented is sum_to_n
+% which sums all integers from 0 up to N.
+% e.g. sum_to_n(1,1)=1. sum_to_n(2,3)=1+2. sum_to_n(3,6)=1+2+3. etc.
+% The rationale behind it is that the value of finding two or more
+% keywords should not be linear, i.e. the existence of more than one keywords
+% should be rewarded.
+
+scoreTopic(?N, ?S) :-
+	sum_to_n(?N, ?S).
+
+sum_to_n(?N, ?S) :-
+	add(?N1, ?N, 1:integer),
+	multiply(?M, ?N1, ?N),
+	divide(?S, ?M, 2:integer).
+
+
+% This calculates the overall score of a track as the function of the scoes of the list of its topics (plus the track)
+% The scoring function is as follows:
+% Let Score(i) be the score of the i-th topic
+% We are mostly interested to reward the topic with the greatest score,
+% i.e. the one that contains the most keywords.
+% Thus we multiply the maximum of the scores max(Score(i)) with 1000.
+% However, we need to differentiate between two tracks that contain the same "best" topics,
+% but one of them contains more "good" topics than the other.
+% In order to do so, we add the sum of the scores of all topics (plus track)
+% The overall function is:
+% Score(track) = 1000*max(Score(track,i)) + sum(Score(track,i))
+
+calc_track_score(?Scores,?S) :-
+	find_max(?Scores,?Max),
+	sumlist(?Scores,?Sum),
+	multiply(?Mult, 1000:integer, ?Max),
+	add(?S, ?Mult, ?Sum).
+
+
+
+% This predicate implements the "Retrieve Track of a Topic" sample query
+% The predicate accepts a topic (string), iterates over the track/3 facts,
+% retrieves the corresponding list of topics and checks if the specific input topic belongs to this list
+
+getTrackOfATopic(?Topic,?Track) :-
+	track(?Track,?Topics,?),
+	member(?Topic,?Topics).
+
+
+% This predicate implements the "Retrieve Tracks" sample query
+
+getTrack(?Track) :-
+	track(?Track,?,?).
+	
+	
+getTrack(?Track,?Topics) :-
+	track(?Track,?Topics,?).
+
+
+% This predicate implements the "Retrieve Contact Details of Chairs for a specific track" sample query
+% The predicate accepts a track (string), retrieves the corresponding track/3 fact,
+% retrieves the list of chairs of the track, iterates over the list, retrieves the contact details of each track chair
+% from the trackperson/5 facts and returns their contact details
+
+getContactOfTrack(?Track,contactdetails[?Role,?Chair,?Title,?Email,?Phones]) :-
+	track(?Track,?,?Chairs),
+	member(?Chair,?Chairs),
+	trackperson(?Role,?Chair,?Title,?Email,?Phones).	
+
+
+
+% Auxiliary predicates
+
+% member of a list
+
+member(?X,[?X|?T]).
+member(?X,[?H|?T]) :- member(?X,?T).
+
+
+% find the maximum number in a list of numbers
+
+find_max([?X],?X).
+find_max([?H|?T],?Max) :-
+	find_max(?T,?Max1),
+	max(?H,?Max1,?Max).
+
+
+% find the maximum of two numbers
+
+max(?X,?Y,?X) :- greaterThan(?X,?Y).
+max(?X,?Y,?Y) :- lessThanOrEqual(?X,?Y).
+
+
+% sum a list of numbers
+
+sumlist([],0:integer).
+sumlist([?H|?T],?Sum) :-
+	sumlist(?T,?Temp),
+	add(?Sum,?Temp,?H).
+	
+
+	calendar(c0004).
+	%c0004,ruleml2011	
+	%DATETIMES FOR CALENDAR EVENTS
+	%-----------------------------
+
+	event(c0004,"RuleML-2012@ECAI Paper submission":string,
+	dateTime[2012:integer,1:integer,4:integer,1:integer,0:integer],
+	dateTime[2012:integer,3:integer,5:integer,1:integer,0:integer]).
+
+	event(c0004,"RuleML-2012@ECAI Abstract submission":string,
+	dateTime[2012:integer,12:integer,25:integer,1:integer,0:integer],
+	dateTime[2012:integer,2:integer,26:integer,1:integer,0:integer]).
+
+	event(c0004,"RuleML-2012@ECAI dates",
+	dateTime[2012:integer,7:integer,19:integer,2:integer,0:integer],
+	dateTime[2012:integer,7:integer,22:integer,2:integer,0:integer]).
+
+	event(c0004,"RuleML-2012@ECAI Camera-ready copy due":string,
+	dateTime[2012:integer,4:integer,1:integer,2:integer,0:integer],
+	dateTime[2012:integer,4:integer,16:integer,2:integer,0:integer]).
+
+	event(c0004,"RuleML-2012@ECAI Notification of acceptance/rejection":string,
+	dateTime[2012:integer,3:integer,31:integer,2:integer,0:integer],
+	dateTime[2012:integer,4:integer,1:integer,2:integer,0:integer]).
+	
+	
+	
+getImportantDates(?Title,dateTime[?StartYear,?StartMonth,?StartDay,?StartHour,?StartMinute],
+	dateTime[?EndYear,?EndMonth,?EndDay,?EndHour,?EndMinute]) :-
+	calendar(?CalendarID),
+	event(?CalendarID,?Title, dateTime[?StartYear,?StartMonth,?StartDay,?StartHour,?StartMinute],
+	dateTime[?EndYear,?EndMonth,?EndDay,?EndHour,?EndMinute]).
+	
+getItemOfImportantDates(?Title,dateTime[?StartYear,?StartMonth,?StartDay,?StartHour,?StartMinute],
+	dateTime[?EndYear,?EndMonth,?EndDay,?EndHour,?EndMinute]) :-
+	calendar(?CalendarID),
+	event(?CalendarID,?Title, dateTime[?StartYear,?StartMonth,?StartDay,?StartHour,?StartMinute],
+	dateTime[?EndYear,?EndMonth,?EndDay,?EndHour,?EndMinute]).

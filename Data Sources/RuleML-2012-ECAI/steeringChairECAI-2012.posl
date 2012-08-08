@@ -1,0 +1,30 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%FOAF profile for ECAI-2012 General Chair: **Disclaimer** these rules are experimental and not offical									    %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%FOAF contact and personal information									                                                                        %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%FOAF facts about the Steering Chair	
+
+person(
+  symposiumChair[ECAI_2012,steering],  
+  foafname[firstName[Mike],lastName[Dean]],
+  foaftitle[title[Dr]],
+  foafmbox[email[]],
+  exphones[telephoneNumbers[office[],cellPhone[]]]).
+  
+  person(
+  symposiumChair[ECAI_2012,steering],  
+  foafname[firstName[John],lastName[Hall]],
+  foaftitle[title[Dr]],
+  foafmbox[email[]],
+  exphones[telephoneNumbers[office[],cellPhone[]]]).
+  
+  person(
+  symposiumChair[ECAI_2012,steering],  
+  foafname[firstName[Christian de Sainte],lastName[Marie]],
+  foaftitle[title[Dr]],
+  foafmbox[email[]],
+  exphones[telephoneNumbers[office[],cellPhone[]]]).

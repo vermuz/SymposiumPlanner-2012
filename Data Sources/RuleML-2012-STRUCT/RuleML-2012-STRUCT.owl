@@ -1,0 +1,211 @@
+<?xml version="1.0"?>
+
+<rdf:RDF
+
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:ruleml2012ATstruct="http://ibis.in.tum.de/projects/paw#"
+    xmlns="http://ibis.in.tum.de/projects/paw#"
+	xml:base="http://ibis.in.tum.de/projects/paw#"
+>
+
+	<owl:Ontology rdf:about="./RuleML-2012-STRUCT.owl">
+	  <owl:versionInfo>v 0.01</owl:versionInfo>
+	  <rdfs:comment>Describes the responsibility assignment matrix of RuleML-Struct</rdfs:comment>	  
+	</owl:Ontology>
+
+
+	<owl:Class rdf:ID="STRUCT-2012" />	
+
+	<!-- Model of the RuleML Structure  -->
+
+
+	<owl:Class rdf:ID="Organizing_Committee">
+		<rdfs:subClassOf rdf:resource="#STRUCT-2012" />
+	</owl:Class>
+
+	<owl:Class rdf:ID="TG_Agent">
+	     <rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>
+	
+	<owl:Class rdf:ID="Advisory_Board">
+		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>
+
+	<owl:Class rdf:ID="CEI">
+		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>	
+
+	<owl:Class rdf:ID="Co_Chairs">
+		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>
+
+	<owl:Class rdf:ID="Defeasible_Logic">
+		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>
+
+	<owl:Class rdf:ID="MAS">
+		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>
+	
+	<owl:Class rdf:ID="Modal_Logic">
+		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>
+	
+	<owl:Class rdf:ID="PSOA">
+		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>
+	
+	<owl:Class rdf:ID="Reaction_Rules">
+		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>
+
+	<owl:Class rdf:ID="Steering_Committee">
+		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>
+	
+	<owl:Class rdf:ID="UnCert_Reason">
+		<rdfs:subClassOf rdf:resource="#Organizing_Committee" />
+	</owl:Class>
+	
+	<!-- Responsibility Domains -->
+	
+	<owl:Class rdf:ID="Responsibility">
+		<rdfs:subClassOf rdf:resource="#STRUCT-2012" />
+	</owl:Class>
+	
+	
+	
+	<!-- TODO: extend responsibilities -->
+	<Responsibility rdf:ID="Symposium" />
+	<Responsibility rdf:ID="SymposiumPlanner" />
+	<Responsibility rdf:ID="Submission" />
+	<Responsibility rdf:ID="Sponsoring" />
+	<Responsibility rdf:ID="Partners" />
+	
+	<!-- Meta Topics -->
+	<Responsibility rdf:ID="TGAgent" />
+	<Responsibility rdf:ID="AdvisoryBoard" />
+	<Responsibility rdf:ID="CEI" />
+	<Responsibility rdf:ID="CoChairs" />
+	<Responsibility rdf:ID="DefeasibleLogic" />
+	<Responsibility rdf:ID="MAS" />
+	<Responsibility rdf:ID="ModalLogic" />
+	<Responsibility rdf:ID="PSOA" />
+	<Responsibility rdf:ID="ReactionRules" />
+	<Responsibility rdf:ID="SteeringCommittee" />
+	<Responsibility rdf:ID="UnCertReason" />
+	
+	<!-- Assign Responsibilities to organizing committee members -->
+	
+	<owl:ObjectProperty rdf:ID="accountable">
+		<rdfs:comment>This role approves the completed work and is held fully accountable for it.</rdfs:comment>
+	    <rdf:type rdf:resource="owl#FunctionalProperty" />
+	    <rdfs:domain rdf:resource="#Organizing_Committee" />
+	    <rdfs:range rdf:resource="#Responsibility" />
+ 	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:ID="supportive">
+		<rdfs:comment>This role provides additional resources to conduct the work or plays a supportive role in implementation.</rdfs:comment>
+	    <rdf:type rdf:resource="owl#FunctionalProperty" />
+	    <rdfs:domain rdf:resource="#Organizing_Committee" />
+	    <rdfs:range rdf:resource="#Responsibility" />
+ 	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:ID="consulted">
+		<rdfs:comment>This role has the information and/or capability to complete the work. Two-way communication typically between R and C.</rdfs:comment>
+	    <rdf:type rdf:resource="owl#FunctionalProperty" />
+	    <rdfs:domain rdf:resource="#Organizing_Committee" />
+	    <rdfs:range rdf:resource="#Responsibility" />
+ 	</owl:ObjectProperty>		
+	
+	<owl:ObjectProperty rdf:ID="informed">
+		<rdfs:comment>This role is to be informed of progress and results. One-way communication (typically from R to A).</rdfs:comment>
+	    <rdf:type rdf:resource="owl#FunctionalProperty" />
+	    <rdfs:domain rdf:resource="#Organizing_Committee" />
+	    <rdfs:range rdf:resource="#Responsibility" />
+ 	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:ID="verifies">
+		<rdfs:comment>This role checks the work to ensure that it meets all defined criteria and standards.</rdfs:comment>
+	    <rdf:type rdf:resource="owl#FunctionalProperty" />
+	    <rdfs:domain rdf:resource="#Organizing_Committee" />
+	    <rdfs:range rdf:resource="#Responsibility" />
+ 	</owl:ObjectProperty>
+	
+	<owl:ObjectProperty rdf:ID="signs">
+		<rdfs:comment>This role signs off on the completed work.</rdfs:comment>
+	    <rdf:type rdf:resource="owl#FunctionalProperty" />
+	    <rdfs:domain rdf:resource="#Organizing_Committee" />
+	    <rdfs:range rdf:resource="#Responsibility" />
+ 	</owl:ObjectProperty>
+	
+	
+ 		
+
+	<!-- Individual agents (individuals) 
+	
+		 Define a Responsibility Assignment Matrix
+		     
+	-->
+	
+<!-- TODO: Complete Responsibility Assignment Matrix --> 
+
+    <TG_Agent rdf:ID="TGAgent">
+        <responsible rdf:resource="#Partners" />
+        <responsible rdf:resource="#TGAgent" />	
+    </TG_Agent>
+    
+	<Advisory_Board rdf:ID="AdvisoryBoard">
+		 <responsible rdf:resource="#Symposium" />
+		 <responsible rdf:resource="#AdvisoryBoard" />			 
+	</Advisory_Board>
+
+	<CEI rdf:ID="CEI">
+    	 <responsible rdf:resource="#Symposium" />
+		<responsible rdf:resource="#CEI" />			
+	</CEI>
+	
+	<Co_Chairs rdf:ID="CoChairs">	
+		 <responsible rdf:resource="#Symposium" />
+		<responsible rdf:resource="#CoChairs" />			
+	</Co_Chairs> 
+	
+	<Defeasible_Logic rdf:ID="DefeasibleLogic">
+		 <responsible rdf:resource="#Symposium" />
+		<responsible rdf:resource="#DefeasibleLogic" />		
+	</Defeasible_Logic>
+	
+	<MAS rdf:ID="MAS">
+	   <responsible rdf:resource="#Symposium" />
+	    <responsible rdf:resource="#MAS" />	
+	</MAS>
+
+	<Modal_Logic rdf:ID="ModalLogic">
+	    <responsible rdf:resource="#Symposium" />
+		<responsible rdf:resource="#ModalLogic" />	
+	</Modal_Logic>
+	
+	<PSOA rdf:ID="PSOA">
+	    <responsible rdf:resource="#Symposium" />
+		<responsible rdf:resource="#PSOA" />	
+	</PSOA>
+	
+	<Reaction_Rules rdf:ID="ReactionRules">
+		 <responsible rdf:resource="#Symposium" />
+		<responsible rdf:resource="#ReactionRules" />	
+	</Reaction_Rules>
+	
+	<Steering_Committee rdf:ID="SteeringCommittee">
+		 <responsible rdf:resource="#Symposium" />
+		<responsible rdf:resource="#SteeringCommittee" />	
+	</Steering_Committee>
+	
+	<UnCert_Reason rdf:ID="UnCertReason">
+		 <responsible rdf:resource="#Symposium" />
+		<responsible rdf:resource="#UnCertReason" />	
+	</UnCert_Reason>
+	
+		
+</rdf:RDF>

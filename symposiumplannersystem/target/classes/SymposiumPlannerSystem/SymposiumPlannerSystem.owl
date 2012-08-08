@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE rdf:RDF [
 	 <!ENTITY ruleml2012ATecai 'http://ibis.in.tum.de/projects/paw/2011#'>
+	 <!ENTITY ruleml2012ATstruct 'http://ibis.in.tum.de/projects/paw/2011#'>
 ]>
 
 
@@ -10,6 +11,7 @@
     xmlns:owl="http://www.w3.org/2002/07/owl#"
    	xmlns:sps="http://ibis.in.tum.de/projects/paw#"
     xmlns:ruleml2012ATecai="&ruleml2012ATecai;"
+    xmlns:ruleml2012ATstruct="&ruleml2012ATstruct;"
     xmlns="http://ibis.in.tum.de/projects/paw#"
 	xml:base="http://ibis.in.tum.de/projects/paw#"
 >
@@ -28,22 +30,36 @@
 		<rdfs:subClassOf rdf:resource="#SymposiumPlannerSystem" />
 	</owl:Class>
 
-   <owl:Class rdf:ID="getContact">
+    <owl:Class rdf:ID="getContact">
 		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
 	</owl:Class>
 	<owl:Class rdf:ID="sponsor">
 		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
 	</owl:Class>
-	<owl:Class rdf:ID="viewMediaPartners">
+	<owl:Class rdf:ID="meetingMediaPartner">
 		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
 	</owl:Class>
-		<owl:Class rdf:ID="viewOrganizationPartners">
+	
+	<owl:Class rdf:ID="meetingPartner">
 		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
 	</owl:Class>
-		<owl:Class rdf:ID="viewSponsors">
+	
+	<!-- New Changes for RuleML-2012 -->
+	<owl:Class rdf:ID="mediaNewsFeedResource">
 		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
 	</owl:Class>
-		<owl:Class rdf:ID="getTopicsOfATrack">
+	<owl:Class rdf:ID="mediaPartnerCommunity">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+	<owl:Class rdf:ID="mediapartnerWithSector">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+	<!-- End of New Changes for RuleML-2012 -->
+	
+	<owl:Class rdf:ID="viewSponsors">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+	<owl:Class rdf:ID="getTopicsOfATrack">
 		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
 	</owl:Class>
 	
@@ -51,6 +67,10 @@
 		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
 	</owl:Class>
 	
+	<owl:Class rdf:ID="getMembersOfATechnicalGroup">
+		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
+	</owl:Class>
+	    
 	<owl:Class rdf:ID="findTracks">
 		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
 	</owl:Class>
@@ -72,14 +92,14 @@
 		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
 	</owl:Class>
 	
-	<owl:Class rdf:ID="getTrackPapers">
+	<owl:Class rdf:ID="getTrackPaper">
 		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
 	</owl:Class>
 		<owl:Class rdf:ID="getFullPapers">
 		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
 	</owl:Class>
 	
-			<owl:Class rdf:ID="getShortPapers">
+	<owl:Class rdf:ID="getShortPapers">
 		<rdfs:subClassOf rdf:resource="#FunctionManagement" />
 	</owl:Class>
 	
@@ -106,6 +126,13 @@
 	    <rdfs:range rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI"/>
  	</owl:ObjectProperty>
  	
+ 	<owl:ObjectProperty rdf:ID="responsible">
+		<rdfs:comment>This role conducts the actual work/owns the problem. There should be only one R. If multiple R s are listed, then the work needs to be further subdivided to a lower level.</rdfs:comment>
+	    <rdf:type rdf:resource="owl#FunctionalProperty" />
+	    <rdfs:domain rdf:resource="#FunctionManagement" />
+	    <rdfs:range rdf:resource="&ruleml2012ATstruct;RuleML-2012-STRUCT"/>
+ 	</owl:ObjectProperty>
+ 	
  	<!-- Individual agents (individuals) 
 	
 		 Define a Responsibility Assignment Matrix
@@ -122,13 +149,26 @@
 		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
 	</Sponsor>
 	
-	<ViewMediaPartners rdf:ID="viewMediaPartners">
+	<MeetingMediaPartner rdf:ID="meetingMediaPartner">
 		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
-	</ViewMediaPartners>
+	</MeetingMediaPartner>
 	
-	<ViewOrganizationPartners rdf:ID="viewOrganizationPartners">
+		
+	<MeetingPartner rdf:ID="meetingPartner">
 		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
-	</ViewOrganizationPartners>
+	</MeetingPartner>
+	
+	<MediaNewsFeedResource rdf:ID="mediaNewsFeedResource">
+		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</MediaNewsFeedResource>
+	
+	<MediaPartnerCommunity rdf:ID="mediaPartnerCommunity">
+		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</MediaPartnerCommunity>
+	
+	<MediapartnerWithSector rdf:ID="mediapartnerWithSector">
+	 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
+	</MediapartnerWithSector>
 	
 	<ViewSponsors rdf:ID="viewSponsors">
 		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
@@ -141,6 +181,10 @@
 	<GetTrackOfATopic rdf:ID="getTrackOfATopic">
 		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
 	</GetTrackOfATopic>
+	
+	<GetMembersOfATechnicalGroup rdf:ID="getMembersOfATechnicalGroup">
+		 <responsible rdf:resource="&ruleml2012ATstruct;RuleML-2012-STRUCT" />
+	</GetMembersOfATechnicalGroup>
 	
 	<FindTracks rdf:ID="findTracks">
 		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
@@ -162,11 +206,11 @@
 		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
 	</Submission>
 	
-	<GetTrackPapers rdf:ID="getTrackPapers">
+	<GetTrackPaper rdf:ID="getTrackPaper">
 		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
-	</GetTrackPapers>
+	</GetTrackPaper>
 	
-		<GetFullPapers rdf:ID="getFullPapers">
+	<GetFullPapers rdf:ID="getFullPapers">
 		 <responsible rdf:resource="&ruleml2012ATecai;RuleML-2012-ECAI" />
 	</GetFullPapers>
 	

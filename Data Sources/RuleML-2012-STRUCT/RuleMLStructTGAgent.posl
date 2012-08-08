@@ -1,0 +1,68 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%FOAF profile for RuleML Structure Technical Groups Agent: **Disclaimer** these rules are experimental and not offical									    %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%FOAF contact and personal information									                                                                        %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%technicalGroup("Reaction Rules":string,
+    %[foafname[firstName[Alex],lastName[Kozlenkov]],
+	 %foafname[firstName[Adrian],lastName[Paschke]],
+	% foafname[firstName[Tara],lastName[Athan]],
+	 %foafname[firstName[Reuben],lastName[PeterPaul]],
+	 %foafname[firstName[Harold],lastName[Boley]]]).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+technicalGroup("Reaction Rules":string,
+    [foafname[firstName[Alex],lastName[Kozlenkov]],
+	 foafname[firstName[Adrian],lastName[Paschke]]]).
+	 
+	 
+technicalGroup("Defeasible Logic in RuleML":string,
+    [foafname[firstName[Nick],lastName[Bassiliades]],
+	 foafname[firstName[Guido],lastName[Governatori]]]).
+	 
+
+technicalGroup("Modal Logic in RuleML":string,
+    [foafname[firstName[Tara],lastName[Athan]],
+	 foafname[firstName[Harold],lastName[Boley]]]).
+	 
+technicalGroup("Positional-Slotted Object-Applicative":string,
+    [foafname[firstName[Alexander],lastName[Riazonov]],
+	 foafname[firstName[Harold],lastName[Boley]]]).
+	 
+technicalGroup("Uncertainty Reasoning":string,
+    [foafname[firstName[Davide],lastName[Sottara]],
+	 foafname[firstName[Jeff],lastName[Pan]]]).
+	 
+technicalGroup("Controlled English Interfaces for RuleML":string,
+    [foafname[firstName[Adrian],lastName[Paschke]],
+	 foafname[firstName[Adam],lastName[Wyner]]]).
+	 
+technicalGroup("RuleML-Based Multi-Agent Systems":string,
+    [foafname[firstName[Adrian],lastName[Paschke]],
+	 foafname[firstName[Nick],lastName[Bassiliades]]]).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

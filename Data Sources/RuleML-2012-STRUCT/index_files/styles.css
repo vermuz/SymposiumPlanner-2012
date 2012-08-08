@@ -1,0 +1,529 @@
+/* CSS Document */
+/* purple links - 8B78B4 -> 695399 (6/9/9) */
+
+body {
+	margin: 0;
+	padding; 0;
+	background-color: #87CEFA;
+	background-image:url(../images/brf_borders_03.png);
+	background-repeat:repeat-y;
+	background-position:center;
+}
+
+a:link {
+	text-decoration : none;
+	font-weight: bold;
+    color: #695399;
+}
+
+a:visited { 
+	text-decoration : none;
+	font-weight: bold;
+    color: #695399;
+}
+
+a:hover {
+	text-decoration : underline;
+    color: #695399;
+}	
+
+a:active {
+	text-decoration : italic;
+    color: #695399;
+}	
+
+img.border {
+	border: 1px solid #695399;
+	padding: 2px;
+	background-color: #FFFFFF;
+}
+
+p {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-size: 12px;
+	color: #000000;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
+}
+
+p.agenda_times {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 10px;
+	margin-left: 0px;
+}
+
+p.agenda_presentation_type {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-style: italic;
+	font-weight: normal;
+	font-size: 10px;
+	margin-left: 0px;
+}
+
+p.agenda_header {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 11px;
+	margin-left: 5px;
+}
+
+p.agenda_text {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 12px;
+	margin-left: 5px;
+	margin-top: 0px;
+}
+
+p.agenda_bioname {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 11px;
+	margin-left: 5px;
+	margin-top: 5px;
+}
+
+p.agenda_biosubtitles {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 9px;
+	margin-left: 5px;
+	margin-top: 0px;
+}
+
+p.agenda_details_title {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	margin-left: 0px;
+    color: #695399;	
+}
+
+p.news_date {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-style: italic;
+	font-weight: bold;
+	font-size: 11px;
+	color: #695399;
+	letter-spacing: 0pt;
+	text-decoration: none;	
+	margin-top: 10px;
+	margin-bottom: 0px;
+	margin-left: 37px;
+	margin-right: 0px;
+}
+
+p.news_headline {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 12px;
+	color: #000000;
+	letter-spacing: 0pt;
+	text-decoration: none;	
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: 37px;
+	margin-right: 0px;
+}
+
+.news_headline2 {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 14px;
+	color: #F7E404;
+	letter-spacing: 0pt;
+	text-decoration: none;	
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 10px;
+}
+
+.news_source {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 11px;
+	color: #888888;
+	letter-spacing: 0pt;
+	text-decoration: none;	
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 10px;
+}
+.news_text {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-style: normal;
+	font-size: 12px;
+	color: #000000;
+	letter-spacing: 0pt;
+	text-decoration: none;	
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 10px;
+}
+
+
+p.home_news_headline a:link {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-size: 13px;
+	color: #FFFFFF;
+	letter-spacing: -1px;
+	font-weight: bolder;
+	text-decoration: normal;	
+}
+
+p.home_news_date {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-size: 9px;
+	color: #CCCCCC;
+	letter-spacing: 0px;
+	font-weight: normal;
+	font-style: italic;
+}
+
+p.home_news_text {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-size: 10px;
+	color: #FFFFFF;
+	letter-spacing: 0px;
+	font-weight: 100;
+	text-decoration: normal;	
+}
+
+
+
+p.more_info {
+    color: #16A1CF;
+	font-size: 11px;
+	text-align: right;
+	font-style: italic;
+	font-weight: bold;
+	margin-right: 5px;
+	margin-top: 2px;
+}
+
+/*
+p.15 {
+    margin-left: 15px;
+	margin-right: 10px;
+}
+*/
+
+p.title {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-weight: bold;
+	font-size: 18px;
+	letter-spacing: -1px;
+	margin-top: 5px;
+	margin-left: 0px;
+	margin-bottom: 0px;
+	color: #695399;
+}
+
+p.feature_topic {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-weight: bolder;
+	font-size: 24px;
+	letter-spacing: -0.5px;
+	margin-top: 5px;
+	margin-left: 0px;
+	margin-bottom: 0px;
+	color: #695399;
+}
+
+p.topic {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-weight: bold;
+	font-size: 16px;
+	letter-spacing: 0px;
+	margin-top: 5px;
+	margin-left: 0px;
+	margin-bottom: 0px;
+	color: #000000;
+}
+
+p.registration_title {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-weight: bold;
+	font-size: 14px;
+	letter-spacing: 0px;
+	margin-top: 0px;
+	margin-left: 0px;
+	margin-bottom: 0px;
+	color: #3963A9;
+}
+
+p.headline {
+	font-family: Verdana, Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-weight: bold;
+	font-size: 14px;
+	color: #F0CB00;
+}
+
+p.cast {
+	font-family: Verdana, Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-style: normal;
+	font-size: 12px;
+	color: #FFFFFF;
+	letter-spacing: 0pt;
+	text-decoration: none;	
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: 10px;
+	margin-right: 0px;
+}
+
+p.production {
+	font-family: Verdana, Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 10px;
+	color: #FFFFFF;
+	letter-spacing: 0pt;
+	text-decoration: none;	
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: 10px;
+	margin-right: 0px;
+}
+
+p.quotes_main {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 14px;
+	color: #000000;
+	letter-spacing: 0pt;
+	text-decoration: none;	
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: 280px;
+	margin-right: 0px;
+}
+
+p.quotes_main_caption {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-style: italic;
+	font-weight: bold;
+	font-size: 11px;
+	color: #695399;
+	letter-spacing: 0pt;
+	text-decoration: none;
+	text-align: right;	
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: 295px;
+	margin-right: 0px;
+}
+p.copyrights {
+	font-family: Verdana, Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-style: normal;
+	font-size: 9px;
+	color: #CCCCCC;
+	letter-spacing: 0pt;
+	text-decoration: none;	
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: 10px;
+	margin-right: 0px;
+}
+
+p.byline {
+	font-family: Verdana, Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-weight: bold;
+	font-style: italic;
+	font-size: 9px;
+	color: #000000;
+}
+
+p.credits {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-weight: normal;
+	margin-top: 0px;
+	font-size: 10px;
+	color: #FFFFFF;
+}
+
+p.quote_caption {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-style: italic;
+	font-weight: normal;
+	font-size: 10px;
+	color: #000000;
+	letter-spacing: 0pt;
+	text-decoration: none;	
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left: 67px;
+	margin-right: 0px;
+}
+
+p.bullet {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-style: normal;
+	font-weight: bolder;
+	font-size: 14px;
+	letter-spacing: -1px;
+	margin-left: 0px;
+	margin-top: 0px;
+}
+
+h1 {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-size: 26px;
+	color: #473165;
+	margin: 10px 0 10px 0;
+}
+
+h2 {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-size: 20px;
+	color: #473165;
+	margin: 10px 0 10px 0;
+}
+
+h3 {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-size: 18px;
+	color: #473165;
+	margin: 10px 0 10px 0;
+}
+
+a:link.schedule {
+	text-decoration : underline;
+	font-weight: bold;
+    color: #695399;
+}
+
+a:visited.schedule { 
+	text-decoration : underline;
+	font-weight: bold;
+    color: #695399;
+}
+
+a:hover.schedule {
+	text-decoration : none;
+	font-weight: bold;
+    color: #695399;
+}	
+
+a:active.schedule {
+	text-decoration : none;
+	font-weight: bold;
+	font-style: italic;
+    color: #695399;
+}	
+
+
+a:link.credits {
+	text-decoration : underline;
+	font-weight: bold;
+    color: #FFFFFF;
+}
+
+a:visited.credits { 
+	text-decoration : underline;
+	font-weight: bold;
+    color: #FFFFFF;
+}
+
+a:hover.credits {
+	text-decoration : none;
+	font-weight: bold;
+    color: #FFFFFF;
+}	
+
+a:active.credits {
+	text-decoration : none;
+	font-weight: bold;
+	font-style: italic;
+    color: #FFFFFF;
+}	
+
+li {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 12px;
+	color: #000000;
+	letter-spacing: 0pt;
+	text-decoration: none;	
+	margin-top: 0px;
+	margin-bottom: 5px;
+	margin-left: 0px;
+	margin-right: 0px;
+	list-style-type: disc;	
+}
+
+#menu_float {
+   position:absolute;
+   left:40px;
+   top:10px;
+   z-index:2;
+}
+
+#menu_shade {
+   position:absolute;
+   left:44px;
+   top:14px;
+   z-index:1;
+   background-color: #000000;
+   filter:alpha(opacity=50);
+   -moz-opacity:0.5;
+   opacity: 0.5;
+}
+
+p.links {
+	font-family: Optima, Lucida, 'MgOpen Cosmetica', 'Lucida Sans Unicode', sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	color: #FFFFFF;
+}
+
+.links a {
+	text-decoration: underline;
+	font-weight: normal;
+	color: #FFFFFF;
+}
+
+.links a:visited {
+	text-decoration: underline;
+	font-weight: normal;
+	color: #FFFFFF;
+}
+
+.links a:active {
+	text-decoration: underline;
+	font-weight: normal;
+	color: #FFFFFF;
+}
+
+.links a:hover {
+	text-decoration: none;
+	font-weight: normal;
+	color: #CCCCCC;
+}
+
+.row1 {
+	border-bottom: 1px dashed #000000;
+}
+
+.image_hover:hover {
+	opacity: .5;
+	-moz-opacity: .5;
+	filter: alpha(opacity=50);
+}

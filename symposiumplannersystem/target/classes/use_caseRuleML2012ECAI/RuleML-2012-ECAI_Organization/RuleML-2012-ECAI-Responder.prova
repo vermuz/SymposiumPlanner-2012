@@ -71,7 +71,8 @@ interface(getChairsOfTrack(Track,Chairs),getChairsOfTrack("+","-"),"return all t
 interface(getTopicsOfATrack(Track,Topic),getTopicsOfATrack("+","-"),"return all topics that fall within a certain track from RuleML-2012@ECAI CFP").
 interface(suggested_sponsoring_level(Sponsor,Amount,Level),suggested_sponsoring_level("+","+","-"),"suggest an appropriate sponsoring level for a potential sponsor according to the offered amount").
 interface(submission(contact(FirstName,LastName,Country,Email),Title,SubmissionCategory, Keywords),submission(contact("+","+","+","+"),"+","+","+"),"decide whether can submit a paper").
-interface(getTrackPapers(PaperType, TrackPapers),getTrackPapers("+", "-"),"return all track papers").
+%interface(getTrackPapers(PaperType, TrackPapers),getTrackPapers("+", "-"),"return all track papers").
+interface(getTrackPaper(PaperType, TrackPapers),getTrackPaper("+", "-"),"return all track papers").
 interface(getFullPapers(PaperType, FullPapers),getFullPapers("+","-"),"return all full papers").
 interface(getShortPapers(PaperType, ShortPapers),getShortPapers("+","-"),"return all short papers").
 interface(getPosterPapers(PaperType, PosterPapers),getPosterPapers("+","-"),"return all poster papers").
@@ -114,7 +115,7 @@ understandPerformative(XID, From, Performative, PayLoad) :-
 	sendMsg(XID,esb,From,"no_further_answers", PayLoad),
 	fail().	
 %=============================================================================================================================================================================      
-% sponsor query for publicity chair
+% sponsor query for publicity chair (works)
 processMessage(XID,From,Primitive,sponsor(contact(Name,Organization),Amount,results(Level,Benefits,DeadlineResults), performative(Action))):-
     !,
     println(["---------------------------------------------"]),
@@ -152,7 +153,8 @@ processMessage(XID,From,Primitive,sponsor(contact(Name,Organization),Amount,resu
     sendMsg(XID,esb,"httpEndpoint", "answer", sponsor(contact(Name,Organization),Amount,results(Level,Benefits,passed(deadline)), performative(Action),event("RuleML2012@ECAI"))),
     sendMsg(XID,esb,"httpEndpoint","no_further_answers",end(messages)).
 %=============================================================================================================================================================================    
-% contact publicity chair
+% contact publicity chair (works)
+% Publicity Chair is reponsible both for Sponsoring and Partners in 2012
 processMessage(XID,From,Primitive,contactPublicityChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
   	!,
     println(["---------------------------------------------"]),
@@ -162,6 +164,7 @@ processMessage(XID,From,Primitive,contactPublicityChair(Meeting, Chair, FirstNam
   	
   	println(["Looking up Responsible Personal Agent"]),
 	assigned(XID, Agent,ruleml2012ATecai_Sponsoring,ruleml2012ATecai_responsible),
+	%assigned(XID, Agent,ruleml2012ATecai_Partners,ruleml2012ATecai_responsible),
 	println(["Responsible Personal Agent Found: ",Agent]),
 	
 	sendMsg(XID,esb,Agent, "query", contactPublicityChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
@@ -174,7 +177,7 @@ processMessage(XID,From,Primitive,contactPublicityChair(Meeting, Chair, FirstNam
     sendMsg(XID,esb,From, "answer", contactPublicityChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
     println(["Sent message to browser."]).		
 
-% contact general chair
+% contact general chair (works)
 processMessage(XID,From,Primitive,contactGeneralChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
    	!,
     println(["---------------------------------------------"]),
@@ -199,7 +202,7 @@ processMessage(XID,From,Primitive,contactGeneralChair(Meeting, Chair, FirstName,
     println(["Sent message to browser."]).
     	
     
-% contact program chair
+% contact program chair (works)
 processMessage(XID,From,Primitive,contactProgramChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
    	!,
     println(["---------------------------------------------"]),
@@ -222,7 +225,7 @@ processMessage(XID,From,Primitive,contactProgramChair(Meeting, Chair, FirstName,
    	println(["Sent message to browser."]).
    	
     
-% contact panel chair
+% contact panel chair (works)
 processMessage(XID,From,Primitive,contactPanelChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
    	!,
     println(["---------------------------------------------"]),
@@ -245,7 +248,7 @@ processMessage(XID,From,Primitive,contactPanelChair(Meeting, Chair, FirstName, L
    	println(["Sent message to browser."]).
 
 % New PAs
-% contact Local Chair
+% contact Local Chair (works)
 processMessage(XID,From,Primitive,contactLocalChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
   	!,
     println(["---------------------------------------------"]),
@@ -270,7 +273,7 @@ processMessage(XID,From,Primitive,contactLocalChair(Meeting, Chair, FirstName, L
 
 % ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-% contact Meta Data And Social Chair
+% contact Meta Data And Social Chair (works)
 processMessage(XID,From,Primitive,contactMetaAndSocialChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
   	!,
     println(["---------------------------------------------"]),
@@ -294,7 +297,7 @@ processMessage(XID,From,Primitive,contactMetaAndSocialChair(Meeting, Chair, Firs
 
 % //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-% contact International Rule Challenge Steering Committee Chair
+% contact International Rule Challenge Steering Committee Chair (works)
 processMessage(XID,From,Primitive,contactIntlRuleChalSteerCommitChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
   	!,
     println(["---------------------------------------------"]),
@@ -317,8 +320,32 @@ processMessage(XID,From,Primitive,contactIntlRuleChalSteerCommitChair(Meeting, C
     println(["Sent message to browser."]).
 
 % ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+% contact International Rule Challenge Chair (works)
+processMessage(XID,From,Primitive,contactIntlRuleChalChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
+  	!,
+    println(["---------------------------------------------"]),
+    println(["              QUERY RECEIVED                 "]),
+    println(["---------------------------------------------"]),
+    println(["Received message from browser."]),
+  	
+  	println(["Looking up Responsible Personal Agent"]),
+	assigned(XID, Agent,ruleml2012ATecai_CoordinateLocalChair,ruleml2012ATecai_responsible),
+	println(["Responsible Personal Agent Found: ",Agent]),
+	
+	sendMsg(XID,esb,Agent, "query", contactIntlRuleChalChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+	println(["Sent message to the ",Agent," PA."]),
+	println([""]),
+	
+	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+	println(["Received message from the ",Agent," PA."]),
+	
+    sendMsg(XID,esb,From, "answer", contactIntlRuleChalChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+    println(["Sent message to browser."]).
 
-% contact Doctoral Symposium Chair
+
+% //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+% contact Doctoral Symposium Chair (works)
 processMessage(XID,From,Primitive,contactDocSymposiumChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
   	!,
     println(["---------------------------------------------"]),
@@ -342,7 +369,7 @@ processMessage(XID,From,Primitive,contactDocSymposiumChair(Meeting, Chair, First
 
 % /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-% contact Steering Chair
+% contact Steering Chair (works)
 processMessage(XID,From,Primitive,contactSteeringChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
   	!,
     println(["---------------------------------------------"]),
@@ -368,7 +395,7 @@ processMessage(XID,From,Primitive,contactSteeringChair(Meeting, Chair, FirstName
 % End New PAs Contact Info
    	
 	
-% view pending panel topics
+% view pending panel topics (Legacy from 2008)
 processMessage(XID,From,Primitive,checkPendingPanelTopics(Meeting, Topic)):-
    !,
     println(["---------------------------------------------"]),
@@ -391,7 +418,7 @@ processMessage(XID,From,Primitive,checkPendingPanelTopics(Meeting, Topic)):-
     println(["Sent message to browser."]).
     	
 
-% view pending panel participants
+% view pending panel participants (Legacy from 2008)
 processMessage(XID,From,Primitive,checkPendingPanelParticipants(Meeting, Participant, Organization)):-
   	 !,
     println(["---------------------------------------------"]),
@@ -414,7 +441,7 @@ processMessage(XID,From,Primitive,checkPendingPanelParticipants(Meeting, Partici
     println(["Sent message to browser."]).
     	
 
-% view panel time
+% view panel time (Legacy from 2008)
 processMessage(XID,From,Primitive,viewPanelTime(Meeting, Time, Day, Month, Year)):-
   	!,
     println(["---------------------------------------------"]),
@@ -437,52 +464,81 @@ processMessage(XID,From,Primitive,viewPanelTime(Meeting, Time, Day, Month, Year)
    	println(["Sent message to browser."]).
    
 
-%contact Liaison Chair
-processMessage(XID,From,Primitive,contactLiaisonChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
-	!,
-    println(["---------------------------------------------"]),
-    println(["              QUERY RECEIVED                 "]),
-    println(["---------------------------------------------"]),
-    println(["Received message from browser."]),
+%contact Liaison Chair (2008 - 2011 not in 2012) This Publicity Chair is doing Liaison Chair`s work
+%processMessage(XID,From,Primitive,contactLiaisonChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
+	%!,
+    %println(["---------------------------------------------"]),
+    %println(["              QUERY RECEIVED                 "]),
+    %println(["---------------------------------------------"]),
+    %println(["Received message from browser."]),
   	
-  	println(["Looking up Responsible Personal Agent"]),
-	assigned(XID, Agent,ruleml2012ATecai_Partners,ruleml2012ATecai_responsible),
-	println(["Responsible Personal Agent Found: ",Agent]),
+  	%println(["Looking up Responsible Personal Agent"]),
+	%assigned(XID, Agent,ruleml2012ATecai_Partners,ruleml2012ATecai_responsible),
+	%println(["Responsible Personal Agent Found: ",Agent]),
 	
-	sendMsg(XID,esb,Agent, "query", contactLiaisonChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
-	println(["Sent message to the ",Agent," PA."]),
-	println([""]),
+	%sendMsg(XID,esb,Agent, "query", contactLiaisonChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+	%println(["Sent message to the ",Agent," PA."]),
+	%println([""]),
 	
-	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
- 	println(["Received message from the ",Agent," PA."]),
+	%rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+ 	%println(["Received message from the ",Agent," PA."]),
 
-    sendMsg(XID,esb,From, "answer", contactLiaisonChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
-	println(["Sent message to browser."]).
+    %sendMsg(XID,esb,From, "answer", contactLiaisonChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+	%println(["Sent message to browser."]).
 	
-	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+% Used to be handled by the Liaison Chair
+% In 2012 will be handled by the Publicity Chair
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %organization partners
-processMessage(XID,From,Primitive,viewOrganizationPartners(Meeting, Partner)):-
-    !,
+%processMessage(XID,From,Primitive,viewOrganizationPartners(Meeting, Partner)):-
+    %!,
+    %println(["---------------------------------------------"]),
+    %println(["              QUERY RECEIVED                 "]),
+    %println(["---------------------------------------------"]),
+    %println(["Received message from browser."]),
+	
+	%println(["Looking up Responsible Personal Agent"]),  
+	%assigned(XID, Agent,ruleml2012ATecai_Partners,ruleml2012ATecai_responsible),
+	%println(["Responsible Personal Agent Found: ",Agent]),
+
+	%sendMsg(XID,esb,Agent, "query", viewOrganizationPartners(Meeting, Partner)),
+	%println(["Sent message to the ",Agent," PA."]),
+	%println([""]),
+	
+	%rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Partner)),
+ 	%println(["Received message from the ",Agent," PA."]),
+
+    %sendMsg(XID,esb,From, "answer", viewOrganizationPartners(Meeting, Partner)),
+   	%println(["Sent message to browser."]).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ECAI 2012 Organization Partners.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%processMessage(XID,From,Primitive,meetingPartner(?Meeting, ?PartnerName)):-
+processMessage(XID,From,Primitive,meetingPartner(Meeting, PartnerName)):-
+ !,
     println(["---------------------------------------------"]),
     println(["              QUERY RECEIVED                 "]),
     println(["---------------------------------------------"]),
     println(["Received message from browser."]),
-	
-	println(["Looking up Responsible Personal Agent"]),  
+
+    println(["Looking up Responsible Personal Agent"]),  
 	assigned(XID, Agent,ruleml2012ATecai_Partners,ruleml2012ATecai_responsible),
 	println(["Responsible Personal Agent Found: ",Agent]),
 
-	sendMsg(XID,esb,Agent, "query", viewOrganizationPartners(Meeting, Partner)),
+
+    sendMsg(XID,esb,Agent, "query", meetingPartner(Meeting, PartnerName)),
 	println(["Sent message to the ",Agent," PA."]),
 	println([""]),
-	
-	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Partner)),
+
+    rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, PartnerName)),
  	println(["Received message from the ",Agent," PA."]),
 
-    sendMsg(XID,esb,From, "answer", viewOrganizationPartners(Meeting, Partner)),
+    sendMsg(XID,esb,From, "answer", meetingPartner(Meeting, PartnerName)),
    	println(["Sent message to browser."]).
    	
-	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
 %media partners
 processMessage(XID,From,Primitive,viewSponsors(Meeting, Partner)):-
     !,
@@ -504,9 +560,34 @@ processMessage(XID,From,Primitive,viewSponsors(Meeting, Partner)):-
     
     sendMsg(XID,esb,From, "answer", viewSponsors(Meeting, Partner)),
     println(["Sent message to browser."]).	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ECAI 2012 media partners
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%processMessage(XID,From,Primitive,viewSponsors(?Meeting, ?Sponsor)):-
+    %!,
+    %println(["---------------------------------------------"]),
+    %println(["              QUERY RECEIVED                 "]),
+    %println(["---------------------------------------------"]),
+    %println(["Received message from browser."]),
+  
+	%println(["Looking up Responsible Personal Agent"]),  
+	%assigned(XID, Agent,ruleml2012ATecai_Partners,ruleml2012ATecai_responsible),
+	%println(["Responsible Personal Agent Found: ",Agent]),
+	
+	%sendMsg(XID,esb,Agent, "query", viewSponsors(?Meeting, ?Sponsor)),
+	%println(["Sent message to the ",Agent," PA."]),
+	%println([""]),
+	
+	%rcvMult(XID,esb,Agent,"answer", substitutions(?Meeting, ?Sponsor)),
+	%println(["Received message from the ",Agent," PA."]),
+    
+    %sendMsg(XID,esb,From, "answer", viewSponsors(?Meeting, ?Sponsor)),
+    %println(["Sent message to browser."]).
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %sponsors
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 processMessage(XID,From,Primitive,viewSponsors(Meeting, Sponsor, SponsorLevel)):-
     !,
     println(["---------------------------------------------"]),
@@ -529,7 +610,59 @@ processMessage(XID,From,Primitive,viewSponsors(Meeting, Sponsor, SponsorLevel)):
 	println(["Sent message to browser."]).
 		
 %sponsors without sponsoring level
-processMessage(XID,From,Primitive,viewMediaPartners(Meeting, Sponsor)):-
+%processMessage(XID,From,Primitive,viewMediaPartners(Meeting, Sponsor)):-
+    %!,
+    %println(["---------------------------------------------"]),
+    %println(["              QUERY RECEIVED                 "]),
+    %println(["---------------------------------------------"]),
+    %println(["Received message from browser."]),
+    
+    %println(["Looking up Responsible Personal Agent"]),
+	%assigned(XID, Agent,ruleml2012ATecai_Partners,ruleml2012ATecai_responsible),
+	%println(["Responsible Personal Agent Found: ",Agent]),
+	
+	%sendMsg(XID,esb,Agent, "query", viewMediaPartners(Meeting, Sponsor)),
+	%println(["Sent message to the ",Agent," PA."]),
+	%println([""]),
+	
+	%rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Sponsor)),
+	%println(["Received message from the ",Agent," PA."]),
+	
+    %sendMsg(XID,esb,From, "answer", viewMediaPartners(Meeting, Sponsor)),
+   	%println(["Sent message to browser."]). 	
+   	
+   	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%ECAI sponsors without sponsoring level
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+processMessage(XID,From,Primitive,meetingMediaPartner(Meeting,PartnerName)):-
+   !,
+    println(["---------------------------------------------"]),
+    println(["              QUERY RECEIVED                 "]),
+    println(["---------------------------------------------"]),
+    println(["Received message from browser."]),
+    
+    println(["Looking up Responsible Personal Agent"]),
+	assigned(XID, Agent,ruleml2012ATecai_Partners,ruleml2012ATecai_responsible),
+	println(["Responsible Personal Agent Found: ",Agent]),
+	
+	sendMsg(XID,esb,Agent, "query", meetingMediaPartner(Meeting,PartnerName)),
+	println(["Sent message to the ",Agent," PA."]),
+	println([""]),
+	
+	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting,PartnerName)),
+	println(["Received message from the ",Agent," PA."]),
+	
+    sendMsg(XID,esb,From, "answer", meetingMediaPartner(Meeting,PartnerName)),
+   	println(["Sent message to browser."]). 	
+
+
+%%%%%%%%%%%%%%%%%%%%%% 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Media Partners by Services
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+processMessage(XID,From,Primitive,mediapartnerWithSector(Meeting,Partner,Service,Contact,CategoryofKnowledge)):-
     !,
     println(["---------------------------------------------"]),
     println(["              QUERY RECEIVED                 "]),
@@ -540,17 +673,69 @@ processMessage(XID,From,Primitive,viewMediaPartners(Meeting, Sponsor)):-
 	assigned(XID, Agent,ruleml2012ATecai_Partners,ruleml2012ATecai_responsible),
 	println(["Responsible Personal Agent Found: ",Agent]),
 	
-	sendMsg(XID,esb,Agent, "query", viewMediaPartners(Meeting, Sponsor)),
+	sendMsg(XID,esb,Agent, "query", mediapartnerWithSector(Meeting,Partner,Service,Contact,CategoryofKnowledge)),
 	println(["Sent message to the ",Agent," PA."]),
 	println([""]),
 	
-	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Sponsor)),
+	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting,Partner,Service,Contact,CategoryofKnowledge)),
 	println(["Received message from the ",Agent," PA."]),
 	
-    sendMsg(XID,esb,From, "answer", viewMediaPartners(Meeting, Sponsor)),
+    sendMsg(XID,esb,From, "answer", mediapartnerWithSector(Meeting,Partner,Service,Contact,CategoryofKnowledge)),
+   	println(["Sent message to browser."]). 		
+   	
+   	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+% Which Media Partners are a Community
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+processMessage(XID,From,Primitive,mediaPartnerCommunity(Meeting,Community, Interest)):-
+    !,
+    println(["---------------------------------------------"]),
+    println(["              QUERY RECEIVED                 "]),
+    println(["---------------------------------------------"]),
+    println(["Received message from browser."]),
+    
+    println(["Looking up Responsible Personal Agent"]),
+	assigned(XID, Agent,ruleml2012ATecai_Partners,ruleml2012ATecai_responsible),
+	println(["Responsible Personal Agent Found: ",Agent]),
+	
+	sendMsg(XID,esb,Agent, "query", mediaPartnerCommunity(Meeting,Community, Interest)),
+	println(["Sent message to the ",Agent," PA."]),
+	println([""]),
+	
+	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Community, Interest)),
+	println(["Received message from the ",Agent," PA."]),
+	
+    sendMsg(XID,esb,From, "answer", mediaPartnerCommunity(Meeting,Community, Interest)),
    	println(["Sent message to browser."]). 	
+   	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+% News Feeds
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+processMessage(XID,From,Primitive,mediaNewsFeedResource(Meeting, Resource, ResourceURI)):-
+    !,
+    println(["---------------------------------------------"]),
+    println(["              QUERY RECEIVED                 "]),
+    println(["---------------------------------------------"]),
+    println(["Received message from browser."]),
+    
+    println(["Looking up Responsible Personal Agent"]),
+	assigned(XID, Agent,ruleml2012ATecai_Partners,ruleml2012ATecai_responsible),
+	println(["Responsible Personal Agent Found: ",Agent]),
+	
+	sendMsg(XID,esb,Agent, "query", mediaNewsFeedResource(Meeting, Resource, ResourceURI)),
+	println(["Sent message to the ",Agent," PA."]),
+	println([""]),
+	
+	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Resource, ResourceURI)),
+	println(["Received message from the ",Agent," PA."]),
+	
+    sendMsg(XID,esb,From, "answer", mediaNewsFeedResource(Meeting, Resource, ResourceURI)),
+   	println(["Sent message to browser."]). 
+   	
+   	  	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%contact web chair (Web Chair in 2011 not in 2012)
 
-%contact web chair
 processMessage(XID,From,Primitive,contactWebChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
     !,
     println(["---------------------------------------------"]),
@@ -571,7 +756,7 @@ processMessage(XID,From,Primitive,contactWebChair(Meeting, Chair, FirstName, Las
 	
     sendMsg(XID,esb,From, "answer", contactWebChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
     println(["Sent message to browser."]).	
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %contact challenge chair	
 processMessage(XID,From,Primitive,contactChallengeChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
     !,
@@ -616,26 +801,24 @@ processMessage(XID,From,Primitive,contactChallengeChair(Meeting, Chair, FirstNam
 
 %sparql_select(QueryString , [summary(Summary), location(Location)]).  
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RuleML2012@ECAI extension
 % Retrieve all Track Papers	
-processMessage(XID,From,Primitive, getTrackPapers("accepted", Paper)):-
-	getTrackPapers("accepted", Paper),
-	sendMsg(XID,esb,From, "answer", getTrackPapers("accepted", Paper)).
+processMessage(XID,From,Primitive, getTrackPaper("accepted", Paper)):-
+	getTrackPaper("accepted", Paper),
+	sendMsg(XID,esb,From, "answer", getTrackPaper(Paper)).
 	
-processMessage(XID,From,Primitive, getTrackPapers("accepted", Paper)):-
-	sendMsg(XID,esb,From, "no_further_answers", getTrackPapers("accepted", Paper)).
-	
-getTrackPapers("accepted", Paper) :-
+processMessage(XID,From,Primitive, getTrackPaper("accepted", Paper)):-
+	sendMsg(XID,esb,From, "no_further_answers", getTrackPaper("accepted", Paper)).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+getTrackPaper("accepted", Paper) :-
 	QueryString = '
 		PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 		PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 		PREFIX dc: <http://purl.org/dc/elements/1.1/>
 		PREFIX swrc: <http://swrc.ontoware.org/ontology#>
 		SELECT ?paper ?title
-			FROM <http://localhost:8080/SymposiumPlannerSystem/ruleml2012.rdfs>
+			FROM <http://localhost:8080/SymposiumPlannerSystem/ruleml2012.rdf>
 			WHERE {
 				?paper a ?type .
 				?paper dc:title ?title .
@@ -660,7 +843,7 @@ getFullPapers("accepted", Paper) :-
 		PREFIX dc: <http://purl.org/dc/elements/1.1/>
 		PREFIX swrc: <http://swrc.ontoware.org/ontology#>
 		SELECT ?paper ?title
-			FROM <http://localhost:8080/SymposiumPlannerSystem/ruleml2012.rdfs>
+			FROM <http://localhost:8080/SymposiumPlannerSystem/ruleml2012.rdf>
 			WHERE {
 				?paper a ?type .
 				?paper dc:title ?title .
@@ -685,7 +868,7 @@ getShortPapers("accepted", Paper) :-
 		PREFIX dc: <http://purl.org/dc/elements/1.1/>
 		PREFIX swrc: <http://swrc.ontoware.org/ontology#>
 		SELECT ?paper ?title
-			FROM <http://localhost:8080/SymposiumPlannerSystem/ruleml2012.rdfs>
+			FROM <http://localhost:8080/SymposiumPlannerSystem/ruleml2012.rdf>
 			WHERE {
 				?paper a ?type .
 				?paper dc:title ?title .
@@ -710,7 +893,7 @@ getPosterPapers("accepted", Paper) :-
 		PREFIX dc: <http://purl.org/dc/elements/1.1/>
 		PREFIX swrc: <http://swrc.ontoware.org/ontology#>
 		SELECT ?paper ?title
-			FROM <http://localhost:8080/SymposiumPlannerSystem/ruleml2012.rdfs>
+			FROM <http://localhost:8080/SymposiumPlannerSystem/ruleml2012.rdf>
 			WHERE {
 				?paper a ?type .
 				?paper dc:title ?title .
@@ -735,7 +918,7 @@ getDoctoralConsortiumPapers("accepted", Paper) :-
 		PREFIX dc: <http://purl.org/dc/elements/1.1/>
 		PREFIX swrc: <http://swrc.ontoware.org/ontology#>
 		SELECT ?paper ?title
-			FROM <http://localhost:8080/SymposiumPlannerSystem/ruleml2012.rdfs>
+			FROM <http://localhost:8080/SymposiumPlannerSystem/ruleml2012.rdf>
 			WHERE {
 				?paper a ?type .
 				?paper dc:title ?title .
@@ -753,7 +936,7 @@ processMessage(XID,From,Primitive, getAuthorsOfPaper(PaperTitle, Author)):-
 		PREFIX dc: <http://purl.org/dc/elements/1.1/>
 		PREFIX bibo: <http://purl.org/ontology/bibo/>
 		SELECT ?paper ?name ?author
-			FROM <http://localhost:8080/SymposiumPlannerSystem/ruleml2012.rdfs>
+			FROM <http://localhost:8080/SymposiumPlannerSystem/ruleml2012.rdf>
 			WHERE {
 			    ?paper dc:title \"",
 			    
@@ -815,19 +998,36 @@ permit(no_further_answers).
 
 setVaule("RuleML 2012 ECAI","http://www.easychair.org/conferences/?conf;ruleml2012ecai").
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% (ConsultInternalinterface (Sub-OA Prova) + ConsultExternalInterface (Sparql Query -> ruleml2011.rdfs)
+% contact conference chairs and get their information from Semantic Web Dog Food
+%processMessage(XID,From,Primitive,getContact(Topic,person(name(Name),email(Email),phone(Phone),title(Title),create(Resource),hasRole(Role),affiliation(Affiliation)))):-
+   %chairName(Topic,Name),
+   %consultInternalResouce(Name,Email,Phone,Title),
+   %consultExternalResource(Name,Resource,Role,Affiliation),
+   % Accumulate all solutions to a problem. The goal is passed in second argument.
+   % Results in third Argument. Third Argument - RawResources = Java ArrayList
+   %findall([Role,Affiliation,Resource],consultExternalResource(Name,Resource,Role,Affiliation),RawResources),
+   %Resources = ws.prova.mule.impl.ExternalInformationProcessing.process(RawResources),
+   %sendMsg(XID,esb,From,"answer",getContact(Topic,person(name(Name),email(Email),phone(Phone),title(Title),Resources))).
+   %processMessage(XID,From,Primitive,getContact(Topic,person(name(Name),email(Email),phone(Phone),title(Title),create(Resource),hasRole(Role),affiliation(Affiliation)))):-
+   %sendMsg(XID,esb,From,"no_further_answers",getContact(Topic)).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   
+% Working code for using just ConsultInternalInterface which can have all the information required without using External Information.
 % contact conference chairs and get their information from Semantic Web Dog Food
 processMessage(XID,From,Primitive,getContact(Topic,person(name(Name),email(Email),phone(Phone),title(Title),create(Resource),hasRole(Role),affiliation(Affiliation)))):-
    chairName(Topic,Name),
-   consultInternalResouce(Name,Email,Phone,Title),
+   %consultInternalResouce(Name,Email,Phone,Title),
+   consultInternalResouce(Name,Email,Phone,Title,Role,Affiliation),
    %consultExternalResource(Name,Resource,Role,Affiliation),
-   findall([Role,Affiliation,Resource],consultExternalResource(Name,Resource,Role,Affiliation),RawResources),
-   Resources = ws.prova.mule.impl.ExternalInformationProcessing.process(RawResources),
-   sendMsg(XID,esb,From,"answer",getContact(Topic,person(name(Name),email(Email),phone(Phone),title(Title),Resources))).
+   %findall([Role,Affiliation,Resource],consultExternalResource(Name,Resource,Role,Affiliation),RawResources),
+   %Resources = ws.prova.mule.impl.ExternalInformationProcessing.process(RawResources),
+   sendMsg(XID,esb,From,"answer",getContact(Topic,person(name(Name),email(Email),phone(Phone),title(Title),role(Role),affiliation(Affiliation)))).
    
 processMessage(XID,From,Primitive,getContact(Topic,person(name(Name),email(Email),phone(Phone),title(Title),create(Resource),hasRole(Role),affiliation(Affiliation)))):-
    sendMsg(XID,esb,From,"no_further_answers",getContact(Topic)).
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % General Chair
 chairName("ruleml2012ATecai_GeneralChair", "Grigoris Antoniou").
 chairName("ruleml2012ATecai_GeneralChair", "Guido Governatori").
@@ -851,98 +1051,85 @@ chairName("ruleml2012ATecai_PublicityChair", "Frank Olken").
 chairName("ruleml2012ATecai_MetaAndSocialChair", "Petros Stefaneas").
 
 % Int'l Rule Challenge Steering Committee
-chairName("ruleml2012ATecai_IntlRuleChalSteerCommitChair", "Hassan Ait-Kaci").
-chairName("ruleml2012ATecai_IntlRuleChalSteerCommitChair", "Yuh-Jong Hu").
-chairName("ruleml2012ATecai_IntlRuleChalSteerCommitChair", "Dumitru Roman").
-chairName("ruleml2012ATecai_IntlRuleChalSteerCommitChair", "Adrian Giurca").
+chairName("ruleml2012ATecai_IntlRuleChalSteerCommitChair", "Patrick Albert").
+chairName("ruleml2012ATecai_IntlRuleChalSteerCommitChair", "Francoise Briant").
+
+% Intl`l Rule Challenge Chairs
+chairName("ruleml2012ATecai_IntlRuleChalChair", "Hassan Ait-Kaci").
+chairName("ruleml2012ATecai_IntlRuleChalChair", "Yuh-Jong Hu").
+chairName("ruleml2012ATecai_IntlRuleChalChair", "Dumitru Roman").
 
 % Doctoral Consortium Chairs
 chairName("ruleml2012ATecai_DocSymposiumChair", "Grzegorz J. Nalepa").
 chairName("ruleml2012ATecai_DocSymposiumChair", "Monica Palmirani").
+chairName("ruleml2012ATecai_DocSymposiumChair", "Yuh-Jong Hu").
 
-chairName("ruleml2012ATecai_LiaisonChair", "tba"). 
-% chairName("ruleml2012ATecai_DocSymposiumChair", "Umberto Straccia").
-%chairName("ruleml2012ATecai_PosterChair", "Jeff Pan").
-%chairName("ruleml2012ATecai_PosterChair", "Monica Palmirani").
-% chairName("ruleml2012ATecai_MetaAndSocialChair", "Richard Cyganiak").
-% chairName("ruleml2012ATecai_MetaAndSocialChair", "Lina Wolf").
-%chairName("ruleml2012ATecai_WebChair", "G�khan Coskun").
-%chairName("ruleml2012ATecai_WebChair", "Ho-Pun (Brian) Lam").
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Using ConsultInternalInterface only
 
 % General Chair
-consultInternalResouce("Grigoris Antoniou","antoniouATdomainname","302810391624","Dr").
-consultInternalResouce("Guido Governatori","guidoDOTgovernatoriATnictaDOTcomDOTau","610733652907","Dr").
+consultInternalResouce("Grigoris Antoniou","antoniouATdomainname","302810391624","Dr","General Chair","Forth-ICS").
+consultInternalResouce("Guido Governatori","guidoDOTgovernatoriATnictaDOTcomDOTau","610733652907","Dr","General Chair","NICTA").
 
 % Steering Chair
-consultInternalResouce("Mike Dean","mdeanATbbnDOTcom","7349977439","Dr").
-consultInternalResouce("John Hall","jDOTgDOThall@openDOTacDOTuk","4401908274066","Dr").
-consultInternalResouce("Christian de Sainte Marie","csma@ilog.fr","","Dr").
+consultInternalResouce("Mike Dean","mdeanATbbnDOTcom","7349977439","Dr","Steering Chair","Raytheon").
+consultInternalResouce("John Hall","jDOTgDOThall@openDOTacDOTuk","4401908274066","Dr","Steering Chair","Model Systems").
+consultInternalResouce("Christian de Sainte Marie","csma@ilog.fr","","Dr","Steering Chair","IBM-ILOG").
 
 % Program Chair
-consultInternalResouce("Antonis Bikakis","bikakisATicsDOTforthDOTgr","302810391624","Dr").
-consultInternalResouce("Adrian Giurca","giurca@tu-cottbus.de","490355692032","Dr").
+consultInternalResouce("Antonis Bikakis","bikakisATicsDOTforthDOTgr","302810391624","Dr","Program Chair","University College London").
+consultInternalResouce("Adrian Giurca","giurca@tu-cottbus.de","490355692032","Dr","Program Chair","Brandenburg University of Technology").
 
 % Local Chair
-consultInternalResouce("Madalina Croitoru","croitoru@lirmm.fr","33067418539","Dr").
+consultInternalResouce("Madalina Croitoru","croitoru@lirmm.fr","33067418539","Dr","Local Chair","University Montpellier II").
 
 % Publicity Chair
-consultInternalResouce("Frank Olken","folkenATnsfDOTgov","7032927350","Dr").
+consultInternalResouce("Frank Olken","folkenATnsfDOTgov","7032927350","Dr","Publicity Chair","Frank Olken Consulting").
 
-% MetaData And Social Chair
-consultInternalResouce("Petros Stefaneas","","","Dr").
+% Metadata and Social Chair
+consultInternalResouce("Petros Stefaneas","","","Dr","Metadata and Social Media Chair","National Technical University of Athens").
 
 % Int'l Rule Challenge Steering Committee
-consultInternalResouce("Hassan Ait-Kaci","hakATcaDOTibmDOTcom","16049305603","Dr").
-consultInternalResouce("Yuh-Jong Hu","jongATcsDOTnccuDOTeduDOTtw","886229387620","Dr").
-consultInternalResouce("Dumitru Roman","","","Dr").
-consultInternalResouce("Adrian Giurca","giurca@tu-cottbus.de","490355692032","Dr").
+consultInternalResouce("Patrick Albert","patrickDOTalbert55ATgmailDOTcom","33685107799","Dr","International Rule Challenge Steering Committee Chair","IBM France").
+consultInternalResouce("Francoise Briant","fbriantATfrDOTibmDOTcom","","Dr","International Rule Challenge Steering Committee Chair","IBM CAS France").
 
-% Doctoral Symposium Chairs
-consultInternalResouce("Grzegorz J. Nalepa","gjnATaghDOTeduDOTpl","048126173856","Dr").
-consultInternalResouce("Monica Palmirani","palmiraniATcirsfidDOTuniboDOTit","","Dr").
+% Intl`l Rule Challenge Chairs
+consultInternalResouce("Hassan Ait-Kaci","hakATcaDOTibmDOTcom","16049305603","Dr","Intl Rule Challenge Chair","IBM Canada").
+consultInternalResouce("Yuh-Jong Hu","jongATcsDOTnccuDOTeduDOTtw","886229387620","Dr","Intl Rule Challenge Chair","National Chengchi University").
+consultInternalResouce("Dumitru Roman","","","Dr","Intl Rule Challenge Chair","SINTEF").
 
-% Liaison Chair
-%consultInternalResouce("tba","","","").
-
-%consultInternalResouce("Nick Bassiliades","nbassiliATcsdDOTauthDOTgr","302310997913","Dr").
-%consultInternalResouce("Hassan Ait-Kaci","hakATcaDOTibmDOTcom","16049305603","Dr").
-%consultInternalResouce("Yuh-Jong Hu","jongATcsDOTnccuDOTeduDOTtw","886229387620","Dr").
-%consultInternalResouce("Dumitru Roman","","","Dr").
-%consultInternalResouce("Umberto Straccia","stracciaATistiDOTcnrDOTit","390503152894","Dr").
-% consultInternalResouce("Jeff Pan","jeffDOTzDOTpanATabdnDOTacDOTuk","4401224274449","Dr").
-% consultInternalResouce("Petros Stefaneas","","","Dr").
-% consultInternalResouce("Richard Cyganiak","richardATcyganiakDOTde","353872206327","Dr").
-% consultInternalResouce("Lina Wolf","","","Dr").
-% consultInternalResouce("G�khan Coskun","","","Dr").
-% consultInternalResouce("Ho-Pun (Brian) Lam","","","Dr").
-
-
+% Doctoral Consortium Chairs
+consultInternalResouce("Grzegorz J. Nalepa","gjnATaghDOTeduDOTpl","048126173856","Dr","Doctoral Consortium Chair","AGH University of Science and Technology").
+consultInternalResouce("Monica Palmirani","palmiraniATcirsfidDOTuniboDOTit","","Dr","Doctoral Consortium Chair","CIRSFID-University of Bologna").
+consultInternalResouce("Yuh-Jong Hu","jongATcsDOTnccuDOTeduDOTtw","886229387620","Dr","Doctoral Consortium Chair","National Chengchi University").
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % The most straightforward way of runninq SPARQL queries that indicates the required data right inside the FROM clause
-
-consultExternalResource(ChairName,Resource,Role,Affiliation) :-
-	QueryStringPrefix = "
-		PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-		PREFIX swc: <http://data.semanticweb.org/ns/swc/ontology#>
-		PREFIX swrc: <http://swrc.ontoware.org/ontology#>
-		SELECT ?person ?resource ?role ?affiliationEntity
-			FROM <http://localhost:8080/SymposiumPlannerSystem/ruleml2012.rdfs>
-			WHERE {
-				?foaf foaf:name \"",
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% We are not using the External Information Processing
+%consultExternalResource(ChairName,Resource,Role,Affiliation) :-
+	%QueryStringPrefix = "
+		%PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+		%PREFIX swc: <http://data.semanticweb.org/ns/swc/ontology#>
+		%PREFIX swrc: <http://swrc.ontoware.org/ontology#>
+		%SELECT ?person ?resource ?role ?affiliationEntity
+			%FROM <http://localhost:8080/SymposiumPlannerSystem/ruleml2012.rdfs>
+			%WHERE {
+				%?foaf foaf:name \"",
 				
 				
-	concat([QueryStringPrefix,ChairName], QueryStringTemp),		
+	%concat([QueryStringPrefix,ChairName], QueryStringTemp),		
 	
-	QueryStringSuffix = "\".			
-				?person foaf:made ?resource .
-				?person swc:holdsRole ?role .
-				?person swrc:affiliation ?affiliationEntity .
-			}
-	",
+	%QueryStringSuffix = "\".			
+				%?person foaf:made ?resource .
+				%?person swc:holdsRole ?role .
+				%?person swrc:affiliation ?affiliationEntity .
+			%}
+	%",
 	
-	concat([QueryStringTemp,QueryStringSuffix], QueryString1),
-	unescape(QueryString1,QueryString),
-	sparql_select(QueryString,[resource(Resource),role(Role),affiliationEntity(Affiliation)]).
-	
+	%concat([QueryStringTemp,QueryStringSuffix], QueryString1),
+	%unescape(QueryString1,QueryString),
+	%sparql_select(QueryString,[resource(Resource),role(Role),affiliationEntity(Affiliation)]).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
 % look-up interface
 processMessage(XID,From,Primitive,[X|Args]):-
 	not(interface([X|Args],ModeDeclarations,Description)),

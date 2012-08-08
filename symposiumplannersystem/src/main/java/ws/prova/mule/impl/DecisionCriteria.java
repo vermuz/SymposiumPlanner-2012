@@ -54,34 +54,23 @@ public class DecisionCriteria {
 		}
 		//=======================================================================================
 		
-		if(argumentsString.indexOf("IJCAI")!=-1||argumentsString.indexOf("Europe")!=-1||argumentsString.indexOf("Spain")!=-1||argumentsString.indexOf("Barcelona")!=-1){
+		if(argumentsString.indexOf("STRUCT")!=-1||argumentsString.indexOf("Canada")!=-1||argumentsString.indexOf("Fredericton")!=-1||argumentsString.indexOf("Fredericton")!=-1){
 			for (int i = 0; i < list.size(); i++) {
-				if(((List)list.get(i)).get(2).toString().equalsIgnoreCase("RuleML-2011-IJCAI")){
+				if(((List)list.get(i)).get(2).toString().equalsIgnoreCase("RuleML-2012-STRUCT")){
 					tag=true;
 					break;
 				}
 			}
 			
 			if(!tag){
-				list.add("RuleML-2011-IJCAI");
+				list.add("RuleML-2012-STRUCT");
 			}
 		}
-		
-		//if(argumentsString.indexOf("BRF")!=-1||argumentsString.indexOf("America")!=-1||argumentsString.indexOf("USA")!=-1||argumentsString.indexOf("US")!=-1||argumentsString.indexOf("Florida")!=-1||argumentsString.indexOf("Fort Lauderdale")!=-1||argumentsString.indexOf("Ft Lauderdale")!=-1){
-			//for (int i = 0; i < list.size(); i++) {
-				//if(((List)list.get(i)).get(2).toString().equalsIgnoreCase("RuleML-2011-BRF")){
-					//tag=true;
-					//break;
-				//}
-			//}
-			
-			//if(!tag)
-				//list.add("RuleML-2011-BRF");
-			
-		//}
 		if(list.size()==0)
 			list = candidateList;
 		tag=false;
 		return list;
+		
+		
 	}
 }

@@ -180,12 +180,17 @@ public class ProvaUMOImpl extends LogComponent implements Initialisable,
 							.println("Timeout increase to 5 minutes for RuleML-2012. Will be reset upon new query.");
 					timeout = 300000;
 				}
+				//if (temp.contains("RuleML-2012-STRUCT")) {
+					//System.out
+							//.println("Timeout increase to 5 minutes for RuleML-2012. Will be reset upon new query.");
+					//timeout = 300000;
+				//}
 				//============================================================================
-				if (temp.contains("RuleML-struct")) {
-					System.out
-							.println("Timeout increase to 5 minutes for RuleML-2012. Will be reset upon new query.");
-					timeout = 300000;
-				}
+				//if (temp.contains("RuleML-STRUCT")) {
+					//System.out
+							//.println("Timeout increase to 5 minutes for RuleML-2012. Will be reset upon new query.");
+					//timeout = 300000;
+				//}
 				
 				//============================================================================
 //				tmpAgent = ((ProvaConstant) rMsg.getFixed()[2]).toString();

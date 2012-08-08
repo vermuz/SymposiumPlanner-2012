@@ -1,0 +1,1065 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The RuleML-2011@BRF Organizational Agent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import external rules/ContractLog libraries for
+% mathematical, lists and date / time computations
+% and access to external data sources, e.g.
+% Semantic Web ontologies, iCal Calendars etc.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+:-eval(consult('../../ContractLog/math.prova')).
+:-eval(consult('../../ContractLog/datetime.prova')).
+:-eval(consult('../../ContractLog/list.prova')).
+:-eval(consult('../../ContractLog/update.prova')).
+:-eval(consult('../../ContractLog/utils.prova')).
+%:-eval(consult('../../ContractLog/calendar.prova')). % calendar API
+:-eval(consult('../../ContractLog/owl.prova')).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Performative vocabulary of organizational agent
+% More complex vocabularies (e.g. FIPA ACL) might be defined as Semantic Web ontologies	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+performative(request):-performative(query).
+performative(query).
+
+performative(XID,Performative):-
+   performative(Performative).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Public interface definitions of the organizational agent
+% Might be also defined externally, e.g. using RDF
+% Format: interface(Signature, ModeDeclaration, Description)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+interface(sponsor(contact(Name,Organization),Amount,results(Level,Benefits,DeadlineResults), performative(Action)),sponsor(contact("+","+"),"+",results("-","-","-"), performative("-"))," tweaew").
+interface(performative(Performative),performative("?"),"vocabulary of performatives of the agent").
+interface(interface(Signature, ModeDeclaration, Description),interface("?","?","?"),"the public interfaces of the agent").
+interface(submit(Requester, Type, Result),submit("+","+","-"),"submital rules").
+interface(agent(Agent),agent("?"),"the agents of RuleML-2011@BRF defined in an external ontology").	
+interface(topic(Topic),topic("?"),"the responsibility topics/domains of RuleML-2011@BRF").
+interface(role(Role),role("?"),"the defined roles of the responsibility assignment matrix for RuleML-2011@BRF").
+interface(assigned(Agent,Topic,Role),assigned("?","?","?"),"the defined responsibility assignment matrix for RuleML-2011@BRF").
+
+interface(getContact(Topic,Contact),getContact("+","-"),"request personal contact information for a certain Topic and Request regarding RuleML-2011@BRF").
+interface(open(Phase),open("-"),"returns the currently active RuleML-2011@BRF phases").
+interface(dates(Phase,Start,End),dates("+","-","-"),"returns the start and end date of a phase").	
+interface(permit(ContactAuthor,submit(ContactAuthor,Submission)),permit("?",submit("?","?")), "permission to submit to RuleML-2011@BRF").
+interface(submitted(Submission),submitted("?"),"request submitted submissions").
+interface(obliged(Reviewer,submit(Reviewer,Review)),obliged("?",submit("?","?")), "review obligations for reviewer").
+interface(forbid(Reviewer,review(submission(Authors,Abstract,Paper),Review)),forbid("?",review(submission("?","?","?"),"?")), "forbid reviewer to review his own submissions").
+interface(accepted(Submission),accepted("?"),"accepted submissions").
+
+interface(fee(Phase,Fee),fee("?","?"),"registration fee").
+interface(computeFee(Participant,Fee),computeFee("?","?"),"compute registration fee for participant").
+interface(oblige(Participant,pay(Fee)),oblige("?",pay("?")),"obligation for registered participants to pay fee").
+interface(permit(Participant,attend),permit("?","-"),"permission to attend the conference").
+interface(permit(Participant,register(Participant)),permit("?",register("?")), "permission to register to RuleML-2011@BRF").
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+interface(getMembersOfATechnicalGroup(TechnicalGroup,Chairs),getMembersOfATechnicalGroup("+","-"),"return all chairs for a certain Technical Group").
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% RuleML-2011@BRF extensions - all extensions have been implemented through the interface/3 mechanism
+
+interface(getTrackOfATopic(Topic,Track),getTrackOfATopic("+","-"),"retrieve the track under which a certain topic falls within RuleML-2011@BRF CFP - exact match").
+interface(findTracks(Keywords,ScoredTrack),findTracks("+","-"),"find relevant tracks from RuleML-2011@BRF CFP using keyword matching - inexact matching").
+interface(getTracks(Content),getTracks("-"),"return all tracks from RuleML-2011@BRF CFP").
+interface(getTrackChairs(TrackChairs),getTrackChairs("-"),"return all track chairs from RuleML-2011@BRF CFP").
+interface(getChairsOfTrack(Track,Chairs),getChairsOfTrack("+","-"),"return all track chairs for a certain track").
+interface(getTopicsOfATrack(Track,Topic),getTopicsOfATrack("+","-"),"return all topics that fall within a certain track from RuleML-2011@BRF CFP").
+interface(suggested_sponsoring_level(Sponsor,Amount,Level),suggested_sponsoring_level("+","+","-"),"suggest an appropriate sponsoring level for a potential sponsor according to the offered amount").
+interface(submission(contact(FirstName,LastName,Country,Email),Title,SubmissionCategory, Keywords),submission(contact("+","+","+","+"),"+","+","+"),"decide whether can submit a paper").
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Main rule for this use case: 
+% 
+% "Single point of entry"
+%
+% An external person/agent requests information from the
+% RuleML-2011@BRF organization.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+rcvMsg(XID,esb, From, Performative, [X|Args]) :-
+	understandPerformative(XID, From, Performative, [X|Args]),
+	processMessage(XID, From, Performative, [X|Args]).
+rcvMsg(XID,esb, From, Performative, [X|Args]) :-
+	understandPerformative(XID, From, Performative, [X|Args]),
+	rcvMsg(XID,esb,Agent,no_further_answers, Payload),
+	sendMsg(XID,esb,From,no_further_answers,[X|Args]).
+		
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% rules for processing the message
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+	
+% try to understand the performative of the message
+understandPerformative(XID, From, "answer", PayLoad) :- !, fail().
+understandPerformative(XID, From, "end_of_transmission", PayLoad) :- !, fail().
+understandPerformative(XID, From, "no_further_answers", PayLoad) :- !, fail().  	
+understandPerformative(XID, From, Performative, PayLoad) :-
+	performative(Performative).
+understandPerformative(XID, From, Performative, PayLoad) :-
+	not(performative(Performative)),
+	sendMsg(XID,esb,From,"answer", notUnderstood("performative",Performative)),
+	sendMsg(XID,esb,From,"no_further_answers", PayLoad),
+	fail().	
+    
+% sponsor query for publicity chair
+processMessage(XID,From,Primitive,sponsor(contact(Name,Organization),Amount,results(Level,Benefits,DeadlineResults), performative(Action))):-
+   !,
+   % look-up responsible agent	
+	println(["looking up responsible agent"]), 
+	%ruleml2011ATbrf_GeneralChair
+	assigned(XID, Agent,ruleml2011ATbrf_Sponsoring,ruleml2011ATbrf_responsible),
+	println(["sending message to OO jDREW personal agent"]),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", sponsor(contact(Name,Organization),Amount,results(Level,Benefits,DeadlineResults), performative(Action))),
+	println(["recieve message from OO jDREW personal agent"]),
+	% receive answers multiple times
+	% rcvMult(XID,esb,Agent,"answer", substitutions(DeadlineResults,Action,Benefits,Level)),
+    % println(["sending message to external agent"]),
+    % sendMsg(XID,esb,From, "answer", sponsor(contact(Name,Organization),Amount,results(Level,Benefits,DeadlineResults), performative(Action))).
+    
+    rcvMult(XID,esb,Agent,Answer, PlayLoad),
+	println(["Received message from the ",Agent," PA."]),
+	sendMsgToClient(XID,From,Answer,Name,Organization,Amount,PlayLoad),
+    println(["Sent message to browser."]).
+    
+sendMsgToClient(XID,"SymposiumPlannerSystem","answer",Name,Organization,Amount,substitutions(Level,Benefits,DeadlineResults,Action)):-
+    sendMsg(XID,esb,"SymposiumPlannerSystem", "answer", sponsor(contact(Name,Organization),Amount,results(Level,Benefits,DeadlineResults), performative(Action),event("RuleML2011@BRF"))).
+
+sendMsgToClient(XID,"RuleML-2011-IJCAI","answer",Name,Organization,Amount,substitutions(Level,Benefits,DeadlineResults,Action)):-
+    sendMsg(XID,esb,"RuleML-2011-IJCAI", "answer", sponsor(contact(Name,Organization),Amount,results(Level,Benefits,DeadlineResults), performative(Action),event("RuleML2011@BRF"))).
+    
+sendMsgToClient(XID,"httpEndpoint","answer",Name,Organization,Amount,substitutions(Level,Benefits,onGoing(deadline),Action)):-
+    sendMsg(XID,esb,"httpEndpoint", "answer", sponsor(contact(Name,Organization),Amount,results(Level,Benefits,onGoing(deadline)), performative(Action),event("RuleML2011@BRF"))).
+    
+sendMsgToClient(XID,"httpEndpoint","answer",Name,Organization,Amount,substitutions(Level,Benefits,passed(deadline),Action)):-
+    Agent="RuleML-2011-IJCAI",
+    sendMsg(XID,esb,Agent, "query", sponsor(contact(Name,Organization),Amount,results(Level1,Benefits1,DeadlineResults1), performative(Action1))),
+	
+	rcvMult(XID,esb,Agent,"answer", PlayLoad),
+	println(["Received message from the ",Agent," PA."]),
+    sendMsg(XID,esb,"httpEndpoint", "answer", PlayLoad),
+    sendMsg(XID,esb,"httpEndpoint", "answer", sponsor(contact(Name,Organization),Amount,results(Level,Benefits,passed(deadline)), performative(Action),event("RuleML2011@BRF"))),
+    sendMsg(XID,esb,"httpEndpoint","no_further_answers",end(messages)).
+
+% contact publicity chair
+processMessage(XID,From,Primitive,contactPublicityChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
+   !,
+   % look-up responsible agent
+    println(["looking up responsible agent"]),	
+	assigned(XID, Agent,ruleml2011ATbrf_Sponsoring,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	println(["sending message to OO jDREW personal agent"]),
+	sendMsg(XID,esb,Agent, "query", contactPublicityChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+	% receive answers multiple times
+	println(["recieve message from OO jDREW personal agent"]),
+	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+    println(["sending message to external agent"]),
+    sendMsg(XID,esb,From, "answer", contactPublicityChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)).		
+
+% contact general chair
+processMessage(XID,From,Primitive,contactGeneralChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
+   !,
+   % look-up responsible agent	
+	assigned(XID, Agent,ruleml2011ATbrf_Symposium,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", contactGeneralChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+    sendMsg(XID,esb,From, "answer", contactGeneralChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)).	
+    
+% contact RR chair
+processMessage(XID,From,Primitive,contactRRChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
+   !,
+   % look-up responsible agent	
+	assigned(XID, Agent,ruleml2011ATbrf_Symposium,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", contactRRChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+    sendMsg(XID,esb,From, "answer", contactRRChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)).	    
+    
+% contact program chair
+processMessage(XID,From,Primitive,contactProgramChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
+   !,
+   % look-up responsible agent	
+	assigned(XID, Agent,ruleml2011ATbrf_Submission,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", contactProgramChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+    sendMsg(XID,esb,From, "answer", contactProgramChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)).	
+    
+% contact panel chair
+processMessage(XID,From,Primitive,contactPanelChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
+   !,
+   % look-up responsible agent	
+	assigned(XID, Agent,ruleml2011ATbrf_Panel,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", contactPanelChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+    sendMsg(XID,esb,From, "answer", contactPanelChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)).	
+	
+% view pending panel topics
+processMessage(XID,From,Primitive,checkPendingPanelTopics(Meeting, Topic)):-
+   !,
+   % look-up responsible agent	
+	assigned(XID, Agent,ruleml2011ATbrf_Panel,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", checkPendingPanelTopics(Meeting, Topic)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Topic)),
+    sendMsg(XID,esb,From, "answer", checkPendingPanelTopics(Meeting, Topic)).	
+
+% view pending panel participants
+processMessage(XID,From,Primitive,checkPendingPanelParticipants(Meeting, Participant, Organization)):-
+   !,
+   % look-up responsible agent	
+	assigned(XID, Agent,ruleml2011ATbrf_Panel,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", checkPendingPanelParticipants(Meeting, Participant, Organization)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Participant, Organization)),
+    sendMsg(XID,esb,From, "answer", checkPendingPanelParticipants(Meeting, Participant, Organization)).	
+
+% view panel time
+processMessage(XID,From,Primitive,viewPanelTime(Meeting, Time, Day, Month, Year)):-
+   !,
+   % look-up responsible agent	
+	assigned(XID, Agent,ruleml2011ATbrf_Panel,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", viewPanelTime(Meeting, Time, Day, Month, Year)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Time, Day, Month, Year)),
+    sendMsg(XID,esb,From, "answer", viewPanelTime(Meeting, Time, Day, Month, Year)).
+
+%contact Liaison Chair
+processMessage(XID,From,Primitive,contactLiaisonChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
+   !,
+   % look-up responsible agent	
+	assigned(XID, Agent,ruleml2011ATbrf_Partners,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", contactLiaisonChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+    sendMsg(XID,esb,From, "answer", contactLiaisonChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)).	
+	
+%organization partners
+processMessage(XID,From,Primitive,viewOrganizationPartners(Meeting, Partner)):-
+   !,
+   % look-up responsible agent	
+	assigned(XID, Agent,ruleml2011ATbrf_Partners,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", viewOrganizationPartners(Meeting, Partner)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Partner)),
+    sendMsg(XID,esb,From, "answer", viewOrganizationPartners(Meeting, Partner)).	
+	
+%media partners
+processMessage(XID,From,Primitive,viewSponsors(Meeting, Partner)):-
+   !,
+   % look-up responsible agent	
+	assigned(XID, Agent,ruleml2011ATbrf_Partners,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", viewSponsors(Meeting, Partner)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Partner)),
+    sendMsg(XID,esb,From, "answer", viewSponsors(Meeting, Partner)).	
+
+%sponsors
+processMessage(XID,From,Primitive,viewSponsors(Meeting, Sponsor, SponsorLevel)):-
+   !,
+   % look-up responsible agent	
+	assigned(XID, Agent,ruleml2011ATbrf_Partners,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", viewSponsors(Meeting, Sponsor, SponsorLevel)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Sponsor, SponsorLevel)),
+    sendMsg(XID,esb,From, "answer", viewSponsors(Meeting, Sponsor, SponsorLevel)).	
+
+%sponsors without sponsoring level
+processMessage(XID,From,Primitive,viewMediaPartners(Meeting, Sponsor)):-
+   !,
+   % look-up responsible agent	
+	assigned(XID, Agent,ruleml2011ATbrf_Partners,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", viewMediaPartners(Meeting, Sponsor)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Sponsor)),
+    sendMsg(XID,esb,From, "answer", viewMediaPartners(Meeting, Sponsor)).	
+
+%contact web chair
+processMessage(XID,From,Primitive,contactWebChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
+   !,
+   % look-up responsible agent	
+	assigned(XID, Agent,ruleml2011ATbrf_Website,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", contactWebChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+    sendMsg(XID,esb,From, "answer", contactWebChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)).	
+
+%contact challenge chair	
+processMessage(XID,From,Primitive,contactChallengeChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)):-
+   !,
+   % look-up responsible agent	
+	assigned(XID, Agent,ruleml2011ATbrf_Challenge,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", contactChallengeChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", substitutions(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)),
+    sendMsg(XID,esb,From, "answer", contactChallengeChair(Meeting, Chair, FirstName, LastName, Title, Email, Telephone)).	
+
+% check if users can submit the paper    
+processMessage(XID,From,Primitive,submission(contact(FirstName,LastName,Country,Email),Title,SubmissionCategory, Keywords)) :-
+   assigned(XID,Agent,ruleml2011ATbrf_ProgramChair,ruleml2011ATbrf_responsible),
+   sendMsg(XID,esb,Agent, "query", getTrack(Track)),
+
+   % receive answers multiple times
+   Playloads=java.util.ArrayList(),
+   rcvMult(XID,esb,Agent, AnswerPrimitive, Playload),
+   Playloads.add(Playload),
+   
+   % collect the answsers util the conversation is end.
+   @author (AnswerPrimitive)
+   continue()[permit(AnswerPrimitive)],
+   
+   % use the keywords to check tracks, topics and other information whether the user can submit the paper to this event
+   Result = ws.prova.mule.impl.BRF2011SubmissionDecision.decision(Country, SubmissionCategory, Keywords,Playloads),
+   
+   IsOK = ws.prova.mule.impl.BRF2011SubmissionDecision.isPermit(),
+  
+   
+   % send the answer to brower if the user can submit the paper.
+   processandSendAnswer(XID, From, contact(FirstName,LastName,Country,Email),Title,SubmissionCategory, Keywords, IsOK, Result).
+
+
+% send the answer to brower if the user can submit the paper.
+processandSendAnswer(XID, From, contact(FirstName,LastName,Country,Email),Title,SubmissionCategory, Keywords,IsOK, Result):-
+   @decisionResult(IsOK)
+   eventInitialization(EventName,SubmissionAddress)[trusted(IsOK)],
+   sendMsg(XID,esb,From,"answer",submission(contact(FirstName,LastName,Country,Email),Title,SubmissionCategory, Keywords,event(EventName),url(SubmissionAddress),score(Result))).
+ 
+@author continue():-
+   println(["The procedure goes on if the agent receives all the anwers."]).
+   
+@decisionResult(possible) eventInitialization(EventName,SubmissionAddress):-
+setVaule(EventName,SubmissionAddress).
+  
+trusted(possible).
+
+permit(no_further_answers).
+
+setVaule("RuleML 2011 BRF","http://www.businessrulesforum.com/").
+
+% contact conference chairs and get their information from Semantic Web Dog Food
+processMessage(XID,From,Primitive,getContact(Topic,person(name(Name),email(Email),phone(Phone),title(Title),create(Resource),hasRole(Role),affiliation(Affiliation)))):-
+   chairName(Topic,Name),
+   consultInternalResouce(Name,Email,Phone,Title),
+   findall([Role,Affiliation,Resource],consultExternalResource(Name,Resource,Role,Affiliation),RawResources),
+   Resources = ws.prova.mule.impl.ExternalInformationProcessing.process(RawResources),
+   sendMsg(XID,esb,From,"answer",getContact(Topic,person(name(Name),email(Email),phone(Phone),title(Title),Resources))).
+   
+%   consultExternalResource(Name,Resource,Role,Affiliation),
+%   sendMsg(XID,esb,From,"answer",getContact(Topic,person(name(Name),email(Email),phone(Phone),title(Title),create(Resource),hasRole(Role),affiliation(Affiliation)))).
+   
+processMessage(XID,From,Primitive,getContact(Topic,person(name(Name),email(Email),phone(Phone),title(Title),create(Resource),hasRole(Role),affiliation(Affiliation)))):-
+   sendMsg(XID,esb,From,"no_further_answers",getContact(Topic)).
+
+chairName("ruleml2011ATbrf_GeneralChair", "Mike Dean").
+chairName("ruleml2011ATbrf_GeneralChair", "Said Tabet").
+
+chairName("ruleml2011ATbrf_TechnicalGroupChair","Adrian Pashcke").
+chairName("ruleml2011Atbrf_TechnicalGroupChair","Alex Kozlenkov").
+
+chairName("ruleml2011ATbrf_ProgramChair", "Frank Olken").
+chairName("ruleml2011ATbrf_rogramChair", "Monica Palmirani").
+chairName("ruleml2011ATbrf_ProgramChair", "Davide Sottara").
+
+chairName("ruleml2011ATbrf_SteeringChair", "Christian de Saint Marie").
+chairName("ruleml2011ATbrf_SteeringChair", "John Hall").
+
+chairName("ruleml2011ATbrf_ChallengeChair", "Stefano Bragaglia").
+chairName("ruleml2011ATbrf_ChallengeChair", "Marco Montali").
+chairName("ruleml2011ATbrf_ChallengeChair", "Charles Petrie").
+chairName("ruleml2011ATbrf_ChallengeChair", "Mark Proctor").
+
+
+chairName("ruleml2011ATbrf_MetadataAndMediaChair", "Adrian Paschke").
+chairName("ruleml2011ATbrf_MetadataAndMediaChair", "Nick Bassiliades").
+chairName("ruleml2011ATbrf_MetadataAndMediaChair", "Jie Bao").
+chairName("ruleml2011ATbrf_MetadataAndMediaChair", "Richard Cyganiak").
+chairName("ruleml2011ATbrf_MetadataAndMediaChair", "Lina Wolf").
+
+chairName("ruleml2011ATbrf_SponsorshipChair", "Robert Golan").
+
+chairName("ruleml2011ATbrf_WebChair", "Luca Cervone").
+chairName("ruleml2011ATbrf_WebChair", "Gökhan Coskun").
+chairName("ruleml2011ATbrf_WebChair", "Ho-Pun (Brian) Lam").
+
+consultInternalResouce("Mike Dean","mdeanATbbnDOTcom","17349977439","Dr").
+consultInternalResouce("Said Tabet","stabetATattbiDOTcom","","Dr").
+consultInternalResouce("Frank Olken","olkenATlblDOTgov","5104865891","Dr").
+consultInternalResouce("Monica Palmirani","","","Dr").
+consultInternalResouce("Davide Sottara","","","Dr").
+consultInternalResouce("Christian de Saint Marie","","","Dr").
+consultInternalResouce("John Hall","","","Dr").
+consultInternalResouce("Stefano Bragaglia","","","Dr").
+consultInternalResouce("Marco Montali","","","Dr").
+consultInternalResouce("Charles Petrie","","","Dr").
+consultInternalResouce("Mark Proctor","","","Dr").
+consultInternalResouce("Adrian Paschke","adrianDOTpaschkeATgmxDOTde","4935146340074","Dr").
+consultInternalResouce("Nick Bassiliades","nbassiliATcsdDOTauthDOTgr","302310997913","Dr").
+consultInternalResouce("Jie Bao","","","Dr").
+consultInternalResouce("Richard Cyganiak","","","Dr").
+consultInternalResouce("Lina Wolf","","","Dr").
+consultInternalResouce("Robert Golan","","","Dr").
+consultInternalResouce("Luca Cervone","","","Dr").
+consultInternalResouce("Gökhan Coskun","","","Dr").
+consultInternalResouce("Ho-Pun (Brian) Lam","","","Dr").
+
+% The most straightforward way of runninq SPARQL queries that indicates the required data right inside the FROM clause
+
+consultExternalResource("Mike Dean",Resource,Role,Affiliation) :-
+	QueryString = '
+		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+		PREFIX ns1: <http://xmlns.com/foaf/0.1/>
+		PREFIX ns3: <http://swrc.ontoware.org/ontology#>
+		PREFIX ns2: <http://data.semanticweb.org/ns/swc/ontology#>
+		SELECT ?person ?resource ?role ?affiliationEntity
+			FROM <http://data.semanticweb.org/person/mike-dean/rdf>
+			WHERE {
+				?person rdfs:label ?Name .
+				?person ns1:made ?resource .
+				?person ns2:holdsRole ?role .
+				?person ns3:affiliation ?affiliationEntity .
+			}
+	',
+	sparql_select(QueryString,[resource(Resource),role(Role),affiliationEntity(Affiliation)]).
+	
+consultExternalResource("Said Tabet",Resource,Role,Affiliation) :-
+   Resource = "",
+   Role = "",
+   Affiliation = "".
+
+consultExternalResource("Frank Olken",Resource,Role,Affiliation) :-
+   Resource = "",
+   Role = "",
+   Affiliation = "".
+
+consultExternalResource("Monica Palmirani",Resource,Role,Affiliation) :-
+   Resource = "",
+   Role = "",
+   Affiliation = "".
+   
+consultExternalResource("Davide Sottara",Resource,Role,Affiliation) :-
+   Resource = "",
+   Role = "",
+   Affiliation = "".
+   
+consultExternalResource("Christian de Saint Marie",Resource,Role,Affiliation) :-
+   Resource = "",
+   Role = "",
+   Affiliation = "".
+   
+consultExternalResource("John Hall",Resource,Role,Affiliation) :-
+   Resource = "",
+   Role = "",
+   Affiliation = "".
+   
+consultExternalResource("Stefano Bragaglia",Resource,Role,Affiliation) :-
+   Resource = "",
+   Role = "",
+   Affiliation = "".
+   
+consultExternalResource("Marco Montali",Resource,Role,Affiliation) :-
+    Role = "",
+   	QueryString = '
+		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+		PREFIX ns1: <http://xmlns.com/foaf/0.1/>
+		PREFIX ns3: <http://swrc.ontoware.org/ontology#>
+		PREFIX ns2: <http://data.semanticweb.org/ns/swc/ontology#>
+		SELECT ?person ?resource ?affiliationEntity
+			FROM <http://data.semanticweb.org/person/marco-montali/rdf>
+			WHERE {
+				?person rdfs:label ?Name .
+				?person ns1:made ?resource .
+				?person ns2:affiliation ?affiliationEntity .
+			}
+	',
+	sparql_select(QueryString,[resource(Resource),affiliationEntity(Affiliation)]).
+   
+consultExternalResource("Charles Petrie",Resource,Role,Affiliation) :-
+	QueryString = '
+		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+		PREFIX ns1: <http://xmlns.com/foaf/0.1/>
+		PREFIX ns3: <http://swrc.ontoware.org/ontology#>
+		PREFIX ns2: <http://data.semanticweb.org/ns/swc/ontology#>
+		SELECT ?person ?resource ?role ?affiliationEntity
+			FROM <http://data.semanticweb.org/person/charles-petrie/rdf>
+			WHERE {
+				?person rdfs:label ?Name .
+				?person ns1:made ?resource .
+				?person ns2:holdsRole ?role .
+				?person ns3:affiliation ?affiliationEntity .
+			}
+	',
+	sparql_select(QueryString,[resource(Resource),role(Role),affiliationEntity(Affiliation)]).
+	
+consultExternalResource("Nick Bassiliades",Resource,Role,Affiliation) :-
+	QueryString = '
+		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+		PREFIX ns1: <http://xmlns.com/foaf/0.1/>
+		PREFIX ns2: <http://swrc.ontoware.org/ontology#>
+		PREFIX ns3: <http://data.semanticweb.org/ns/swc/ontology#>
+		SELECT ?person ?resource ?role ?affiliationEntity
+			FROM <http://data.semanticweb.org/person/nick-bassiliades/rdf>
+			WHERE {
+				?person rdfs:label ?Name .
+				?person ns1:made ?resource .
+				?person ns3:holdsRole ?role .
+				?person ns2:affiliation ?affiliationEntity .
+			}
+	',
+	sparql_select(QueryString,[resource(Resource),role(Role),affiliationEntity(Affiliation)]).
+
+consultExternalResource("Adrian Paschke",Resource,Role,Affiliation) :-
+	QueryString = '
+		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+		PREFIX ns1: <http://xmlns.com/foaf/0.1/>
+		PREFIX ns2: <http://data.semanticweb.org/ns/swc/ontology#>
+		PREFIX ns3: <http://swrc.ontoware.org/ontology#>
+		SELECT ?person ?resource ?role ?affiliationEntity
+			FROM <http://data.semanticweb.org/person/adrian-paschke/rdf>
+			WHERE {
+				?person rdfs:label ?Name .
+				?person ns1:made ?resource .
+				?person ns2:holdsRole ?role .
+				?person ns3:affiliation ?affiliationEntity .
+			}
+	',
+	sparql_select(QueryString,[resource(Resource),role(Role),affiliationEntity(Affiliation)]).
+
+consultExternalResource("Jie Bao",Resource,Role,Affiliation) :-
+	QueryString = '
+		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+		PREFIX ns1: <http://xmlns.com/foaf/0.1/>
+		PREFIX ns2: <http://data.semanticweb.org/ns/swc/ontology#>
+		PREFIX ns3: <http://swrc.ontoware.org/ontology#>
+		SELECT ?person ?resource ?role ?affiliationEntity
+			FROM <http://data.semanticweb.org/person/jie-bao/rdf>
+			WHERE {
+				?person rdfs:label ?Name .
+				?person ns1:made ?resource .
+				?person ns2:holdsRole ?role .
+				?person ns2:affiliation ?affiliationEntity .
+			}
+	',
+	sparql_select(QueryString,[resource(Resource),role(Role),affiliationEntity(Affiliation)]).
+   
+consultExternalResource("Richard Cyganiak",Resource,Role,Affiliation) :-
+	QueryString = '
+		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+		PREFIX ns1: <http://xmlns.com/foaf/0.1/>
+		PREFIX ns3: <http://data.semanticweb.org/ns/swc/ontology#>
+		PREFIX ns2: <http://swrc.ontoware.org/ontology#>
+		SELECT ?person ?resource ?role ?affiliationEntity
+			FROM <http://data.semanticweb.org/person/richard-cyganiak/rdf>
+			WHERE {
+				?person rdfs:label ?Name .
+				?person ns1:made ?resource .
+				?person ns3:holdsRole ?role .
+				?person ns2:affiliation ?affiliationEntity .
+			}
+	',
+	sparql_select(QueryString,[resource(Resource),role(Role),affiliationEntity(Affiliation)]).
+
+
+consultExternalResource("Lina Wolf",Resource,Role,Affiliation) :-
+   Resource = "",
+   Role = "",
+   Affiliation = "".
+   
+consultExternalResource("Robert Golan",Resource,Role,Affiliation) :-
+   Resource = "",
+   Role = "",
+   Affiliation = "".
+   
+consultExternalResource("Luca Cervone",Resource,Role,Affiliation) :-
+   Resource = "",
+   Role = "",
+   Affiliation = "".
+   
+consultExternalResource("Gökhan Coskun",Resource,Role,Affiliation) :-
+    Role = "",
+    Affiliation = "",
+	QueryString = '
+		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+		PREFIX ns1: <http://xmlns.com/foaf/0.1/>
+		PREFIX ns3: <http://data.semanticweb.org/ns/swc/ontology#>
+		PREFIX ns2: <http://swrc.ontoware.org/ontology#>
+		SELECT ?person ?resource
+			FROM <http://data.semanticweb.org/person/goekhan-coskun/rdf>
+			WHERE {
+				?person rdfs:label ?Name .
+				?person ns1:made ?resource .
+			}
+	',
+	sparql_select(QueryString,[resource(Resource)]).
+   
+consultExternalResource("Ho-Pun (Brian) Lam",Resource,Role,Affiliation) :-
+   Resource = "",
+   Role = "",
+   Affiliation = "".
+	
+% look-up interface
+processMessage(XID,From,Primitive,[X|Args]):-
+	not(interface([X|Args],ModeDeclarations,Description)),
+	sendMsg(XID,esb,From,"answer", noPublicInterface(interface([X|Args]))),
+	sendMsg(XID,esb,From,"no_further_answers", [X|Args]),
+	fail().
+
+processMessage(XID,From,Primitive,[Function|Arguments]):-
+   interface([Function|Arguments],ModeDeclarations,Description),
+   %TODO: write rule which checks signature and mode declarations (dynamic testing)
+   derive([Function,XID|Arguments]),
+   sendMsg(XID,esb,From, "answer", [Function|Arguments]).
+   
+   
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import Responsibility Assignment Matrix from ontology and define 
+% the query functions of the organizational agent on top
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% import external ontology of responsibility assignment matrix
+% import("http://ruleml.org/RuleML-2011@BRF/RuleResponder/RuleML-2011@BRF.owl").
+import("http://localhost:8080/RuleML-2012-STRUCT/RuleML-2012-STRUCT.owl").
+
+% use external OWL Lite reasoner for a list of available reasoners 
+% see the OWL2PROVA API
+reasoner("owl").
+
+% member of the organizing committee    
+agent(XID,Agent:ruleml2012Struct_Organizing_Committee).
+agent(XID,Agent):-
+  sendMsg(XID,esb,"RuleML-2011@BRF","no_further_answers", agent(Member)),fail().
+
+% responsibility domain of RuleML 2010
+responsibility(XID,Domain:ruleml2012Struct_Responsibility).
+
+% role such as "responsible", "informed", "accountable" etc.
+role(XID,Role:owl_ObjectProperty).
+
+% responsibility assignment matrix
+% e.g. ruleml2011ATbrf_GeneralChair ruleml2011ATbrf_responsible ruleml2011ATbrf_Symposium
+assigned(XID,Agent,Responsibility,Role):-
+	import(URL),
+	reasoner(Reasoner),
+	rdf(URL,Reasoner,Agent,Role,Responsibility).
+
+interface(XID,Signature,Modes,Description):-
+   interface(Signature,Modes,Description).	
+	
+	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% Requests to personal agents
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%		  
+
+% request personal contact information from responsible personal agent
+
+% RuleML-2011@BRF extension
+% This rule returns the contact details of the chairs of a specific track
+% These details are kept in the KB of the ruleml2011ATbrf_ProgramChair PA
+
+getContact(XID,ruleml2011ATbrf_TrackChair,track(Track),person(Role,Name, Title, EMail, Telephone)):- !,
+	% look-up responsible agent	
+	assigned(XID,Agent,ruleml2011ATbrf_ProgramChair,ruleml2011ATbrf_responsible),
+	% query personal contact information from agent
+	sendMsg(XID,esb,Agent, "query", getContactOfTrack(Track,contactdetails(Role,Name,Title,EMail,Telephone))),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent, "answer", substitutions(Role,Name, Title, EMail, Telephone)).
+
+% RuleML-2011@BRF extension
+% This rule returns the contact details of a specific chair of a specific track,
+% given his/her name
+% These details are kept in the KB of the ruleml2011ATbrf_ProgramChair PA
+
+getContact(XID,ruleml2011ATbrf_TrackChair,person(Name),person(Role,Name, Title, EMail, Telephone)):- !,
+	% look-up responsible agent	
+	assigned(XID,Agent,ruleml2011ATbrf_ProgramChair,ruleml2011ATbrf_responsible),
+	% query personal contact information from agent
+	sendMsg(XID,esb,Agent, "query", trackperson(Role,Name,Title,EMail,Telephone)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent, "answer", substitutions(Role,Title, EMail, Telephone)).
+
+% RuleML-2011@BRF extension
+% This rule returns the contact details of a specific chair (other than a specific track),
+% given his/her name
+% These details are kept in the KB of the corresponding PA
+
+getContact(XID,Topic,person(Name),person(Role,Name, Title, EMail, Telephone)):- !,
+	% look-up responsible agent	
+	assigned(XID,Agent,Topic,ruleml2011ATbrf_responsible),
+		println(["test"]),
+	%TODO: Implement the escalation procedure here
+	% query personal contact information from agent
+	sendMsg(XID,esb,Agent, "query", person(Role,Name, Title, EMail, Telephone)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent, "answer", substitutions(Role, Title, EMail, Telephone)).
+
+% This rule is from older RuleML symposia
+% It returns the contents of the person/5 facts from each implemented personal agent
+
+getContact(XID,Topic,Request,person(Role,Name, Title, EMail, Telephone)):-   
+	% The Request argument is never used. We take advantage of it and we use it for 2010 extension, see above
+	% look-up responsible agent	
+	assigned(XID,Agent,Topic,"ruleml2011ATbrf_responsible"),
+	%TODO: Implement the escalation procedure here
+	% query personal contact information from agent
+	sendMsg(XID,esb,Agent, "query", person(Role,Name, Title, EMail, Telephone)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent, "answer", substitutions(Role,Name, Title, EMail, Telephone)).
+
+
+% RuleML-2011@BRF extension
+% request the track that a specific topic belongs to
+
+getTrackOfATopic(XID,Topic,Track):-
+	% look-up responsible agent (Program Chair)	
+	assigned(XID,Agent,ruleml2011ATbrf_ProgramChair,ruleml2011ATbrf_responsible),
+	% query topic-track information from agent
+	sendMsg(XID,esb,Agent, "query", getTrackOfATopic(Topic,Track)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent, "answer", substitutions(Track)).
+
+
+% RuleML-2011@BRF extension
+% Find the relevant tracks for a specific set of keywords
+% The algorithm for determining the relevance is given in the Program Chair's PA POSL file
+% Here the interface between the user query and the POSL predicate is implemented
+% The interface can take input in 2 forms:
+% a) input is a string of keywords and it is transformed it into a list of keywords
+% The algorithm is presented below (see comments of string_to_keywords/2 predicate)
+% b) input is a list of keywords directly. This is more flexible since each keyword
+% can have an associated weight
+% NOTICE: This query, depending also on the length of the list of keywords and 
+% the number of tracks and topics, may take a long time to complete and returns results
+% Thus we extended the timeout period of the Prova-MULE interface by a factor of 10.
+
+findTracks(XID,KeywordString,ScoredTrack):-
+	isa_string(KeywordString), !,       % If the input is a string then transform it to a keyword list
+	string_to_keywords(KeywordString,KeywordList),
+	% look-up responsible agent (Program Chair)	
+	assigned(XID,Agent,ruleml2011ATbrf_ProgramChair,ruleml2011ATbrf_responsible),
+	sendMsg(XID,esb,Agent, "query", score_tracks(KeywordList,ScoredTrack)),
+	rcvMult(XID,esb,Agent, "answer", substitutions(ScoredTrack)).
+findTracks(XID,KeywordList,ScoredTrack):-   % If the inpout is not a string it should be a keyword list
+	% look-up responsible agent (Program Chair)	
+	assigned(XID,Agent,ruleml2011ATbrf_ProgramChair,ruleml2011ATbrf_responsible),
+	sendMsg(XID,esb,Agent, "query", score_tracks(KeywordList,ScoredTrack)),
+	rcvMult(XID,esb,Agent, "answer", substitutions(ScoredTrack)).
+
+	
+% RuleML-2011@BRF extension
+% Retrieve all the tracks of the RuleML-2011@BRF CFP
+
+getTracks(XID,Track):-
+	assigned(XID,Agent,ruleml2011ATbrf_ProgramChair,ruleml2011ATbrf_responsible),
+	sendMsg(XID,esb,Agent, "query", getTrack(Track)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent, "answer", substitutions(Track)).
+
+
+% RuleML-2011@BRF extension
+% Retrieve all the track chairs (their names)
+
+getTrackChairs(XID,trackchair(track(Track),chair(Chair))):-
+	% look-up responsible agent (Program Chair)	
+	println(["test"]),
+	assigned(XID,Agent,ruleml2011ATbrf_ProgramChair,ruleml2011ATbrf_responsible),
+	% query topic-track information from agent
+	sendMsg(XID,esb,Agent, "query", track(Track,Topics,Chairs)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent, "answer", substitutions(Track,Topics,Chairs)),
+	member(Chair,Chairs).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+%getMembersOfATechnicalGroup(XID,TechnicalGroup,technicalGroupMember(Chair)):-
+	% look-up responsible agent (Program Chair)	
+	%assigned(XID, Agent,ruleml2011ATbrf_TechnicalGroupChair,ruleml2011ATbrf_responsible),
+	% query topic-track information from agent
+	%sendMsg(XID,esb,Agent, "query", technicalGroup(TechnicalGroup,Chairs)),
+	% receive answers multiple times
+	%rcvMult(XID,esb,Agent, "answer", substitutions(Chairs)),
+	%member(Chair,Chairs).
+	
+	
+getMembersOfATechnicalGroup(XID,TechnicalGroup,technicalGroupMember(Chair)):-
+	% look-up responsible agent (TG Agent)	
+	assigned(XID, Agent,ruleml2012ATstruct_TGAgent,ruleml2012ATstruct_responsible),
+	% query topic-track information from agent
+	sendMsg(XID,esb,Agent, "query", technicalGroup(TechnicalGroup,Chairs)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent, "answer", substitutions(Chairs)),
+	member(Chair,Chairs).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% RuleML-2011@BRF extension
+% Retrieve all the chairs of a specific track (their names)
+
+getChairsOfTrack(XID,Track,trackchair(Chair)):-
+	% look-up responsible agent (Program Chair)	
+	assigned(XID,Agent,ruleml2011ATbrf_ProgramChair,ruleml2011ATbrf_responsible),
+	% query topic-track information from agent
+	sendMsg(XID,esb,Agent, "query", track(Track,Topics,Chairs)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent, "answer", substitutions(Topics,Chairs)),
+	member(Chair,Chairs).
+
+
+% RuleML-2011@BRF extension
+% Retrieve all the chairs of a specific track (their names)
+
+getTopicsOfATrack(XID,Track,Topic):-
+	% look-up responsible agent (Program Chair)	
+	assigned(XID,Agent,ruleml2011ATbrf_ProgramChair,ruleml2011ATbrf_responsible),
+	% query topic-track information from agent
+	sendMsg(XID,esb,Agent, "query", track(Track,Topics,Chairs)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent, "answer", substitutions(Topics,Chairs)),
+	member(Topic,Topics).
+
+
+
+% RuleML-2011@BRF extension
+
+%exported_results("http://155.207.113.24:8080/ruleSetsRuleML-2011@BRF/sponsors-output.rdf").
+exported_results("C:\Program Files\Apache Software Foundation\Tomcat 6.0\webapps\ruleSetsRuleML-2011@BRF\sponsors-output.rdf").
+
+
+% request open phases
+open(XID,Phase):-
+	% look-up responsible agent for Submissions
+	assigned(XID,Agent,ruleml2011ATbrf_Submission,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", open(Phase)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", open(Phase)).
+
+% request open phases
+dates(XID,Phase,Start,End):-
+	% look-up responsible agent	for Submissions
+	assigned(XID,Agent,ruleml2011ATbrf_Submission,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", dates(Phase,Start,End)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", dates(Phase,Start,End)).		
+	
+% permission to submit
+permit(XID,ContactAuthor,submit(ContactAuthor,Submission)):-
+	% look-up responsible agent	
+	assigned(XID,Agent,ruleml2011ATbrf_Submission,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", permit(ContactAuthor,submit(ContactAuthor,Submission))),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", permit(ContactAuthor,submit(ContactAuthor,Submission))).	
+
+% request submission from the responsible personal agent for "Submissions"
+submitted(XID,Submission):-
+ 	% look-up responsible agent	
+	assigned(XID,Agent,ruleml2011ATbrf_Submission,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", submitted(Submission)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", submitted(Submission)).	
+
+
+obliged(XID,Reviewer,submit(Reviewer,Review)):-
+ 	% look-up responsible agent	
+	assigned(XID,Agent,ruleml2011ATbrf_Submission,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", obliged(Reviewer,submit(Reviewer,Review))),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", obliged(Reviewer,submit(Reviewer,Review))).
+
+forbid(XID,Reviewer,review(submission(Authors,Abstract,Paper),Review)):-
+ 	% look-up responsible agent	
+	assigned(XID,Agent,ruleml2011ATbrf_Submission,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", forbid(Reviewer,review(submission(Authors,Abstract,Paper),Review))),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", forbid(Reviewer,review(submission(Authors,Abstract,Paper),Review))).
+
+accepted(XID,Submission):-
+ 	% look-up responsible agent	
+	assigned(XID,Agent,ruleml2011ATbrf_Submission,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", accepted(Submission)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", accepted(Submission)).
+
+
+fee(XID,Phase,Fee):-
+ 	% look-up responsible agent	
+	assigned(XID,Agent,ruleml2011ATbrf_Submission,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", fee(Phase,Fee)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", fee(Phase,Fee)).
+
+computeFee(XID,Participant,Fee):-
+ 	% look-up responsible agent	
+	assigned(XID,Agent,ruleml2011ATbrf_Submission,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", computeFee(Participant,Fee)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", computeFee(Participant,Fee)).
+
+oblige(XID,Participant,pay(Fee)):-
+ 	% look-up responsible agent	
+	assigned(XID,Agent,ruleml2011ATbrf_Submission,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", oblige(Participant,pay(Fee))),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", oblige(Participant,pay(Fee))).
+
+permit(XID,Participant,attend):-
+ 	% look-up responsible agent	
+	assigned(XID,Agent,ruleml2011ATbrf_Submission,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", permit(Participant,attend)),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", permit(Participant,attend)).
+
+permit(XID,Participant,register(Participant)):-
+ 	% look-up responsible agent	
+	assigned(XID,Agent,ruleml2011ATbrf_Submission,ruleml2011ATbrf_responsible),
+	% query permission from responsible agent
+	sendMsg(XID,esb,Agent, "query", permit(Participant,register(Participant))),
+	% receive answers multiple times
+	rcvMult(XID,esb,Agent,"answer", permit(Participant,register(Participant))).
+
+
+
+% Auxiliary predicate for RuleML-2011@BRF extensions
+
+
+% This predicate tokenizes a string as a list of keywords.
+% Currently the list of delimiters are ";" "," "/" and space
+% However, space has a unique behavior as well.
+% e.g. the string "rule exceptions" gives two keywords
+% "rule" and "exceptions", plus "rule exceptions" as a phrase
+% The words that constitute the space-delimited phrase get lower weight than a normal keyword
+
+string_to_keywords(KeywordsString,Keywords) :- 
+	tokenize_list([KeywordsString,";"],ListOfKeywords1),
+	clear_all_strings([",","/"],ListOfKeywords1,ListOfKeywords2),
+	clear_space(ListOfKeywords2,ListOfKeywords),
+	list_to_keywords(ListOfKeywords,Keywords).
+
+
+% auxiliary for string_to_keywords
+% take a list of strings that may contain more tokens
+% inside each list-element and tokenize them using a list of delimiters.
+
+clear_all_strings([],L,L) :- !.
+clear_all_strings([H|T],L1,L) :-
+	clear_strings(H,L1,L2),
+	clear_all_strings(T,L2,L) .
+
+
+% auxiliary for string_to_keywords
+% take a list of strings that may contain more tokens
+% inside each list-element and tokenize them using a specific delimiter
+
+clear_strings(_,[],[]) :- !.
+clear_strings(Sep,[H1|T1],L2) :-
+	tokenize_list([H1,Sep],H2),
+	clear_strings(Sep,T1,T2),
+	append(H2,T2,L2).
+
+
+% auxiliary for string_to_keywords
+% take a list of strings that may contain more tokens
+% inside each list-element and tokenize them using space as a delimiter
+
+clear_space([],[]) :- !.
+clear_space([H1|T1],[H2|T2]) :-
+	tokenize_list([H1," "],[H2]), !,
+	clear_space(T1,T2).
+clear_space([H1|T1],L2) :-
+	tokenize_list([H1," "],L),
+	% The words that constitute the space-delimited phrase get lower weight
+	% than a normal keyword
+	infuse_weights(L,L1), 
+	clear_space(T1,T2),
+	append(L1,[H1|T2],L2).
+	
+
+
+
+% auxiliary for string_to_keywords
+% Transform a list of strings into a list of keywords
+% according to the keys/2 complex term requiored by the corresponding OOJDrew predicate
+% Notice that when a keyword has a weight (due to space-delimited phrases)
+% then the complex term is keys/3
+% When no weight exists, default 1 is assumed in the corresponding PA (program chair)
+
+list_to_keywords([],nil) :- !.
+list_to_keywords([""|T],Rest) :- !,
+	list_to_keywords(T,Rest).
+list_to_keywords([weight("",W)|T],Rest) :- !,
+	list_to_keywords(T,Rest).
+list_to_keywords([weight(K,W)|T],keys(K,W,Rest)) :-
+	isa_string(K), !,
+	list_to_keywords(T,Rest).
+list_to_keywords([K|T],keys(K,Rest)) :-
+	isa_string(K), !,
+	list_to_keywords(T,Rest).
+list_to_keywords([weight(K,W)|T],keys(Key,W,Rest)) :- !,
+	K1 = K.trim(),
+	concat(["string:",K1],Key),
+	list_to_keywords(T,Rest).
+list_to_keywords([K|T],keys(Key,Rest)) :-
+	K1 = K.trim(),
+	concat(["string:",K1],Key),
+	list_to_keywords(T,Rest).
+
+
+% auxiliary for string_to_keywords
+% check if a string contains the "string:" type declaration
+% necessary for OOJDrew
+
+isa_string(S) :-
+	tokenize_list([S,":"],["string"|_]).
+
+
+% When there is a space-delimited phrase
+% each word becomes a keyword as well with a lower weight
+% The weight of each word is 1/N, where N is the number
+% of the words in the phrase
+
+infuse_weights(L,L1) :-
+	size(L,N),
+	math_div1(1, N, W),
+	concat(["real:",W],W1),
+	infuse_weights_aux(W1,L,L1).
+
+
+% auxiliary for infuse_weights/2
+% for each word in the list construct a list with
+% weight/2 complex terms that carry both the word an its weight
+
+infuse_weights_aux(_,[],[]).
+infuse_weights_aux(W,[H|T],[weight(H,W)|T1]) :-
+	infuse_weights_aux(W,T,T1).

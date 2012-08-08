@@ -92,7 +92,7 @@ public class PAConfiguration {
 	
 	private final static String RULEML2011BRF_DataPath = "http://localhost:8080/RuleML-2011-BRF/";
 	//SymposiumPlanner10
-	private final static String ruleml2011brf_Port = "9993";
+	private final static String ruleml2011brf_Port = "";
 	private final static String ruleml2011brf_RDFTaxonomy = RULEML2011BRF_DataPath+"publicityChairOntologyBRF-2011.rdf";
 	//SymposiumPlanner10-Topics
 	private final static String ruleml2011brf_GeneralChairEndpoint = "ruleml2011ATbrf_GeneralChair";
@@ -152,7 +152,41 @@ public class PAConfiguration {
 	private final static String ruleml2012ecai_steeringChairPOSL = RULEML2012ECAI_DataPath+"steeringChairECAI-2012.posl";
 	private final static String ruleml2012ecai_IntlRuleSteeringChairEndpoint = "ruleml2012ATecai_IntlRulesteeringChair";
 	private final static String ruleml2012ecai_IntlRuleSteeringChairPOSL = RULEML2012ECAI_DataPath+"IntlRulesteeringChairECAI-2012.posl";
+	private final static String ruleml2012ecai_IntlRuleChalChairEndpoint = "ruleml2012ATecai_IntlRuleChalChair";
+	private final static String ruleml2012ecai_IntlRuleChalChairPOSL = RULEML2012ECAI_DataPath+"IntlRuleChalChairECAI-2012.posl";
 	
+	
+	//RuleML-Structure
+	private final static String ruleml2012struct_Port = "9993";
+	private final static String ruleml2012struct_DataPath = "http://localhost:8080/RuleML-2012-STRUCT/";
+	private final static String rulemlstruct_RDFTaxonomy = ruleml2012struct_DataPath+"TGAgentOntologySTRUCT-2012.rdf";
+	
+	//*/*****************/*//*/*//*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
+	private final static String ruleml2012struct_TGAgentEndpoint = "ruleml2012ATstruct_TGAgent";
+	private final static String ruleml2012struct_TGAgentPOSL = ruleml2012struct_DataPath+"RuleMLStructTGAgent.posl";
+	//********************************************************************************************************************
+	private final static String ruleml2012struct_AdvisoryBoardEndpoint = "ruleml2012ATstruct_AdvisoryBoard";
+	private final static String ruleml2012struct_AdvisoryBoardPOSL = ruleml2012struct_DataPath+"RuleMLStructAdvisoryBoard.posl";
+	private final static String ruleml2012struct_CEIEndpoint = "ruleml2012ATstruct_CEI";
+	private final static String ruleml2012struct_CEIPOSL = ruleml2012struct_DataPath+"RuleMLStructCEI.posl";
+	private final static String ruleml2012struct_CoChairsEndpoint = "ruleml2012ATstruct_CoChairs";
+	private final static String ruleml2012struct_CoChairsBoardPOSL = ruleml2012struct_DataPath+"RuleMLStructCoChairs.posl";
+	private final static String ruleml2012struct_DefeasibleLogicEndpoint = "ruleml2012ATstruct_DefeasibleLogic";
+	private final static String ruleml2012struct_DefeasibleLogicPOSL = ruleml2012struct_DataPath+"RuleMLStructDefeasibleLogic.posl";
+	private final static String ruleml2012struct_MASEndpoint = "ruleml2012ATstruct_MAS";
+	private final static String ruleml2012struct_MASPOSL = ruleml2012struct_DataPath+"RuleMLStructMAS.posl";
+	private final static String ruleml2012struct_ModalLogicEndpoint = "ruleml2012ATstruct_ModalLogic";
+	private final static String ruleml2012struct_ModalLogicPOSL = ruleml2012struct_DataPath+"RuleMLStructModalLogic.posl";
+	private final static String ruleml2012struct_PSOAEndpoint = "ruleml2012ATstruct_PSOA";
+	private final static String ruleml2012struct_PSOAPOSL = ruleml2012struct_DataPath+"RuleMLStructPSOA.posl";
+	private final static String ruleml2012struct_ReactionRulesEndpoint = "ruleml2012ATstruct_ReactionRules";
+	private final static String ruleml2012struct_ReactionRulesPOSL = ruleml2012struct_DataPath+"RuleMLStructReactionRules.posl";
+	private final static String ruleml2012struct_SteeringCommitteeEndpoint = "ruleml2012ATstruct_SteeringCommittee";
+	private final static String ruleml2012struct_SteeringCommitteePOSL = ruleml2012struct_DataPath+"RuleMLStructSteeringCommittee.posl";
+	private final static String ruleml2012struct_UnCertReasonEndpoint = "ruleml2012ATstruct_UnCertReason";
+	private final static String ruleml2012struct_UnCertReasonPOSL = ruleml2012struct_DataPath+"RuleMLStructUnCertReason.posl";
+	
+		
 	//RULEML Organisation
 	
 	//private final static String ruleml2012ecai_Port = "";
@@ -218,6 +252,8 @@ public class PAConfiguration {
 		//RuleML 2012
 		else if(instantiation.equals("ruleml2012ecai"))
 			return ruleml2012ecai_Port;
+		else if(instantiation.equals("ruleml2012struct"))
+			return ruleml2012struct_Port;
 		else if(instantiation.equals("SymposiumPlanner10"))
 			return symposiumPlanner10_Port;
 		else if(instantiation.equals("SymposiumPlanner09"))
@@ -259,6 +295,8 @@ public class PAConfiguration {
 		//RuleML 2012
 		else if(instantiation.equals("ruleml2012ecai")) 
 			return ruleml2012ecai_RDFTaxonomy;
+		else if(instantiation.equals("ruleml2012struct")) 
+		    return rulemlstruct_RDFTaxonomy;
 		else if(instantiation.equals("ruleml2011brf")) 
 			return ruleml2011brf_RDFTaxonomy;
 		else if(instantiation.equals("SymposiumPlanner09")) 
@@ -432,6 +470,35 @@ public class PAConfiguration {
 				return ruleml2012ecai_steeringChairEndpoint;
 		    else if(topic.equals("IntlRuleChalSteerCommitChair"))
 		    	return ruleml2012ecai_IntlRuleSteeringChairEndpoint;
+		    else if(topic.equals("IntlRuleChalChair"))
+		    	return ruleml2012ecai_IntlRuleChalChairEndpoint;
+			else 
+				throw new BadConfigurationException("ERROR: Could not find ENDPOINT configuration for " + topic + " topic attached to " + instantiation);
+		}
+		//=============================================================================================================
+		else if(instantiation.equals("ruleml2012struct")){
+			if(topic.equals("TGAgent"))
+				return ruleml2012struct_TGAgentEndpoint;
+			else if(topic.equals("AdvisoryBoard"))
+				return ruleml2012struct_AdvisoryBoardEndpoint;
+			else if(topic.equals("CEI"))
+				return ruleml2012struct_CEIEndpoint;
+			else if(topic.equals("CoChairs"))
+				return ruleml2012struct_CoChairsEndpoint;
+			else if(topic.equals("DefeasibleLogic"))
+				return ruleml2012struct_DefeasibleLogicEndpoint;
+			else if(topic.equals("MAS"))
+				return ruleml2012struct_MASEndpoint;
+			else if(topic.equals("ModalLogic"))
+				return ruleml2012struct_ModalLogicEndpoint;
+			else if(topic.equals("PSOA"))
+				return ruleml2012struct_PSOAEndpoint;
+			else if(topic.equals("ReactionRules"))
+				return ruleml2012struct_ReactionRulesEndpoint;
+			else if(topic.equals("SteeringCommittee"))
+				return ruleml2012struct_SteeringCommitteeEndpoint;
+			else if(topic.equals("UnCertReason"))
+				return ruleml2012struct_UnCertReasonEndpoint;
 			else 
 				throw new BadConfigurationException("ERROR: Could not find ENDPOINT configuration for " + topic + " topic attached to " + instantiation);
 		}
@@ -511,9 +578,39 @@ public class PAConfiguration {
 				return ruleml2012ecai_steeringChairPOSL ;
 			else if(topic.equals("IntlRuleChalSteerCommitChair"))
 				return ruleml2012ecai_IntlRuleSteeringChairPOSL;
+			else if(topic.equals("IntlRuleChalChair"))
+				return ruleml2012ecai_IntlRuleChalChairPOSL;
 			else
 				throw new BadConfigurationException("ERROR: Could not find POSL configuration for " + topic + " topic attached to " + instantiation);
 		}
+		//********************************************************************************************
+		if(instantiation.equals("ruleml2012struct")) {
+			if(topic.equals("TGAgent"))
+				return ruleml2012struct_TGAgentPOSL;
+			else if(topic.equals("AdvisoryBoard"))
+				return ruleml2012struct_AdvisoryBoardPOSL;
+			else if(topic.equals("CEI"))
+				return ruleml2012struct_CEIPOSL;
+			else if(topic.equals("CoChairs"))
+				return ruleml2012struct_CoChairsBoardPOSL;
+			else if(topic.equals("DefeasibleLogic"))
+				return ruleml2012struct_DefeasibleLogicPOSL;
+			else if(topic.equals("MAS"))
+				return ruleml2012struct_MASPOSL;
+			else if(topic.equals("ModalLogic"))
+				return ruleml2012struct_ModalLogicPOSL;
+			else if(topic.equals("PSOA"))
+				return ruleml2012struct_PSOAPOSL;
+			else if(topic.equals("ReactionRules"))
+				return ruleml2012struct_ReactionRulesPOSL;
+			else if(topic.equals("SteeringCommittee"))
+				return ruleml2012struct_SteeringCommitteePOSL;
+			else if(topic.equals("UnCertReason"))
+				return ruleml2012struct_UnCertReasonPOSL;
+			else
+				throw new BadConfigurationException("ERROR: Could not find POSL configuration for " + topic + " topic attached to " + instantiation);
+		}
+		//********************************************************************************************
 		else if(instantiation.equals("ruleml2011ijcai")) {
 			if(topic.equals("PublicityChair"))
 				return ruleml2011ijcai_PublicityChairPOSL;

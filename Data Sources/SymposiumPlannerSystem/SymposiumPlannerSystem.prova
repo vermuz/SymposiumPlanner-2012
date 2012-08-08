@@ -1,0 +1,106 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The Super Organizational Agent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import external rules/ContractLog libraries for
+% mathematical, lists and date / time computations
+% and access to external data sources, e.g.
+% Semantic Web ontologies, iCal Calendars etc.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+:-eval(consult('../ContractLog/math.prova')).
+:-eval(consult('../ContractLog/datetime.prova')).
+:-eval(consult('../ContractLog/list.prova')).
+:-eval(consult('../ContractLog/update.prova')).
+:-eval(consult('../ContractLog/utils.prova')).
+%:-eval(consult('calendar.prova')). % calendar API
+:-eval(consult('../ContractLog/owl.prova')).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Performative vocabulary of organizational agent
+% More complex vocabularies (e.g. FIPA ACL) might be defined as Semantic Web ontologies	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+performative(request):-performative(query).
+performative(query).
+
+performative(XID,Performative):-
+   performative(Performative).
+
+rcvMsg(XID,esb, From, Performative, [X|Args]) :-
+	understandPerformative(XID, From, Performative, [X|Args]),
+	processMessage(XID, From, Performative, [X|Args]).
+rcvMsg(XID,esb, From, Performative, [X|Args]) :-
+	understandPerformative(XID, From, Performative, [X|Args]),
+	rcvMsg(XID,esb,Agent,no_further_answers, Payload),
+	sendMsg(XID,esb,From,no_further_answers,[X|Args]),
+	println(["--------------------------------------------"]), 
+	println(["                 COMPLETE                   "]), 
+	println(["--------------------------------------------"]).
+		
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% rules for processing the message
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+	
+% try to understand the performative of the message
+understandPerformative(XID, From, "answer", PayLoad) :- !, fail().
+understandPerformative(XID, From, "end_of_transmission", PayLoad) :- !, fail().
+understandPerformative(XID, From, "no_further_answers", PayLoad) :- !,fail().  	
+understandPerformative(XID, From, Performative, PayLoad) :-
+	performative(Performative).
+understandPerformative(XID, From, Performative, PayLoad) :-
+	not(performative(Performative)),
+	sendMsg(XID,esb,From,"answer", notUnderstood("performative",Performative)),
+	sendMsg(XID,esb,From,"no_further_answers", PayLoad),
+	fail().	
+	
+% look-up interface
+processMessage(XID,From,Primitive,Payload):-
+    rcvMsg(XID,esb, To, "no_further_answers", Answer),
+	sendMsg(XID,esb,From,"no_further_answers", Payload),
+%	sendMsg(XID,esb,From,"answer", Payload),
+	fail().
+
+
+processMessage(XID,From,Primitive,[Function|Arguments]):-
+   %TODO: write rule which checks signature and mode declarations (dynamic testing)
+   concat([sps_,Function],FunctionwithNamespace),
+   assigned(XID,FunctionwithNamespace,"sps_responsible",Agent,Result),
+   CandidateSubOAs=ws.prova.mule.impl.DecisionCriteria.subOADecision(Result,Function,Arguments),
+   element(CandidateSubOA,CandidateSubOAs),
+   sendMsg(XID,esb,CandidateSubOA, "query", [Function|Arguments]),
+   % receive answers multiple times
+   rcvMult(XID,esb,CandidateSubOA, "answer", Answer),
+   sendMsg(XID,esb, From, "answer", Answer).
+   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Import Responsibility Assignment Matrix from ontology and define 
+% the query functions of the organizational agent on top
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% import external ontology of responsibility assignment matrix
+import("http://localhost:8080/SymposiumPlannerSystem/SymposiumPlannerSystem.owl").
+
+% use external OWL Lite reasoner for a list of available reasoners 
+% see the OWL2PROVA API
+reasoner("owl").
+
+% member of the organizing committee    
+agent(XID,Agent:sps_FunctionManagement).
+agent(XID,Agent):-
+  sendMsg(XID,esb,"SymposiumPlannerSystem","no_further_answers", agent(Member)),fail().
+
+% responsibility domain of SymposiumPlannerSystem
+responsibility(XID,Domain:sps_OAManagement).
+
+% role such as "responsible", "informed", "accountable" etc.
+role(XID,Role:owl_ObjectProperty).
+
+% responsibility assignment matrix
+assigned(XID,Responsibility,Role,Agent,Result):-
+	import(URL),
+	reasoner(Reasoner),
+	rdf(URL,Reasoner,Responsibility,Role,Agent,Result).
+	
